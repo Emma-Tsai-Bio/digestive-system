@@ -815,7 +815,7 @@ function organHtml(){
     const correct = chemCorrectAnswer(o, state.food);
     let prompt;
     if(o.nutrients && o.nutrients.length){
-      prompt = `參考上方「${state.food.name}」含有的養分，它在【${o.short}】是否可以化學消化（含有酵素）？`;
+      prompt = `參考上方「${state.food.name}」含有的養分，這裡分泌的消化液，是否含有酵素，能對它進行化學消化？`;
     } else {
       prompt = `「${state.food.name}」在【${o.short}】會不會被消化？`;
     }
@@ -895,7 +895,7 @@ function siEnzymeHtml(o, nutrient){
       <input type="checkbox" value="${j}"> ${j}
     </label>`).join('');
   return `
-  <div class="q-prompt">這三種消化液之中，勾選出哪幾種含有可以化學消化「${nutrient}」的酵素：</div>
+  <div class="q-prompt">這三種消化液之中，哪幾種含有酵素，能對「${nutrient}」進行化學消化：</div>
   <div class="nutrient-box" id="lipidBox">${chks}</div>
   <button class="submit-btn" id="submitLipid">送出答案</button>`;
 }
