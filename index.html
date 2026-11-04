@@ -243,8 +243,8 @@ button{font-family:inherit; cursor:pointer;}
   display:flex; align-items:stretch; gap:10px; background:rgba(0,0,0,0.35); border:1px solid var(--line);
   border-radius:12px; padding:10px; margin-bottom:14px;
 }
-.show-food{display:flex; flex-direction:column; align-items:center; gap:6px; flex:0 0 120px;}
-.food-pic{width:110px; height:84px; border-radius:8px; border:2px solid var(--gold); font-size:44px; background:#2b2022;}
+.show-food{display:flex; flex-direction:column; align-items:center; gap:6px; flex:0 0 210px;}
+.food-pic{width:200px; height:150px; border-radius:8px; border:2px solid var(--gold); font-size:44px; background:#2b2022;}
 .show-cap{font-size:12.5px; font-weight:700; text-align:center; color:var(--gold-hi);}
 .show-vs{display:flex; align-items:center; font-size:22px; color:var(--gold); text-shadow:0 0 10px rgba(217,178,95,0.6);}
 .show-mons{flex:1; display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
@@ -254,7 +254,9 @@ button{font-family:inherit; cursor:pointer;}
 .mon-cap small{display:block; color:var(--muted); font-weight:500;}
 .run-progress{font-size:11.5px; color:var(--muted); margin-top:2px; text-align:center;}
 @media(max-width:480px){
-  .show-food{flex-basis:96px;} .food-pic{width:92px; height:70px;}
+  .showcase{flex-wrap:wrap; justify-content:center;} .show-vs{display:none;}
+  .show-food{flex-basis:100%;} .food-pic{width:220px; height:165px;}
+  .show-mons{flex-basis:100%; justify-content:center;}
   .mon{width:70px;} .mon-pic{width:50px; height:50px; font-size:26px;}
 }
 
@@ -430,7 +432,6 @@ button{font-family:inherit; cursor:pointer;}
 .r-SR.has-art .pcard-full{filter:drop-shadow(0 0 10px rgba(176,124,255,0.55));}
 .r-R.has-art .pcard-full{filter:drop-shadow(0 0 8px rgba(111,156,255,0.45));}
 .r-CURSE.has-art .pcard-full{filter:drop-shadow(0 0 12px rgba(224,87,79,0.55));}
-.r-SSR.has-art::after{height:auto; aspect-ratio:3/4;}
 .pcard.locked.has-art .pcard-full{filter:brightness(0) opacity(0.45);}
 /* 難度圖卡：拿掉外框，讓透明背景的圖直接浮在面板上 */
 .diff-card.has-img{border:none; background:transparent; box-shadow:none;}
@@ -506,7 +507,7 @@ const ASSETS = {
     mouth:     'bg_mouth.jpg',     // 咀嚼石窟（口腔）
     pharynx:   'bg_pharynx.jpg',   // 吞嚥閘門（咽）
     esophagus: 'bg_esophagus.jpg', // 黑暗滑水道（食道）
-    stomach:   'bg_stomach.jpg',   // 胃酸沸騰池（胃）
+    stomach:   'bg_stomach.jpg',   // 胃酸沸騰之池（胃）
     si:        'bg_si.jpg',        // 絨毛迷宮（小腸）
     large:     'bg_large.jpg',     // 汲水深淵（大腸）
     anus:      'bg_anus.jpg',      // 終焉之門（肛門）
@@ -533,7 +534,7 @@ const ASSETS = {
     salad:     'food_salad.jpg',
     pizza:     'food_pizza.jpg'
   },
-  cards: {                     // 便便卡插圖（建議正方形或直式）
+  cards: {                     // 便便卡（整張直式卡牌圖，3:4，例如 600×800）
     ssr_banana:     'card_ssr_banana.png',
     sr_icecream:    'card_sr_icecream.png',
     sr_driftwood:   'card_sr_driftwood.png',
@@ -568,8 +569,8 @@ const ORGANS = [
     intro:'這裡是吞嚥閘門（咽）。食物只是匆匆路過，別被它騙了。'},
   {key:'esophagus', name:'食道', stage:'黑暗滑水道', icon:'🌊', hasChemical:false, askGlandPH:false, note:'靠蠕動把食物推往胃部，沒有消化作用。',
     intro:'黑暗滑水道（食道）到了！牆壁會一波波蠕動，把食物推向深處。'},
-  {key:'stomach', name:'胃', stage:'胃酸沸騰池', icon:'🔥', hasChemical:true, pH:'酸性', gland:'胃腺', juice:'胃液', nutrients:['蛋白質'], askNutrient:true, askGlandPH:true,
-    intro:'小心腳下！這是胃酸沸騰池（胃），強酸翻滾，某些魔物會在這裡現出原形……'},
+  {key:'stomach', name:'胃', stage:'胃酸沸騰之池', icon:'🔥', hasChemical:true, pH:'酸性', gland:'胃腺', juice:'胃液', nutrients:['蛋白質'], askNutrient:true, askGlandPH:true,
+    intro:'小心腳下！這是胃酸沸騰之池（胃），強酸翻滾，某些魔物會在這裡現出原形……'},
   {key:'si', name:'小腸', stage:'絨毛迷宮', icon:'🌿', isSmallIntestine:true, hasChemical:true, pH:'鹼性',
     glands:[
       {gland:'肝臟', juice:'膽汁', icon:'🫘', enzymes:[]},
