@@ -39,7 +39,7 @@ body{
   -webkit-font-smoothing:antialiased;
   background-color:var(--bg0);
   background-image:
-    linear-gradient(rgba(10,7,11,0.84), rgba(10,7,11,0.93)),
+    linear-gradient(rgba(10,7,11,var(--dim-top,0.84)), rgba(10,7,11,var(--dim-bottom,0.93))),
     var(--bgimg, none),
     radial-gradient(ellipse at 15% -10%, rgba(176,124,255,0.12), transparent 55%),
     radial-gradient(ellipse at 90% 0%, rgba(217,178,95,0.10), transparent 50%),
@@ -222,6 +222,18 @@ button{font-family:inherit; cursor:pointer;}
 .basic .diff-tag{background:rgba(76,195,138,0.2); color:var(--green);}
 .adv .diff-tag{background:rgba(224,87,79,0.2); color:var(--red);}
 .diff-go{margin-top:4px; font-family:'Noto Serif TC',serif; font-weight:900; font-size:14px; color:var(--gold-hi);}
+/* 圖卡按鈕：有圖片時只顯示圖片，沒有圖片時顯示文字卡 */
+.diff-img{display:none;}
+.diff-card.has-img{padding:0; gap:0; overflow:hidden; background:#120d0e; position:relative;}
+.diff-card.has-img .diff-img{display:block; width:100%; height:auto;}
+.diff-card.has-img .diff-text{display:none;}
+.diff-card.has-img::after{
+  content:''; position:absolute; top:0; left:-60%; width:40%; height:100%; pointer-events:none;
+  background:linear-gradient(90deg, transparent, rgba(255,240,200,0.35), transparent); transform:skewX(-20deg); opacity:0;
+}
+.diff-card.has-img:hover::after{animation:cardShine .8s ease forwards;}
+@keyframes cardShine{0%{left:-60%; opacity:1;} 100%{left:130%; opacity:1;}}
+.diff-text{display:flex; flex-direction:column; gap:8px;}
 .rules{margin-top:18px; background:rgba(0,0,0,0.3); border:1px dashed var(--line); border-radius:10px; padding:12px 14px; font-size:12.5px; color:var(--muted); line-height:1.8;}
 .rules b{color:var(--gold-hi);}
 .rules summary{cursor:pointer; color:var(--gold); font-weight:700;}
@@ -406,6 +418,25 @@ button{font-family:inherit; cursor:pointer;}
 .codex-grid{display:flex; flex-wrap:wrap; gap:12px;}
 .codex-grid .pcard{width:170px;}
 .codex-grid .pcard-art{height:96px; font-size:50px;}
+/* 整張卡牌圖模式 */
+.pcard-full{display:none;}
+.pcard.has-art{background:transparent; border-color:transparent; box-shadow:none; padding:0; gap:8px;}
+.pcard.has-art .pcard-full{display:block; width:100%; height:auto; border-radius:10px;}
+.pcard.has-art .pcard-rar,.pcard.has-art .pcard-art,.pcard.has-art .pcard-name{display:none;}
+.pcard.has-art .pcard-new{top:10px; left:10px;}
+.pcard.has-art .pcard-count{top:10px; right:10px;}
+.pcard.has-art .pcard-desc{padding:0 4px;}
+.r-SSR.has-art .pcard-full{filter:drop-shadow(0 0 14px rgba(255,210,94,0.65));}
+.r-SR.has-art .pcard-full{filter:drop-shadow(0 0 10px rgba(176,124,255,0.55));}
+.r-R.has-art .pcard-full{filter:drop-shadow(0 0 8px rgba(111,156,255,0.45));}
+.r-CURSE.has-art .pcard-full{filter:drop-shadow(0 0 12px rgba(224,87,79,0.55));}
+.r-SSR.has-art::after{height:auto; aspect-ratio:3/4;}
+.pcard.locked.has-art .pcard-full{filter:brightness(0) opacity(0.45);}
+/* 難度圖卡：拿掉外框，讓透明背景的圖直接浮在面板上 */
+.diff-card.has-img{border:none; background:transparent; box-shadow:none;}
+.diff-card.has-img .diff-img{transition:filter .2s;}
+.diff-card.basic.has-img:hover .diff-img{filter:drop-shadow(0 0 16px rgba(76,195,138,0.7));}
+.diff-card.adv.has-img:hover .diff-img{filter:drop-shadow(0 0 16px rgba(224,87,79,0.7));}
 .reset-link{background:none; border:none; color:#7d6f5c; font-size:11.5px; text-decoration:underline; margin-top:6px;}
 
 /* ---------- 登入 ---------- */
@@ -470,9 +501,20 @@ button{font-family:inherit; cursor:pointer;}
 const ASSETS = {
   diagram: 'diagram.jpg',      // 消化系統地圖（原本遊戲裡的那張人體圖）
   wizard:  'wizard.png',       // 腸道大賢者頭像（建議正方形）
-  background: {                // 關卡背景（建議橫式、偏暗的圖）
-    basic:    'bg_basic.jpg',    // 見習魔法使（新手）
-    advanced: 'bg_advanced.jpg'  // 大魔導士（資深）
+  background: {                // 整個畫面的底圖（建議橫式 1920×1080），新手、資深共用
+    lobby:     'bg_lobby.jpg',     // 登入、大廳、結局
+    mouth:     'bg_mouth.jpg',     // 咀嚼石窟（口腔）
+    pharynx:   'bg_pharynx.jpg',   // 吞嚥閘門（咽）
+    esophagus: 'bg_esophagus.jpg', // 黑暗滑水道（食道）
+    stomach:   'bg_stomach.jpg',   // 胃酸沸騰池（胃）
+    si:        'bg_si.jpg',        // 絨毛迷宮（小腸）
+    large:     'bg_large.jpg',     // 汲水深淵（大腸）
+    anus:      'bg_anus.jpg',      // 終焉之門（肛門）
+    settle:    'bg_settle.jpg'     // 能量煉成陣、營火休息站
+  },
+  difficultyCards: {           // 大廳的難度圖卡按鈕（兩張請用相同比例，建議 4:3，例如 800×600）
+    basic:    'card_basic.png',    // 見習魔法使（新手）
+    advanced: 'card_advanced.png'  // 大魔導士（資深）
   },
   monsters: {                  // 分子魔物圖（建議正方形）
     carbs:   'monster_carbs.png',    // 醣類史萊姆
@@ -521,14 +563,14 @@ const CLOUD = {
    ========================================================= */
 const ORGANS = [
   {key:'mouth', name:'口腔', stage:'咀嚼石窟', icon:'🦷', hasChemical:true, pH:'中性', gland:'唾腺', juice:'唾液', nutrients:['醣類'], askNutrient:true, askGlandPH:true,
-    intro:'歡迎來到咀嚼石窟！牙齒巨石會把食物磨碎，唾腺的泉水也從這裡湧出……仔細觀察吧。'},
-  {key:'pharynx', name:'咽', stage:'吞嚥通道', icon:'🕳️', hasChemical:false, askGlandPH:false, note:'食物快速通過，沒有消化作用。',
-    intro:'這裡是吞嚥通道。食物只是匆匆路過，別被它騙了。'},
+    intro:'歡迎來到咀嚼石窟（口腔）！牙齒巨石會把食物磨碎，唾腺的泉水也從這裡湧出……仔細觀察吧。'},
+  {key:'pharynx', name:'咽', stage:'吞嚥閘門', icon:'🕳️', hasChemical:false, askGlandPH:false, note:'食物快速通過，沒有消化作用。',
+    intro:'這裡是吞嚥閘門（咽）。食物只是匆匆路過，別被它騙了。'},
   {key:'esophagus', name:'食道', stage:'黑暗滑水道', icon:'🌊', hasChemical:false, askGlandPH:false, note:'靠蠕動把食物推往胃部，沒有消化作用。',
-    intro:'黑暗滑水道到了！牆壁會一波波蠕動，把食物推向深處。'},
+    intro:'黑暗滑水道（食道）到了！牆壁會一波波蠕動，把食物推向深處。'},
   {key:'stomach', name:'胃', stage:'胃酸沸騰池', icon:'🔥', hasChemical:true, pH:'酸性', gland:'胃腺', juice:'胃液', nutrients:['蛋白質'], askNutrient:true, askGlandPH:true,
-    intro:'小心腳下！這是胃酸沸騰池，強酸翻滾，某些魔物會在這裡現出原形……'},
-  {key:'si', name:'小腸', stage:'絨毛吸收迷宮', icon:'🌿', isSmallIntestine:true, hasChemical:true, pH:'鹼性',
+    intro:'小心腳下！這是胃酸沸騰池（胃），強酸翻滾，某些魔物會在這裡現出原形……'},
+  {key:'si', name:'小腸', stage:'絨毛迷宮', icon:'🌿', isSmallIntestine:true, hasChemical:true, pH:'鹼性',
     glands:[
       {gland:'肝臟', juice:'膽汁', icon:'🫘', enzymes:[]},
       {gland:'胰臟', juice:'胰液', icon:'🧪', enzymes:['醣類','蛋白質','脂質']},
@@ -536,11 +578,11 @@ const ORGANS = [
     ],
     nutrients:['醣類','蛋白質','脂質'],
     note:'肝臟、胰臟、腸腺並不在小腸「裡面」，而是分別藉由導管，把分泌的消化液運送到小腸中！',
-    intro:'絨毛吸收迷宮是最終決戰之地！肝臟、胰臟、腸腺會從迷宮外送來援軍。'},
+    intro:'絨毛迷宮（小腸）是最終決戰之地！肝臟、胰臟、腸腺會從迷宮外送來援軍。'},
   {key:'large', name:'大腸', stage:'汲水深淵', icon:'💧', hasChemical:false, askGlandPH:false, note:'主要負責吸收水分，把殘渣變成糞便。',
-    intro:'汲水深淵……水分在這裡被一點一滴吸走，殘渣逐漸成形。'},
+    intro:'汲水深淵（大腸）……水分在這裡被一點一滴吸走，殘渣逐漸成形。'},
   {key:'anus', name:'肛門', stage:'終焉之門', icon:'🚪', hasChemical:false, askGlandPH:false, note:'消化之旅的終點站，殘渣在此排出。',
-    intro:'終焉之門就在眼前。殘渣將從這裡離開地下城，旅程即將結束。'}
+    intro:'終焉之門（肛門）就在眼前。殘渣將從這裡離開地下城，旅程即將結束。'}
 ];
 
 /* 營養素 → 魔物 */
@@ -1309,11 +1351,37 @@ function themeKey(){
   return 'hall';
 }
 
+/* 每個關卡用自己的底圖；圖片確定載入成功才換上，並把暗色遮罩調淡讓圖片看得見 */
+function bgKey(){
+  if(state.screen === 'organ') return currentOrgan().key;
+  if(state.screen === 'settlement' || state.screen === 'intermission') return 'settle';
+  return 'lobby';
+}
+let currentBg = null;
+function applyBg(src){
+  const st = document.body.style;
+  if(src){
+    st.setProperty('--bgimg', `url("${src}")`);
+    st.setProperty('--dim-top', '0.45'); st.setProperty('--dim-bottom', '0.7');
+  } else {
+    st.setProperty('--bgimg', 'none');
+    st.removeProperty('--dim-top'); st.removeProperty('--dim-bottom');
+  }
+}
+function setBackground(src){
+  if(src === currentBg) return;
+  currentBg = src;
+  if(!src || BAD_IMG.has(src)){ applyBg(null); return; }
+  const im = new Image();
+  im.onload = ()=>{ if(currentBg === src) applyBg(src); };
+  im.onerror = ()=>{ BAD_IMG.add(src); if(currentBg === src) applyBg(null); };
+  im.src = src;
+}
+
 function render(){
   const tk = themeKey();
   document.documentElement.style.setProperty('--trgb', THEMES[tk].rgb);
-  const bg = state.difficulty && state.screen !== 'menu' ? ASSETS.background[state.difficulty] : null;
-  document.body.style.setProperty('--bgimg', bg ? `url("${bg}")` : 'none');
+  setBackground(ASSETS.background[bgKey()]);
 
   const showMap = state.screen !== 'ending' && state.screen !== 'login';
   const app = document.getElementById('app');
@@ -1560,6 +1628,14 @@ function screenHtml(tk){
 }
 
 /* ---------- 大廳 ---------- */
+function diffCardHtml(cls, id, label, textHtml){
+  const src = ASSETS.difficultyCards[cls === 'basic' ? 'basic' : 'advanced'];
+  const hasImg = src && !BAD_IMG.has(src);
+  const img = hasImg
+    ? `<img class="diff-img" src="${src}" alt="${label}" onerror="BAD_IMG.add('${src}'); this.closest('.diff-card').classList.remove('has-img'); this.remove();">`
+    : '';
+  return `<button class="diff-card ${cls}${hasImg ? ' has-img' : ''}" id="${id}" aria-label="${label}">${img}<span class="diff-text">${textHtml}</span></button>`;
+}
 function menuHtml(tk){
   return `
   <div class="panel stage">
@@ -1570,18 +1646,16 @@ function menuHtml(tk){
       <p>每場冒險會召喚 <b>${DISHES_PER_RUN} 道魔物料理</b>。跟著它們從咀嚼石窟一路闖到終焉之門，擊倒體內的營養魔物，最後煉化出熱魔力！通關後依正確率掉落便便卡。</p>
     </div>
     <div class="diff-grid">
-      <button class="diff-card basic" id="pickBasic">
+      ${diffCardHtml('basic', 'pickBasic', '見習魔法使（新手）', `
         <span class="diff-tag">新手・單一魔物</span>
         <h3>🟢 見習魔法使</h3>
         <p>每道料理只藏著一種魔物，關卡較單純，適合先熟悉地下城的路線。</p>
-        <span class="diff-go">⚔️ 踏入地下城！</span>
-      </button>
-      <button class="diff-card adv" id="pickAdv">
+        <span class="diff-go">⚔️ 踏入地下城！</span>`)}
+      ${diffCardHtml('adv', 'pickAdv', '大魔導士（資深）', `
         <span class="diff-tag">資深・魔物軍團</span>
         <h3>🔴 大魔導士</h3>
         <p>多種魔物同時出沒，還要辨識正在被分解的魔物。風險更高，但熱魔力非常可觀！</p>
-        <span class="diff-go">🔥 挑戰魔物軍團！</span>
-      </button>
+        <span class="diff-go">🔥 挑戰魔物軍團！</span>`)}
     </div>
     <details class="rules">
       <summary>📜 冒險規則與便便卡掉落表</summary>
@@ -1624,12 +1698,12 @@ function organHtml(tk){
   if(qType === 'chem'){
     const correct = chemCorrectAnswer(o, state.food);
     const prompt = o.nutrients && o.nutrients.length
-      ? `「${state.food.name}」帶著魔物闖入了【${o.stage}】。這裡分泌的消化液，是否含有酵素，能對它施展化學消化？`
-      : `「${state.food.name}」來到了【${o.stage}】。這裡會對它進行化學消化嗎？`;
+      ? `「${state.food.name}」帶著魔物闖入了【${stageLabel(o)}】。這裡分泌的消化液，是否含有酵素，能對它施展化學消化？`
+      : `「${state.food.name}」來到了【${stageLabel(o)}】。這裡會對它進行化學消化嗎？`;
     body = optionQuestionHtml('chem', prompt,
       [{val:'是', label:'✨ 施放消化魔法！'}, {val:'否', label:'🛑 按兵不動，放它通過'}], correct);
   } else if(qType === 'pH'){
-    body = optionQuestionHtml('pH', `以魔力感知【${o.stage}】的環境，這裡的酸鹼值是？`,
+    body = optionQuestionHtml('pH', `以魔力感知【${stageLabel(o)}】的環境，這裡的酸鹼值是？`,
       [{val:'酸性', label:'🔥 判定：酸性'}, {val:'中性', label:'⚖️ 判定：中性'}, {val:'鹼性', label:'💠 判定：鹼性'}], o.pH);
   } else if(qType === 'gland'){
     const opts = state.glandShuffled.map(g=>({val:`${g.gland}→${g.juice}`, label:`🔮 召喚 ${g.gland} → ${g.juice}`}));
@@ -1677,7 +1751,7 @@ function nutrientQuestionHtml(o){
   const correct = o.nutrients.filter(n=>foodHasNutrient(state.food, n));
   const items = ['醣類','蛋白質','脂質'].map(n=>({val:n, label:`${MONSTERS[n].emoji} ${monLabel(n)}`}));
   return `
-  <div class="q-prompt">此刻在【${o.stage}】，哪些魔物正在被分解？（可複選）</div>
+  <div class="q-prompt">此刻在【${stageLabel(o)}】，哪些魔物正在被分解？（可複選）</div>
   ${pillsHtml('nutrientBox', items, correct)}
   <button class="cast-btn" id="submitNutrient">⚡ 發動分解術！</button>`;
 }
@@ -1785,9 +1859,16 @@ function cardHtml(card, opts){
   opts = opts || {};
   const locked = opts.locked;
   const name = locked ? '？？？' : card.name;
-  const art = locked ? pic(null, card.emoji, 'pcard-art') : pic(ASSETS.cards[card.id], card.emoji, 'pcard-art');
+  const src = ASSETS.cards[card.id];
+  const hasArt = src && !BAD_IMG.has(src);
+  /* 有卡牌圖：整張卡完整顯示（卡框、等級、名稱都在圖裡），衛教說明放在下方；沒有圖：用文字版卡片 */
+  const full = hasArt
+    ? `<img class="pcard-full" src="${src}" alt="${locked ? '尚未獲得' : card.name}" onerror="BAD_IMG.add('${src}'); this.closest('.pcard').classList.remove('has-art'); this.remove();">`
+    : '';
+  const art = pic(null, card.emoji, 'pcard-art');
   return `
-  <div class="pcard r-${card.rarity}${locked?' locked':''}${opts.reveal?' reveal':''}" style="${opts.delay?`animation-delay:${opts.delay}s;`:''}">
+  <div class="pcard r-${card.rarity}${hasArt?' has-art':''}${locked?' locked':''}${opts.reveal?' reveal':''}" style="${opts.delay?`animation-delay:${opts.delay}s;`:''}">
+    ${full}
     ${opts.isNew ? '<div class="pcard-new">NEW!</div>' : ''}
     ${opts.count ? `<div class="pcard-count">×${opts.count}</div>` : ''}
     <div class="pcard-rar">${RARITY_LABEL[card.rarity]}</div>
