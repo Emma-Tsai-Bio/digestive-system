@@ -39,16 +39,20 @@ body{
   -webkit-font-smoothing:antialiased;
   background-color:var(--bg0);
   background-image:
-    linear-gradient(rgba(10,7,11,var(--dim-top,0.84)), rgba(10,7,11,var(--dim-bottom,0.93))),
-    var(--bgimg, none),
+    linear-gradient(rgba(10,7,11,0.84), rgba(10,7,11,0.93)),
     radial-gradient(ellipse at 15% -10%, rgba(176,124,255,0.12), transparent 55%),
     radial-gradient(ellipse at 90% 0%, rgba(217,178,95,0.10), transparent 50%),
     repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0 2px, transparent 2px 46px),
     repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0 2px, transparent 2px 92px);
-  background-size:auto, cover, auto, auto, auto, auto;
-  background-position:center, center, center, center, center, center;
-  background-attachment:fixed, fixed, scroll, scroll, scroll, scroll;
 }
+/* 關卡底圖：上方是完整的清楚原圖，其餘用同一張圖的模糊放大版填滿 */
+#bgStage{position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:0; transition:opacity .4s; overflow:hidden;}
+#bgStage.on{opacity:1;}
+#bgStage .bg-blur{position:absolute; inset:-60px; background-position:center; background-size:cover; filter:blur(24px) brightness(0.42) saturate(1.1);}
+#bgStage .bg-sharp{position:absolute; top:0; left:50%; transform:translateX(-50%); width:min(80vw, 1200px); aspect-ratio:16/9; max-height:100vh; background-position:top center; background-size:cover; background-repeat:no-repeat;
+  -webkit-mask-image:linear-gradient(to bottom, #000 72%, transparent 100%), linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%); -webkit-mask-composite:source-in; mask-image:linear-gradient(to bottom, #000 72%, transparent 100%), linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%); mask-composite:intersect;}
+@media(max-width:780px){#bgStage .bg-sharp{width:100%;}}
+#bgStage .bg-shade{position:absolute; inset:0; background:linear-gradient(rgba(10,7,11,0.35), rgba(10,7,11,0.65));}
 h1,h2,h3,h4{font-family:'Noto Serif TC',serif; margin:0;}
 button{font-family:inherit; cursor:pointer;}
 .wrap{max-width:1000px; margin:0 auto;}
@@ -88,7 +92,8 @@ button{font-family:inherit; cursor:pointer;}
 @keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
 
 /* ---------- 頂部列 ---------- */
-.topbar{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:16px; flex-wrap:wrap;}
+.topbar{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:16px; flex-wrap:wrap;
+  background:linear-gradient(180deg, rgba(12,8,12,0.82), rgba(12,8,12,0.62)); border:1px solid rgba(217,178,95,0.18); border-radius:14px; padding:10px 14px; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);}
 .brand{display:flex; align-items:center; gap:10px;}
 .brand-emblem{
   width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px;
@@ -240,14 +245,14 @@ button{font-family:inherit; cursor:pointer;}
 
 /* ---------- 魔物料理展示（真實食物照片 + 分子魔物圖） ---------- */
 .showcase{
-  display:flex; align-items:stretch; gap:10px; background:rgba(0,0,0,0.35); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px 16px; background:rgba(0,0,0,0.35); border:1px solid var(--line);
   border-radius:12px; padding:10px; margin-bottom:14px;
 }
 .show-food{display:flex; flex-direction:column; align-items:center; gap:6px; flex:0 0 210px;}
 .food-pic{width:200px; height:150px; border-radius:8px; border:2px solid var(--gold); font-size:44px; background:#2b2022;}
 .show-cap{font-size:12.5px; font-weight:700; text-align:center; color:var(--gold-hi);}
 .show-vs{display:flex; align-items:center; font-size:22px; color:var(--gold); text-shadow:0 0 10px rgba(217,178,95,0.6);}
-.show-mons{flex:1; display:flex; flex-wrap:wrap; gap:8px; align-items:center;}
+.show-mons{flex:0 1 auto; display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center;}
 .mon{display:flex; flex-direction:column; align-items:center; gap:4px; width:84px;}
 .mon-pic{width:62px; height:62px; border-radius:50%; border:2px solid rgba(var(--trgb),0.7); font-size:32px; background:radial-gradient(circle,#3b2c3a,#1a1218);}
 .mon-cap{font-size:11.5px; font-weight:700; text-align:center; line-height:1.3;}
@@ -263,7 +268,7 @@ button{font-family:inherit; cursor:pointer;}
 /* ---------- 題目 ---------- */
 .q-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px; gap:10px;}
 .q-stage{font-size:20px; font-weight:900; display:flex; align-items:center; gap:8px; color:rgb(var(--trgb)); text-shadow:0 0 12px rgba(var(--trgb),0.5), 0 2px 0 #000;}
-.q-stage small{font-size:12px; color:var(--muted); font-family:'Noto Sans TC'; font-weight:500; text-shadow:none;}
+.q-stage small{font-size:15px; color:rgba(var(--trgb),0.85); font-family:'Noto Serif TC',serif; font-weight:600; text-shadow:none;}
 .q-progress{font-size:12px; color:var(--muted); font-weight:700; white-space:nowrap; font-family:'Cinzel',serif;}
 .q-note{font-size:12.5px; color:var(--gold-hi); background:rgba(217,178,95,0.08); border:1px solid rgba(217,178,95,0.25); border-radius:8px; padding:8px 10px; margin:10px 0 4px; line-height:1.6;}
 .timer-label{font-size:10.5px; color:var(--muted); margin-top:14px; letter-spacing:2px;}
@@ -411,7 +416,8 @@ button{font-family:inherit; cursor:pointer;}
 .npc-modal .wizard-bar{margin-bottom:14px;}
 .answer-reveal{background:rgba(0,0,0,0.4); border:1px solid var(--line); border-radius:10px; padding:12px 14px; font-size:15px; line-height:1.6; margin-bottom:10px;}
 .answer-reveal b{color:var(--gold-hi);}
-.explain{font-size:12.5px; color:var(--muted); line-height:1.6; margin-bottom:10px;}
+.explain{font-size:16.5px; font-weight:500; color:var(--text); line-height:1.75; margin-bottom:12px; background:rgba(217,178,95,0.08); border:1px solid rgba(217,178,95,0.3); border-left:4px solid var(--gold); border-radius:10px; padding:12px 14px;}
+@media(max-width:480px){.explain{font-size:15.5px;}}
 .hp-loss{color:var(--red); font-weight:700; font-size:13px; text-align:center; margin-bottom:12px;}
 .codex-summary{font-size:13px; color:var(--muted); margin-bottom:14px;}
 .codex-summary b{color:var(--gold-hi);}
@@ -489,6 +495,7 @@ button{font-family:inherit; cursor:pointer;}
 </style>
 </head>
 <body>
+<div id="bgStage" aria-hidden="true"><div class="bg-blur"></div><div class="bg-sharp"></div><div class="bg-shade"></div></div>
 <div class="wrap" id="app"></div>
 
 <script>
@@ -564,13 +571,13 @@ const CLOUD = {
    ========================================================= */
 const ORGANS = [
   {key:'mouth', name:'口腔', stage:'咀嚼石窟', icon:'🦷', hasChemical:true, pH:'中性', gland:'唾腺', juice:'唾液', nutrients:['醣類'], askNutrient:true, askGlandPH:true,
-    intro:'歡迎來到咀嚼石窟（口腔）！牙齒巨石會把食物磨碎，唾腺的泉水也從這裡湧出……仔細觀察吧。'},
+    intro:'歡迎來到口腔（咀嚼石窟）！牙齒巨石會把食物磨碎，唾腺的泉水也從這裡湧出……仔細觀察吧。'},
   {key:'pharynx', name:'咽', stage:'吞嚥閘門', icon:'🕳️', hasChemical:false, askGlandPH:false, note:'食物快速通過，沒有消化作用。',
-    intro:'這裡是吞嚥閘門（咽）。食物只是匆匆路過，別被它騙了。'},
+    intro:'這裡是咽（吞嚥閘門）。食物只是匆匆路過，別被它騙了。'},
   {key:'esophagus', name:'食道', stage:'黑暗滑水道', icon:'🌊', hasChemical:false, askGlandPH:false, note:'靠蠕動把食物推往胃部，沒有消化作用。',
-    intro:'黑暗滑水道（食道）到了！牆壁會一波波蠕動，把食物推向深處。'},
+    intro:'食道（黑暗滑水道）到了！牆壁會一波波蠕動，把食物推向深處。'},
   {key:'stomach', name:'胃', stage:'胃酸沸騰之池', icon:'🔥', hasChemical:true, pH:'酸性', gland:'胃腺', juice:'胃液', nutrients:['蛋白質'], askNutrient:true, askGlandPH:true,
-    intro:'小心腳下！這是胃酸沸騰之池（胃），強酸翻滾，某些魔物會在這裡現出原形……'},
+    intro:'小心腳下！這是胃（胃酸沸騰之池），強酸翻滾，某些魔物會在這裡現出原形……'},
   {key:'si', name:'小腸', stage:'絨毛迷宮', icon:'🌿', isSmallIntestine:true, hasChemical:true, pH:'鹼性',
     glands:[
       {gland:'肝臟', juice:'膽汁', icon:'🫘', enzymes:[]},
@@ -579,11 +586,11 @@ const ORGANS = [
     ],
     nutrients:['醣類','蛋白質','脂質'],
     note:'肝臟、胰臟、腸腺並不在小腸「裡面」，而是分別藉由導管，把分泌的消化液運送到小腸中！',
-    intro:'絨毛迷宮（小腸）是最終決戰之地！肝臟、胰臟、腸腺會從迷宮外送來援軍。'},
+    intro:'小腸（絨毛迷宮）是最終決戰之地！肝臟、胰臟、腸腺會從迷宮外送來援軍。'},
   {key:'large', name:'大腸', stage:'汲水深淵', icon:'💧', hasChemical:false, askGlandPH:false, note:'主要負責吸收水分，把殘渣變成糞便。',
-    intro:'汲水深淵（大腸）……水分在這裡被一點一滴吸走，殘渣逐漸成形。'},
+    intro:'大腸（汲水深淵）……水分在這裡被一點一滴吸走，殘渣逐漸成形。'},
   {key:'anus', name:'肛門', stage:'終焉之門', icon:'🚪', hasChemical:false, askGlandPH:false, note:'消化之旅的終點站，殘渣在此排出。',
-    intro:'終焉之門（肛門）就在眼前。殘渣將從這裡離開地下城，旅程即將結束。'}
+    intro:'肛門（終焉之門）就在眼前。殘渣將從這裡離開地下城，旅程即將結束。'}
 ];
 
 /* 營養素 → 魔物 */
@@ -743,7 +750,7 @@ function buildSettlementItems(f){
 function currentOrgan(){ return ORGANS[state.organIndex]; }
 function currentQType(){ return state.qList[state.qIndex]; }
 function pointsFor(qType){ return qType==='nutrient' ? NUTRIENT_POINTS : Q_POINTS[state.difficulty]; }
-function stageLabel(o){ return `${o.stage}（${o.name}）`; }
+function stageLabel(o){ return `${o.name}（${o.stage}）`; }
 
 /* 圖片：找不到檔案時改顯示表情符號 */
 function markBad(img, src){
@@ -1360,13 +1367,15 @@ function bgKey(){
 }
 let currentBg = null;
 function applyBg(src){
-  const st = document.body.style;
+  const stage = document.getElementById('bgStage');
+  if(!stage) return;
   if(src){
-    st.setProperty('--bgimg', `url("${src}")`);
-    st.setProperty('--dim-top', '0.45'); st.setProperty('--dim-bottom', '0.7');
+    const u = `url("${src}")`;
+    stage.querySelector('.bg-blur').style.backgroundImage = u;
+    stage.querySelector('.bg-sharp').style.backgroundImage = u;
+    stage.classList.add('on');
   } else {
-    st.setProperty('--bgimg', 'none');
-    st.removeProperty('--dim-top'); st.removeProperty('--dim-bottom');
+    stage.classList.remove('on');
   }
 }
 function setBackground(src){
@@ -1603,7 +1612,7 @@ function mapHtml(){
   const dotColor = {done:'var(--green)', current:'var(--red)', upcoming:'#6b5e4f'};
   const path = ORGANS.map((o,i)=>{
     const s = organStatus(i);
-    return `<li class="p-${s}"><i class="dot" style="background:${dotColor[s]}"></i>${o.icon} ${o.stage}<small>${o.name}</small></li>`;
+    return `<li class="p-${s}"><i class="dot" style="background:${dotColor[s]}"></i>${o.icon} ${o.name}<small>${o.stage}</small></li>`;
   }).join('');
   return `
   <div class="panel map-panel">
@@ -1644,7 +1653,7 @@ function menuHtml(tk){
     <div class="menu-hero">
       <div class="crest">🏰</div>
       <h2>踏入人體地下城</h2>
-      <p>每場冒險會召喚 <b>${DISHES_PER_RUN} 道魔物料理</b>。跟著它們從咀嚼石窟一路闖到終焉之門，擊倒體內的營養魔物，最後煉化出熱魔力！通關後依正確率掉落便便卡。</p>
+      <p>每場冒險會召喚 <b>${DISHES_PER_RUN} 道魔物料理</b>。跟著它們從口腔（咀嚼石窟）一路闖到肛門（終焉之門），擊倒體內的營養魔物，最後煉化出熱魔力！通關後依正確率掉落便便卡。</p>
     </div>
     <div class="diff-grid">
       ${diffCardHtml('basic', 'pickBasic', '見習魔法使（新手）', `
@@ -1721,7 +1730,7 @@ function organHtml(tk){
     ${fxHtml(tk)}
     ${showcaseHtml()}
     <div class="q-head">
-      <div class="q-stage">${o.icon} ${o.stage}<small>（${o.name}）</small></div>
+      <div class="q-stage">${o.icon} ${o.name}<small>（${o.stage}）</small></div>
       <div class="q-progress">FLOOR ${state.organIndex+1} / ${ORGANS.length}</div>
     </div>
     ${o.note ? `<div class="q-note">📜 ${o.note}</div>` : ''}
@@ -1798,7 +1807,7 @@ function settleSelectHtml(f){
   return `
   <div class="food-hero">
     <h2>⚗️ 能量煉成陣</h2>
-    <p>殘渣已從終焉之門排出，魔物化為以下素材。</p>
+    <p>殘渣已從肛門（終焉之門）排出，魔物化為以下素材。</p>
   </div>
   <div class="q-prompt">哪些素材能被煉化成熱魔力（產生熱量）？</div>
   ${pillsHtml('settleSelectBox', items, correct)}
