@@ -570,7 +570,7 @@ button{font-family:inherit; cursor:pointer;}
 .wu-sky::after{content:'▼ 掉到這裡就失敗'; position:absolute; bottom:4px; left:0; right:0; text-align:center; font-size:11px; color:rgba(255,160,150,0.7);}
 .wu-job{position:absolute; left:50%; transform:translateX(-50%); top:0; width:min(92%, 380px); background:linear-gradient(180deg,#f3e3bd,#dcc28c); color:#2b1d10; border:2px solid #8c6a2a; border-radius:10px; padding:12px 14px; font-weight:800; font-size:16px; text-align:center; box-shadow:0 6px 14px rgba(0,0,0,0.5);}
 .wu-job.drag-clone{transform:rotate(-3deg) scale(1.04);}
-.wu-members{display:grid; grid-template-columns:repeat(8, 1fr); gap:8px;}
+.wu-members{display:grid; grid-template-columns:repeat(7, 1fr); gap:8px;}
 @media(max-width:780px){.wu-members{grid-template-columns:repeat(4, 1fr);} .wu-sky{height:180px;} .wu-member{min-height:68px; padding:6px 2px;} .wu-m-icon{font-size:22px;} .wu-job{font-size:15px; padding:10px;}}
 .wu-member{display:flex; flex-direction:column; align-items:center; gap:3px; padding:10px 4px; border-radius:10px; background:rgba(0,0,0,0.4); border:2px solid rgba(217,178,95,0.3); text-align:center; min-height:84px; justify-content:center;}
 .wu-member b{font-size:15px;}
@@ -600,7 +600,9 @@ button{font-family:inherit; cursor:pointer;}
 .wu-ph-val{font-weight:800; font-size:14px; text-align:right;}
 @media(max-width:560px){.wu-ph-row{grid-template-columns:1fr; gap:6px;} .wu-ph-val{text-align:left;} .wu-ph-scale{margin-left:4px;}}
 .wu-ph,.wu-temp{-webkit-appearance:none; appearance:none; width:100%; height:16px; border-radius:999px; outline:none; touch-action:none;}
-.wu-ph{background:linear-gradient(90deg,#e5302a,#f07a24,#f2c12e,#e8e53a,#a5d63c,#4cb848,#2f9e4f,#2aa18f,#2a8bbf,#2c63b5,#3d4aa8,#5a3d9e,#6e2f91,#5b2378);}
+.wu-ph{background:linear-gradient(90deg,#e5503a 0 33.3%,#43b05c 33.3% 66.6%,#3d6fd1 66.6% 100%);}
+.wu-ph-wrap{display:flex; flex-direction:column; gap:4px;}
+.wu-ph-zones{display:flex; justify-content:space-between; font-size:12.5px; font-weight:700; color:var(--muted); padding:0 2px;}
 .wu-temp{background:linear-gradient(90deg,#5ab6ff,#8fe08a,#ffd34d,#ff8a3d,#e5302a);}
 .wu-ph::-webkit-slider-thumb,.wu-temp::-webkit-slider-thumb{-webkit-appearance:none; width:30px; height:30px; border-radius:50%; background:#fff6dd; border:4px solid #8c6a2a; box-shadow:0 2px 6px rgba(0,0,0,0.5); cursor:grab;}
 .wu-ph::-moz-range-thumb,.wu-temp::-moz-range-thumb{width:26px; height:26px; border-radius:50%; background:#fff6dd; border:4px solid #8c6a2a; cursor:grab;}
@@ -632,6 +634,12 @@ button{font-family:inherit; cursor:pointer;}
 .drop-table th,.drop-table td{border:1px solid rgba(217,178,95,0.25); padding:5px 6px; text-align:left; vertical-align:top;}
 .drop-table th{color:var(--gold-hi);}
 @media(max-width:560px){.drop-table{font-size:11px;}}
+.steady .panel,.steady .wizard-bar{animation:none !important;}
+.wu-summary{margin:12px auto 6px; border-collapse:collapse; min-width:min(100%, 420px); font-size:15px;}
+.wu-summary th,.wu-summary td{padding:9px 14px; border-bottom:1px solid rgba(217,178,95,0.2); text-align:left;}
+.wu-summary th{font-size:12px; color:var(--muted);}
+.wu-summary td.stars{letter-spacing:2px;}
+.wu-summary tfoot td{font-weight:900; color:var(--gold-hi); border-bottom:none;}
 </style>
 </head>
 <body>
@@ -1422,7 +1430,7 @@ function randomCardOf(rarity){ return pickOne(CARDS.filter(c=>c.rarity===rarity)
 /* 掉落表：三種模式各自一套（越難越好抽；暖身最容易刷，所以只掉 1 張、SSR 機率最低） */
 const DROP_TABLES = {
   warmup:  {S:{n:1, t:[['SSR',10],['SR',50],['R',40]]}, A:{n:1, t:[['SR',30],['R',70]]}, B:{n:1, t:[['R',100]]}},
-  basic:   {S:{n:2, t:[['SSR',30],['SR',50],['R',20]]}, A:{n:1, t:[['SR',50],['R',50]]}, B:{n:1, t:[['R',100]]}},
+  basic:   {S:{n:2, t:[['SSR',15],['SR',55],['R',30]]}, A:{n:1, t:[['SR',50],['R',50]]}, B:{n:1, t:[['R',100]]}},
   advanced:{S:{n:2, t:[['SSR',40],['SR',45],['R',15]]}, A:{n:1, t:[['SSR',10],['SR',50],['R',40]]}, B:{n:1, t:[['SR',20],['R',80]]}}
 };
 const ALL_MODES = ['warmup','basic','advanced'];
@@ -1442,7 +1450,8 @@ function finishRun(type){
     draws = [CARDS.find(c=>c.id==='curse_diarrhea')];
   } else {
     grade = acc >= 0.9 ? 'S' : acc >= 0.7 ? 'A' : acc >= 0.5 ? 'B' : 'C';
-    if(grade === 'C') draws.push(CARDS.find(c=>c.id==='n_gas'));
+    if(mode === 'warmup') { /* 暖身關不掉落便便卡 */ }
+    else if(grade === 'C') draws.push(CARDS.find(c=>c.id==='n_gas'));
     else {
       const rule = DROP_TABLES[mode][grade];
       for(let i=0;i<rule.n;i++) draws.push(randomCardOf(rollRarity(rule.t)));
@@ -1481,7 +1490,7 @@ function finishRun(type){
     C:'唉，魔物大多從你指縫溜走了……結果只拉出了一團氣。',
     X:'生命耗盡……整座地下城被泥石流淹沒了。年輕人，重新來過吧！'
   };
-  setWizard(words[grade], grade==='X'||grade==='C' ? 'sad' : 'happy');
+  setWizard(mode === 'warmup' ? '暖身完成！看看你四站的成績，準備好就去挑戰見習魔法使或大魔導士吧。' : words[grade], grade==='X'||(grade==='C' && mode!=='warmup') ? 'sad' : 'happy');
   state.ending = {type, grade, acc, cards, urUnlocked, mode};
   if(urUnlocked) setWizard('天啊……三條修行之路你全部走完了！七彩神龍便從天而降，這可是傳說中的傳說！', 'happy');
   state.hintActive = false;
@@ -1582,6 +1591,7 @@ function setBackground(src){
   im.src = src;
 }
 
+let lastRenderedScreen = null;
 function render(){
   const tk = themeKey();
   document.documentElement.style.setProperty('--trgb', THEMES[tk].rgb);
@@ -1600,6 +1610,8 @@ function render(){
     (state.leaderOpen ? leaderHtml() : '') +
     (state.wrongModal ? wrongModalHtml() : '') +
     (state.hintModalOpen ? hintModalHtml() : '');
+  app.classList.toggle('steady', lastRenderedScreen === state.screen);
+  lastRenderedScreen = state.screen;
   bindEvents();
 }
 
@@ -1876,16 +1888,16 @@ function menuHtml(tk){
       ❤️ 生命 ${MAX_HP} 點，答錯扣 1 點，歸零即冒險失敗。<br>
       🔥 答對可獲得熱魔力，15 秒內答對再加 ${SPEED_BONUS} 點速攻加成；結算熱量的大卡數也會轉為熱魔力。<br>
       <table class="drop-table">
-        <tr><th>評價（正確率）</th><th>🏕️ 見習營地</th><th>🟢 見習魔法使</th><th>🔴 大魔導士</th></tr>
-        <tr><td>🌟 S（≥ 90%）</td><td>1 張：SSR 10%／SR 50%／R 40%</td><td>2 張：每張 SSR 30%／SR 50%／R 20%</td><td>2 張：每張 SSR 40%／SR 45%／R 15%</td></tr>
-        <tr><td>✨ A（70～89%）</td><td>1 張：SR 30%／R 70%</td><td>1 張：SR 50%／R 50%</td><td>1 張：SSR 10%／SR 50%／R 40%</td></tr>
-        <tr><td>🔹 B（50～69%）</td><td>1 張 R</td><td>1 張 R</td><td>1 張：SR 20%／R 80%</td></tr>
+        <tr><th>評價（正確率）</th><th>🟢 見習魔法使</th><th>🔴 大魔導士</th></tr>
+        <tr><td>🌟 S（≥ 90%）</td><td>2 張：每張 SSR 15%／SR 55%／R 30%</td><td>2 張：每張 SSR 40%／SR 45%／R 15%</td></tr>
+        <tr><td>✨ A（70～89%）</td><td>1 張：SR 50%／R 50%</td><td>1 張：SSR 10%／SR 50%／R 40%</td></tr>
+        <tr><td>🔹 B（50～69%）</td><td>1 張 R</td><td>1 張：SR 20%／R 80%</td></tr>
       </table>
       🌈 <b>三界制霸</b>：三種模式都通關過一次，必得 UR「三界制霸・七彩神龍便」（每人一張）<br>
       💨 <b>正確率低於 50%</b>：必得「隱身氣體便」<br>
       💩 <b>生命歸零</b>：必得「水行俠的腹瀉」<br>
       📋 <b>大魔導士</b>的能量結算要看「營養標示」：先算出每份熱量，再乘上份數<br>
-      🏕️ <b>見習營地</b>失誤不扣生命，但每失誤一次，暖身成績加 5 秒<br>
+      🏕️ <b>見習營地</b>不掉落便便卡，通關後顯示四站成績；失誤不扣生命，但每失誤一次，暖身成績加 5 秒<br>
       🏆 <b>排行榜</b>：見習、大魔導士各一榜，比「成功通關」場次的單場最高熱魔力；暖身最快榜比時間；圖鑑收集榜比收集到的便便種類
     </details>
   </div>`;
@@ -2140,6 +2152,7 @@ function endingHtml(tk){
   const buttons = e.type === 'gameover'
     ? `<button class="cast-btn danger" id="restartBtn">🔄 重新踏上冒險</button>`
     : `<button class="cast-btn" id="hallBtn">🏰 返回大廳，再次冒險</button>`;
+  if(e.mode === 'warmup' && state.wu) return warmupEndingHtml(tk, e, cards, buttons);
   return `
   <div class="panel stage center">
     ${fxHtml(tk)}
@@ -2160,6 +2173,34 @@ function endingHtml(tk){
     <div class="btn-row">
       ${buttons}
       <button class="cast-btn ghost" id="codexBtn2">📖 查看便便圖鑑</button>
+      <button class="cast-btn ghost" id="leaderBtn2">🏆 查看排行榜</button>
+    </div>
+    <div class="upload-status ${state.uploadStatus==='ok'?'ok':state.uploadStatus==='fail'?'fail':''}" id="uploadStatus">${UPLOAD_TEXT[state.uploadStatus] || ''}</div>
+  </div>`;
+}
+
+function warmupEndingHtml(tk, e, cards, buttons){
+  const w = state.wu;
+  const rows = WU_NAMES.map((n,i)=>`<tr><td>${i+1}. ${n}</td><td class="stars">${'⭐'.repeat(w.stars[i]||0)}${'☆'.repeat(3-(w.stars[i]||0))}</td><td>${w.stMistakes[i]} 次</td></tr>`).join('');
+  const totalStars = w.stars.reduce((a,b)=>a+b,0);
+  return `
+  <div class="panel stage center">
+    ${fxHtml(tk)}
+    <div class="big-icon">🏕️</div>
+    <h2 class="ending-title">見習營地・暖身完成！</h2>
+    <table class="wu-summary">
+      <thead><tr><th>站別</th><th>星星</th><th>失誤</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr><td>合計</td><td>⭐ ${totalStars} / 12</td><td>${w.mistakes} 次</td></tr></tfoot>
+    </table>
+    <div class="stat-row">
+      <div class="stat"><b>${fmtTime(w.timeSec)}</b><span>暖身成績（實際 ${fmtTime(w.rawSec)}＋失誤 ${w.mistakes}×${WU_PENALTY_SEC} 秒）</span></div>
+      <div class="stat"><b>${Math.round(e.acc*100)}%</b><span>正確率（${state.stats.correct}/${state.stats.total}）</span></div>
+      <div class="stat"><b>${state.runEarned}</b><span>本次熱魔力</span></div>
+    </div>
+    ${e.urUnlocked ? `<div class="ur-banner">🌈 三界制霸達成！三條修行之路全部通關，獲得 UR 卡！</div><div class="drop-row" style="margin-top:12px">${cards}</div>` : ''}
+    <div class="btn-row">
+      ${buttons}
       <button class="cast-btn ghost" id="leaderBtn2">🏆 查看排行榜</button>
     </div>
     <div class="upload-status ${state.uploadStatus==='ok'?'ok':state.uploadStatus==='fail'?'fail':''}" id="uploadStatus">${UPLOAD_TEXT[state.uploadStatus] || ''}</div>
@@ -2365,7 +2406,7 @@ const WU_NAMES = ['鋪設通道','點亮地圖','公會任務','煉金管線'];
 const WU_INTRO = [
   '歡迎來到見習營地！第一站：把散落的石板鋪成一條消化道。小心，裡面混了消化腺，食物可不會經過它們喔！',
   '第二站：地下城地圖的名牌被魔物偷走了！把每個名牌放回正確的位置，連續放對還有連擊加成。',
-  '第三站：冒險者公會來了一堆任務卡！在卡片掉到底之前，派給負責的器官。不是消化道的工作，就丟進回收桶。',
+  '第三站：冒險者公會來了一堆任務卡！在卡片掉到底之前，派給負責的器官。',
   '最後一站：煉金管線！先把每種消化液接到它注入的地方，再調整酸鹼值，最後找出酵素最有活力的溫度。'
 ];
 const WU_PENALTY_SEC = 5;           // 暖身每答錯一次，排行榜時間加幾秒
@@ -2400,10 +2441,7 @@ const WU_JOBS = [
   {text:'皺褶、絨毛增加吸收面積', owner:'小腸'},
   {text:'吸收水分', owner:'大腸'},
   {text:'形成糞便並暫時儲存', owner:'大腸'},
-  {text:'排遺', owner:'肛門'},
-  {text:'製造膽汁', owner:'gland'},
-  {text:'儲存膽汁', owner:'gland'},
-  {text:'分泌胰液', owner:'gland'}
+  {text:'排遺', owner:'肛門'}
 ];
 
 /* 第 4 站：消化液管線 */
@@ -2421,7 +2459,8 @@ const WU_PH_TARGETS = [
   {name:'胃',   ans:'酸性', hint:'胃液裡含有鹽酸。'},
   {name:'小腸', ans:'鹼性', hint:'胰液、腸液、膽汁偏鹼性，可以中和從胃來的酸。'}
 ];
-function phClass(v){ return v < 7 ? '酸性' : v > 7 ? '鹼性' : '中性'; }
+const PH_ZONES = ['酸性','中性','鹼性'];
+function phClass(v){ return PH_ZONES[v]; }
 
 let wuSel = null;          // 點選模式：目前選中的拖曳物
 let wuClockHandle = null;
@@ -2435,7 +2474,7 @@ function startWarmup(){
   state.ending = null;
   state.clearedFoods = [];
   state.uploadStatus = null;
-  const randPh = ans => { let v; do { v = 1 + Math.floor(Math.random()*14); } while(phClass(v) === ans); return v; };
+  const randPh = ans => { let v; do { v = Math.floor(Math.random()*3); } while(phClass(v) === ans); return v; };
   state.wu = {
     station:0, start:Date.now(), correct:0, mistakes:0, stMistakes:[0,0,0,0], stars:[], between:false, flash:null,
     s1:{tray:shuffled([...WU_TRACT, ...WU_GLANDS]), slots:Array(7).fill(null), locked:Array(7).fill(false), running:false, bad:[]},
@@ -2478,7 +2517,7 @@ function wuStationDone(msg){
   earn(stars * 10);
   w.between = true;
   setWizard(msg || '漂亮！這一站完成了。', 'happy');
-  render();
+  wuRender();
 }
 function wuNext(){
   const w = state.wu;
@@ -2488,7 +2527,7 @@ function wuNext(){
   if(w.station >= 4){ finishWarmup(); return; }
   setWizard(WU_INTRO[w.station], 'calm');
   if(w.station === 2) wuS3Spawn();
-  render();
+  wuRender();
   if(w.station === 2) requestAnimationFrame(wuS3Loop);
   wuScrollToPlay();
 }
@@ -2616,7 +2655,7 @@ function wuS1Drop(id, target){
   const from = s.slots.indexOf(name);           // -1 表示在托盤
   if(target === 'tray'){
     if(from >= 0 && !s.locked[from]){ s.slots[from] = null; s.tray.push(name); }
-    s.bad = []; render(); return;
+    s.bad = []; wuRender(); return;
   }
   if(!target.startsWith('slot:')) return;
   const to = +target.slice(5);
@@ -2626,13 +2665,13 @@ function wuS1Drop(id, target){
   else { s.tray = s.tray.filter(n=>n !== name); if(occupant) s.tray.push(occupant); }
   s.slots[to] = name;
   s.bad = [];
-  render();
+  wuRender();
 }
 function wuS1Go(){
   const s = state.wu.s1;
   if(s.running || s.slots.some(n=>!n)) return;
   s.running = true;
-  render();
+  wuRender();
   const wrong = s.slots.map((n,i)=> n !== WU_TRACT[i]);
   const firstWrong = wrong.indexOf(true);
   const stopAt = firstWrong < 0 ? 7 : firstWrong;
@@ -2660,7 +2699,7 @@ function wuS1Go(){
           ? `食物卡在第 ${firstWrong+1} 格！「${name}」是消化腺，食物不會經過它。放對的石板已經固定，其他的退回去了。`
           : `食物卡在第 ${firstWrong+1} 格！順序不對喔。放對的石板已經固定，其他的退回去了。`;
         setWizard(msg, 'sad');
-        render();
+        wuRender();
       }, 700);
       return;
     }
@@ -2681,7 +2720,7 @@ function wuS2Drop(id, target){
     s.combo = 0;
     wuBad(`「${name}」不是消化系統的構造，地圖上沒有它的位置喔！`);
     state.wu.flash = {id:'tag:'+name, ok:false};
-    render(); return;
+    wuRender(); return;
   }
   if(!target.startsWith('plaque:')) return;
   const spot = target.slice(7);
@@ -2696,7 +2735,7 @@ function wuS2Drop(id, target){
     setWizard(s.combo >= 3 ? `${s.combo} 連擊！地圖越來越亮了！` : `「${name}」歸位！`, 'happy');
     if(WU_MAP.every(m=>s.placed[m.name])){
       s.lit = true;
-      render();
+      wuRender();
       setTimeout(()=>wuStationDone(`整張地圖都亮起來了！最高 ${s.best} 連擊。`), 2200);
       return;
     }
@@ -2705,7 +2744,7 @@ function wuS2Drop(id, target){
     wuBad(`這裡不是「${name}」的位置，再找找看！`);
     state.wu.flash = {id:target, ok:false};
   }
-  render();
+  wuRender();
 }
 
 /* 第 3 站：公會任務（掉落卡） */
@@ -2730,7 +2769,7 @@ function wuS3Loop(){
       s.deck.push(s.cur);
       wuBad('任務卡掉到地上了！要在卡片掉到底之前派出去喔。');
       wuS3Spawn();
-      render();
+      wuRender();
     }
   }
   requestAnimationFrame(wuS3Loop);
@@ -2745,13 +2784,13 @@ function wuS3Drop(id, target){
     state.wu.flash = {id:target, ok:true};
     setWizard(who === 'gland' ? `沒錯，「${job.text}」是消化腺的工作，不是消化道！` : `派對了！「${job.text}」正是${who}的工作。`, 'happy');
     wuS3Spawn();
-    if(s.cur === null){ render(); setTimeout(()=>wuStationDone('公會的任務全部派完了！'), 900); return; }
+    if(s.cur === null){ wuRender(); setTimeout(()=>wuStationDone('公會的任務全部派完了！'), 900); return; }
   } else {
     s.tries++;
     wuBad(who === 'gland' ? '這是消化道的工作，不該丟進回收桶喔！' : `這不是${who}的工作喔！${s.tries >= 2 ? '老夫幫你把負責的成員點亮了。' : ''}`);
     state.wu.flash = {id:target, ok:false};
   }
-  render();
+  wuRender();
 }
 
 /* 第 4 站：煉金管線、酸鹼、溫度 */
@@ -2762,13 +2801,13 @@ function wuS4Drop(id, target){
   const key = from + '>' + to;
   if(s.conns.includes(key)) return;
   if(WU_PIPES_NEEDED.includes(key)){
-    s.conns.push(key); wuOk();
+    s.conns.push(key); s.lastConn = key; wuOk();
     state.wu.flash = {id:target, ok:true};
     const msg = key === '膽汁>膽囊' ? '對！肝臟做出的膽汁會先存在膽囊。' : key === '膽囊>小腸' ? '膽囊把膽汁送進小腸，幫忙乳化脂肪！' : `「${from}」成功注入${to}！`;
     setWizard(msg, 'happy');
     if(WU_PIPES_NEEDED.every(k=>s.conns.includes(k))){
       s.part = 'ph';
-      setWizard('管線全部接好了！接著幫每個注入點調整酸鹼值，轉到正確的位置後按「調和環境」。', 'happy');
+      setWizard('管線全部接好了！接著把每個注入點的旋鈕拉到正確的酸鹼性，再按「調和環境」。', 'happy');
     }
   } else {
     const msg = (from === '膽汁' && to === '小腸') ? '膽汁不會直接送去，它會先存在某個地方，等食物來了再出發喔！'
@@ -2777,7 +2816,7 @@ function wuS4Drop(id, target){
     wuBad(msg);
     state.wu.flash = {id:target, ok:false};
   }
-  render();
+  wuRender();
 }
 function wuPhGo(){
   const s = state.wu.s4; if(s.part !== 'ph') return;
@@ -2790,20 +2829,24 @@ function wuPhGo(){
   });
   if(s.phBad.length){ setWizard('還有地方的酸鹼值不對：' + hints.join(' '), 'sad'); }
   else { s.part = 'temp'; setWizard('環境調和完成！最後一個實驗：拉動溫度計，找出酵素最有活力的溫度。小心別把牠熱壞了……', 'happy'); }
-  render();
+  wuRender();
 }
-function enzymeActivity(T){ return T <= 37 ? Math.exp(-Math.pow((T-37)/15, 2)) : Math.exp(-Math.pow((T-37)/10, 2)); }
+/* 人體消化酵素最適溫度約 37 °C；超過後活性快速下降，約 40～50 °C 以上會變性且無法恢復；低溫只是暫時變慢 */
+const WU_DENATURE_AT = 50;
+function enzymeActivity(T){ return T <= 37 ? Math.exp(-Math.pow((T-37)/14, 2)) : Math.exp(-Math.pow((T-37)/5.5, 2)); }
 function wuTempUpdate(T){
   const s = state.wu.s4;
   s.temp = T;
-  if(T >= 60) s.denatured = true;
+  if(T >= WU_DENATURE_AT) s.denatured = true;
   const act = s.denatured ? 0 : enzymeActivity(T);
   let face, msg;
   if(s.denatured){ face = '🫠'; msg = '酵素「變性」了！高溫破壞了它的形狀，就算降溫也救不回來。'; }
   else if(T < 15){ face = '🥶'; msg = '好冷……動作變得好慢（回溫後就能恢復）'; }
   else if(T < 30){ face = '🙂'; msg = '慢慢暖起來了，開始有點力氣。'; }
-  else if(T <= 41){ face = '🤩'; msg = '活力全開！'; }
-  else { face = '🥵'; msg = '太熱了，越來越無力……'; }
+  else if(T < 36){ face = '😊'; msg = '越來越有精神了，再暖一點點！'; }
+  else if(T <= 38){ face = '🤩'; msg = '活力全開！'; }
+  else if(T <= 43){ face = '😓'; msg = '有點太熱了，活力開始下降……'; }
+  else { face = '🥵'; msg = '好燙！再熱下去就要變性了！'; }
   const set = (id, fn)=>{ const el = document.getElementById(id); if(el) fn(el); };
   set('wuTempVal', el=>el.textContent = T + ' °C');
   set('wuEnz', el=>{ el.textContent = face; el.style.transform = `scale(${0.8 + act*0.5})`; });
@@ -2813,20 +2856,31 @@ function wuTempUpdate(T){
 }
 function wuTempGo(){
   const s = state.wu.s4; if(s.part !== 'temp') return;
-  if(!s.denatured && s.temp >= 35 && s.temp <= 39){
+  if(!s.denatured && s.temp >= 36 && s.temp <= 38){
     wuOk();
-    wuStationDone(`沒錯！約 ${s.temp} °C，也就是接近我們的體溫，消化酵素最有活力。`);
+    wuStationDone(`沒錯！約 ${s.temp} °C，也就是接近我們的體溫 37 °C，消化酵素在這裡最有活力。`);
     return;
   }
-  wuBad(s.denatured ? '這隻酵素已經變性了，先重新培養一隻吧！' : '酵素還不是最有精神的狀態，看著活力條，再找找看！');
-  render();
+  wuBad(s.denatured ? '這隻酵素已經變性了，先重新培養一隻吧！' : s.temp > 38 ? '有點太熱了，酵素開始無力，降一點看看！' : '再溫暖一點，看著活力條找找看！');
+  wuRender();
 }
-function wuTempReset(){ const s = state.wu.s4; s.denatured = false; s.temp = 10; setWizard('新的酵素培養好了。這次小心溫度，別讓牠變性囉！', 'calm'); render(); }
+function wuTempReset(){ const s = state.wu.s4; s.denatured = false; s.temp = 10; setWizard('新的酵素培養好了。這次小心溫度，別讓牠變性囉！', 'calm'); wuRender(); }
 
 /* ---------- 畫面 ---------- */
 function wuFlashCls(id){ const f = state.wu.flash; return f && f.id === id ? (f.ok ? ' wu-flash-ok' : ' wu-flash-bad') : ''; }
 
+/* 暖身關只重繪遊戲區，不整頁重繪（避免畫面閃動） */
+function wuRender(){
+  const box = document.getElementById('wuBody');
+  if(state.screen !== 'warmup' || !box || state.shopOpen || state.codexOpen || state.leaderOpen){ render(); return; }
+  box.innerHTML = wuInnerHtml();
+  refreshWizardDom(); refreshHud();
+  wuBind();
+}
 function warmupHtml(tk){
+  return `<div class="panel stage wu-panel">${fxHtml(tk)}<div id="wuBody">${wuInnerHtml()}</div></div>`;
+}
+function wuInnerHtml(){
   const w = state.wu;
   const st = w.station;
   const steps = WU_NAMES.map((n,i)=>`<span class="wu-step ${i<st?'done':i===st?'on':''}">${i<st || (i===st && w.between) ? '⭐'.repeat(w.stars[i]||0) : (i+1)} ${n}</span>`).join('');
@@ -2847,7 +2901,7 @@ function warmupHtml(tk){
         <div class="btn-row"><button class="cast-btn" id="wuNext">${last ? '🏆 完成暖身，領取獎勵！' : `➡️ 前往第 ${st+2} 站：${WU_NAMES[st+1]}`}</button></div>
       </div>`;
   } else body = [wuS1Html, wuS2Html, wuS3Html, wuS4Html][st]();
-  return `<div class="panel stage wu-panel">${fxHtml(tk)}${head}${body}</div>`;
+  return head + body;
 }
 function wuTile(name, locked){
   const icon = WU_ICON[name] || '';
@@ -2898,7 +2952,7 @@ function wuS2Html(){
 function wuS3Html(){
   const s = state.wu.s3;
   const job = s.cur !== null ? WU_JOBS[s.cur] : null;
-  const members = [...WU_TRACT, 'gland'].map(n=>{
+  const members = WU_TRACT.map(n=>{
     const hint = job && s.tries >= 2 && job.owner === n ? ' wu-hint' : '';
     const label = n === 'gland' ? `<span class="wu-m-icon">🗑️</span><b>回收桶</b><small>消化腺的工作</small>` : `<span class="wu-m-icon">${WU_ICON[n]}</span><b>${n}</b>`;
     return `<div class="wu-member${n==='gland'?' bin':''}${hint}${wuFlashCls('member:'+n)}" data-drop="member:${n}">${label}</div>`;
@@ -2932,14 +2986,16 @@ function wuS4Html(){
       const v = s.ph[t.name], ok = s.phOk[t.name];
       return `<div class="wu-ph-row${ok?' ok':''}${s.phBad.includes(t.name)?' wu-flash-bad':''}">
         <b>${WU_ICON[t.name]} ${t.name}</b>
-        <input type="range" class="wu-ph" min="1" max="14" step="1" value="${v}" data-ph="${t.name}" ${ok?'disabled':''}>
-        <span class="wu-ph-val" id="phv-${t.name}">pH ${v}・${phClass(v)}${ok?' ✅':''}</span>
+        <div class="wu-ph-wrap">
+          <input type="range" class="wu-ph" min="0" max="2" step="1" value="${v}" data-ph="${t.name}" ${ok?'disabled':''}>
+          <div class="wu-ph-zones"><span>酸性</span><span>中性</span><span>鹼性</span></div>
+        </div>
+        <span class="wu-ph-val" id="phv-${t.name}">${phClass(v)}${ok?' ✅':''}</span>
       </div>`;
     }).join('');
     return `
       <div class="wu-title">🧪 第 4 站：調和環境（2/3）</div>
-      <div class="wu-desc">拖動旋鈕，把每個注入點調到正確的酸鹼性。pH 小於 7 是酸性、等於 7 是中性、大於 7 是鹼性。</div>
-      <div class="wu-ph-scale"><span>酸性</span><span>中性</span><span>鹼性</span></div>
+      <div class="wu-desc">把每個注入點的旋鈕拉到正確的區域：酸性、中性或鹼性。</div>
       ${rows}
       <div class="btn-row"><button class="cast-btn" id="wuPhGo">⚗️ 調和環境！</button></div>`;
   }
@@ -2964,7 +3020,7 @@ function wuS4Html(){
 /* 管線繪製 */
 function wuCenter(el, box){ const r = el.getBoundingClientRect(); return {x:r.left + r.width/2 - box.left, y:r.top + r.height/2 - box.top, l:r.left - box.left, r:r.right - box.left}; }
 function wuPipePath(a, b){
-  const x1 = a.r, y1 = a.y, x2 = b.l, y2 = b.y, mx = (x1 + x2)/2;
+  const x1 = a.r, y1 = a.y, x2 = b.l - 10, y2 = b.y, mx = (x1 + x2)/2;
   return `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`;
 }
 function wuDrawPipes(){
@@ -2973,19 +3029,27 @@ function wuDrawPipes(){
   const b = box.getBoundingClientRect();
   svg.setAttribute('viewBox', `0 0 ${b.width} ${b.height}`);
   const color = from => (WU_SOURCES.find(x=>x.juice===from) || {color:'#9bd65a'}).color;
-  svg.innerHTML = state.wu.s4.conns.map(k=>{
+  const colors = [...new Set([...WU_SOURCES.map(x=>x.color), '#9bd65a', '#fff3c4'])];
+  const defs = '<defs>' + colors.map(c=>`<marker id="ah${c.slice(1)}" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${c}"/></marker>`).join('') + '</defs>';
+  const s4 = state.wu.s4;
+  const paths = s4.conns.map(k=>{
     const [from, to] = k.split('>');
     const a = document.getElementById('wn-'+from), c = document.getElementById('wn-'+to);
     if(!a || !c) return '';
-    return `<path d="${wuPipePath(wuCenter(a,b), wuCenter(c,b))}" stroke="${color(from)}" class="wu-pipe"/>`;
-  }).join('') + '<path id="wuTempPipe" class="wu-pipe temp" d=""/>';
+    const col = color(from), d = wuPipePath(wuCenter(a,b), wuCenter(c,b));
+    const drop = k === s4.lastConn
+      ? `<circle r="7" fill="${col}" stroke="#fff" stroke-width="2"><animateMotion dur="0.9s" repeatCount="1" fill="freeze" path="${d}"/><animate attributeName="opacity" values="1;1;0" keyTimes="0;0.85;1" dur="0.9s" fill="freeze"/></circle>` : '';
+    return `<path d="${d}" stroke="${col}" class="wu-pipe" marker-end="url(#ah${col.slice(1)})"/>${drop}`;
+  }).join('');
+  s4.lastConn = null;
+  svg.innerHTML = defs + paths + '<path id="wuTempPipe" class="wu-pipe temp" d="" marker-end="url(#ahfff3c4)"/>';
 }
 function wuDrawTempLine(el, x, y){
   const p = document.getElementById('wuTempPipe'), box = document.getElementById('wuPipes');
   if(!p || !box) return;
   if(!el){ p.setAttribute('d',''); return; }
   const b = box.getBoundingClientRect(), a = wuCenter(el, b);
-  p.setAttribute('d', wuPipePath(a, {l:x - b.left, y:y - b.top}));
+  p.setAttribute('d', wuPipePath(a, {l:x - b.left + 10, y:y - b.top}));
 }
 
 /* 事件綁定（在 bindEvents 裡呼叫） */
@@ -3000,11 +3064,11 @@ function wuBind(){
   on('wuTempReset', wuTempReset);
   document.querySelectorAll('.wu-ph').forEach(r=>r.addEventListener('input', ()=>{
     const v = +r.value; state.wu.s4.ph[r.dataset.ph] = v;
-    const lab = document.getElementById('phv-'+r.dataset.ph); if(lab) lab.textContent = `pH ${v}・${phClass(v)}`;
+    const lab = document.getElementById('phv-'+r.dataset.ph); if(lab) lab.textContent = phClass(v);
   }));
   const t = document.getElementById('wuTemp');
   if(t){ t.addEventListener('input', ()=>wuTempUpdate(+t.value)); wuTempUpdate(state.wu.s4.temp); }
-  if(document.getElementById('wuPipes')) requestAnimationFrame(wuDrawPipes);
+  if(document.getElementById('wuPipes')) wuDrawPipes();
   state.wu.flash = null;
 }
 window.addEventListener('resize', ()=>{ if(state.screen === 'warmup') wuDrawPipes(); });
