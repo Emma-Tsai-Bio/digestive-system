@@ -52,7 +52,7 @@ body{
 #bgStage .bg-sharp{position:absolute; top:0; left:50%; transform:translateX(-50%); width:min(80vw, 1200px); aspect-ratio:16/9; max-height:100vh; background-position:top center; background-size:cover; background-repeat:no-repeat;
   -webkit-mask-image:linear-gradient(to bottom, #000 72%, transparent 100%), linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%); -webkit-mask-composite:source-in; mask-image:linear-gradient(to bottom, #000 72%, transparent 100%), linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%); mask-composite:intersect;}
 @media(max-width:780px){#bgStage .bg-sharp{width:100%;}}
-#bgStage .bg-shade{position:absolute; inset:0; background:linear-gradient(rgba(10,7,11,0.35), rgba(10,7,11,0.65));}
+#bgStage .bg-shade{position:absolute; inset:0; background:linear-gradient(rgba(10,7,11,0.12), rgba(10,7,11,0.42));}
 h1,h2,h3,h4{font-family:'Noto Serif TC',serif; margin:0;}
 button{font-family:inherit; cursor:pointer;}
 .wrap{max-width:1000px; margin:0 auto;}
@@ -77,7 +77,8 @@ button{font-family:inherit; cursor:pointer;}
 /* ---------- RPG 面板框 ---------- */
 .panel{
   position:relative;
-  background:linear-gradient(180deg, var(--panel2), var(--panel));
+  background:linear-gradient(180deg, rgba(42,33,36,0.74), rgba(31,24,27,0.80));
+  -webkit-backdrop-filter:blur(7px) saturate(1.15); backdrop-filter:blur(7px) saturate(1.15);
   border:2px solid var(--line);
   border-radius:var(--radius);
   padding:22px 20px;
@@ -508,7 +509,7 @@ button{font-family:inherit; cursor:pointer;}
 .calc-row .unit{align-self:center; color:var(--muted); font-weight:700;}
 
 /* ---------- 暖身關：見習營地 ---------- */
-.wu-panel{padding-top:18px;}
+.wu-panel{padding-top:18px; overflow:clip;}
 .wu-head{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;}
 .wu-steps{display:flex; gap:6px; flex-wrap:wrap;}
 .wu-step{font-size:12.5px; font-weight:700; padding:5px 10px; border-radius:999px; background:rgba(0,0,0,0.35); border:1px solid rgba(217,178,95,0.2); color:var(--muted);}
@@ -559,7 +560,14 @@ button{font-family:inherit; cursor:pointer;}
 .wu-plaque.ok{background:linear-gradient(180deg,#fff1c7,#f0d283); border:2px solid #a77a1d; color:#3a2406;}
 .wu-plaque.lit{animation:wuLit 1.2s ease both;}
 @keyframes wuLit{0%{box-shadow:0 0 0 rgba(255,220,120,0);} 50%{box-shadow:0 0 22px 6px rgba(255,220,120,0.95); transform:scale(1.08);} 100%{box-shadow:0 0 10px 2px rgba(255,220,120,0.6);}}
-.wu-tags-box{position:sticky; top:12px;}
+.wu-tags-box{position:sticky; top:12px; z-index:5; background:rgba(26,19,22,0.92); border:1px solid rgba(217,178,95,0.3); border-radius:12px; padding:4px 12px 12px; box-shadow:0 8px 24px rgba(0,0,0,0.5);}
+@media(max-width:780px){
+  .wu-map-layout{display:flex; flex-direction:column;}
+  .wu-tags-box{position:sticky; top:auto; bottom:8px; order:2; padding:2px 10px 10px;}
+  .wu-tags-box .wu-tray-label{margin:6px 0 6px;}
+  .wu-tags-box .wu-tags{flex-wrap:nowrap; overflow-x:auto; padding-bottom:4px; -webkit-overflow-scrolling:touch;}
+  .wu-tags-box .wu-tag{flex:0 0 auto; padding:9px 12px; font-size:15px;}
+}
 .wu-tags{display:flex; flex-wrap:wrap; gap:8px;}
 .wu-tag{background:linear-gradient(180deg,#f0d283,#c0912f); color:#2a1805; border:1px solid var(--gold-hi); border-radius:8px; padding:10px 14px; font-weight:900; font-size:16px; font-family:'Noto Serif TC',serif; box-shadow:0 3px 0 #5a3f10;}
 
@@ -580,18 +588,26 @@ button{font-family:inherit; cursor:pointer;}
 .wu-member.wu-hint{border-color:var(--gold-hi); animation:hintPulse 1s infinite;}
 
 /* 第 4 站：管線 */
-.wu-pipes{position:relative; display:grid; grid-template-columns:1fr 0.8fr 1fr; gap:18px 26px; align-items:center; padding:6px 0;}
+.wu-pipes{position:relative; display:grid; grid-template-columns:1fr 44px 1fr 0.9fr 1fr; gap:0 26px; align-items:stretch; padding:6px 0;}
+.wu-pipe-head{display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:10px; align-items:center; margin-bottom:10px;}
+.wu-ph-title{text-align:center; font-family:'Noto Serif TC',serif; font-weight:900; font-size:17px; color:var(--gold-hi); background:rgba(0,0,0,0.35); border:1px solid rgba(217,178,95,0.35); border-radius:999px; padding:6px 8px;}
+.wu-ph-arrow{display:flex; flex-direction:column; align-items:center; font-size:13px; font-weight:800; color:#ffcf73; line-height:1.1; padding:0 4px;}
+.wu-ph-arrow span{font-size:26px; color:var(--gold);}
+.wu-pipe-tag text{font-size:12px; font-weight:800; font-family:'Noto Sans TC',sans-serif;}
+.wu-col.mid{padding-left:54px;}
+.wu-gb-note{font-size:12px; color:#bfe8a0; text-align:center; margin-top:6px; line-height:1.4;}
 .wu-pipe-svg{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:visible;}
 .wu-pipe{fill:none; stroke-width:7; stroke-linecap:round; opacity:0.9; filter:drop-shadow(0 0 4px rgba(0,0,0,0.6));}
 .wu-pipe.temp{stroke:#fff3c4; stroke-dasharray:10 8; stroke-width:5; opacity:0.85;}
-.wu-col{display:flex; flex-direction:column; gap:12px; position:relative; z-index:1;}
+.wu-col{display:flex; flex-direction:column; justify-content:space-around; gap:10px; position:relative; z-index:1;}
 .wu-col.mid{justify-content:center; height:100%;}
 .wu-node{border-radius:12px; padding:10px 12px; background:#2b2224; border:3px solid rgba(217,178,95,0.35); text-align:center; font-size:15px; position:relative;}
 .wu-node b{font-size:16px;}
 .wu-node small{display:block; color:var(--muted); font-size:12px;}
-.wu-node.src,.wu-node.mid{border-color:var(--c); box-shadow:0 0 12px color-mix(in srgb, var(--c) 40%, transparent);}
+.wu-node.src,.wu-node.mid,.wu-node.juice{border-color:var(--c); box-shadow:0 0 12px color-mix(in srgb, var(--c) 40%, transparent);}
+.wu-node.juice{background:color-mix(in srgb, var(--c) 18%, #2b2224);}
 .wu-node.done{opacity:0.55;}
-@media(max-width:560px){.wu-pipes{gap:12px 12px;} .wu-node{padding:8px 6px; font-size:13px;} .wu-node b{font-size:14px;}}
+@media(max-width:700px){.wu-pipe{stroke-width:3.5;} .wu-col.mid{padding-left:4px;} .wu-node.mid{white-space:nowrap; padding:8px 2px;} .wu-pipes{grid-template-columns:1fr 10px 1fr 0.9fr 1fr; gap:0 8px;} .wu-node{padding:8px 3px; font-size:12px; border-width:2px;} .wu-node b{font-size:13px;} .wu-pipe-tag{display:none;} .wu-ph-title{font-size:13px; padding:5px 4px;} .wu-ph-arrow{font-size:11px;} .wu-ph-arrow span{font-size:18px;} .wu-pipe-head{gap:4px;} .wu-gb-note{font-size:10.5px;}}
 
 /* 第 4 站：酸鹼 */
 .wu-ph-scale{display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:var(--muted); margin:0 4px 6px 96px;}
@@ -650,11 +666,29 @@ button{font-family:inherit; cursor:pointer;}
 .wu-topt{text-align:left; background:linear-gradient(180deg,#3a2e30,#272022); border:2px solid rgba(217,178,95,0.25); color:var(--text); border-radius:10px; padding:11px 12px; font-size:14.5px; font-weight:700; line-height:1.5;}
 .wu-topt.on{border-color:var(--gold-hi); background:rgba(217,178,95,0.16);}
 .wu-tdrag{font-size:14px; font-weight:700; color:var(--gold-hi); background:rgba(217,178,95,0.08); border:1px dashed rgba(217,178,95,0.4); border-radius:8px; padding:8px 12px; margin-bottom:6px; text-align:center;}
+
+/* ---------- 關卡開場畫面 ---------- */
+#stageIntro{position:fixed; inset:0; z-index:120; display:none; cursor:pointer; background:#0b080b; overflow:hidden;}
+#stageIntro.on{display:block; animation:introIn .45s ease both;}
+#stageIntro.out{animation:introOut .45s ease both;}
+@keyframes introIn{from{opacity:0;} to{opacity:1;}}
+@keyframes introOut{from{opacity:1;} to{opacity:0;}}
+.si-blur{position:absolute; inset:-60px; background-size:cover; background-position:center; filter:blur(26px) brightness(0.45);}
+.si-img{position:absolute; inset:0; margin:auto; max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; animation:introZoom 2.8s ease-out both; box-shadow:0 0 60px rgba(0,0,0,0.6);}
+@keyframes introZoom{from{transform:scale(1.06);} to{transform:scale(1);}}
+.si-cap{position:absolute; left:0; right:0; bottom:0; padding:46px 16px 22px; text-align:center; background:linear-gradient(transparent, rgba(8,5,8,0.88));}
+.si-kicker{font-family:'Cinzel',serif; letter-spacing:4px; font-size:13px; color:var(--gold);}
+.si-title{font-family:'Noto Serif TC',serif; font-weight:900; font-size:clamp(24px, 4.5vw, 40px); color:var(--gold-hi); text-shadow:0 3px 0 #000, 0 0 18px rgba(217,178,95,0.5); margin:4px 0 6px;}
+.si-sub{font-size:15px; color:var(--text); opacity:0.9;}
+.si-skip{margin-top:10px; font-size:12px; color:var(--muted);}
+.si-bar{position:absolute; left:0; bottom:0; height:4px; background:linear-gradient(90deg,#ff9d5c,var(--gold-hi)); animation:introBar linear both;}
+@keyframes introBar{from{width:0;} to{width:100%;}}
 </style>
 </head>
 <body>
 <div id="bgStage" aria-hidden="true"><div class="bg-blur"></div><div class="bg-sharp"></div><div class="bg-shade"></div></div>
 <div class="wrap" id="app"></div>
+<div id="stageIntro" aria-hidden="true"></div>
 
 <script>
 /* =========================================================
@@ -879,6 +913,43 @@ function freshState(player){
     ending:null
   };
 }
+
+/* =========================================================
+   🎬 關卡開場畫面：進入新場景時完整展示底圖，約 2.5 秒自動消失，點一下可提前關閉
+   ========================================================= */
+const INTRO_MS = 2500;
+let introUntil = 0, introTimer = null;
+function introActive(){ return Date.now() < introUntil; }
+function showStageIntro(bgSrc, kicker, title, sub){
+  const box = document.getElementById('stageIntro');
+  if(!box || !bgSrc || BAD_IMG.has(bgSrc)) return;
+  clearTimeout(introTimer);
+  introUntil = Date.now() + INTRO_MS;
+  box.className = 'on';
+  box.innerHTML = `<div class="si-blur" style="background-image:url('${bgSrc}')"></div>
+    <img class="si-img" src="${bgSrc}" alt="" onerror="BAD_IMG.add('${bgSrc}'); hideStageIntro();">
+    <div class="si-cap"><div class="si-kicker">${kicker||''}</div><div class="si-title">${title||''}</div><div class="si-sub">${sub||''}</div><div class="si-skip">點一下畫面直接開始</div></div>
+    <div class="si-bar" style="animation-duration:${INTRO_MS}ms"></div>`;
+  introTimer = setTimeout(hideStageIntro, INTRO_MS);
+}
+function hideStageIntro(){
+  const box = document.getElementById('stageIntro');
+  clearTimeout(introTimer);
+  const wasActive = introActive();
+  introUntil = 0;
+  if(wasActive && state.screen === 'ending' && !state.wrongModal) render();   // 讓卡片翻牌動畫在開場畫面關閉後才播
+  if(state.wu && state.screen === 'warmup' && state.wu.start > Date.now()) state.wu.start = Date.now();
+  if(timerStartAt > Date.now()) timerStartAt = Date.now();
+  if(!box || !box.classList.contains('on')) return;
+  box.className = 'on out';
+  setTimeout(()=>{ if(!introActive()){ box.className = ''; box.innerHTML = ''; } }, 450);
+}
+(function(){ const b = document.getElementById('stageIntro'); if(b) b.addEventListener('click', hideStageIntro); })();
+function introForOrgan(){
+  const o = currentOrgan();
+  showStageIntro(ASSETS.background[o.key], `FLOOR ${state.organIndex+1} / ${ORGANS.length}`, `${o.icon} ${o.name}（${o.stage}）`, `料理 ${state.runIndex+1} / ${DISHES_PER_RUN}：${state.food.name}`);
+}
+
 let state = freshState();
 (function initLogin(){
   const rem = loadRemembered();
@@ -1184,7 +1255,7 @@ function beginFood(){
   state.glandShuffled = shuffled(GLAND_OPTIONS);
   state.screen = 'organ';
   setWizard(ORGANS[0].intro, 'calm');
-  render(); startTimer();
+  render(); introForOrgan(); startTimer();
 }
 
 function nextQuestion(){
@@ -1201,12 +1272,15 @@ function nextQuestion(){
       state.calcDraft = null;
       setWizard('魔物已被擊倒，化為一地素材。最後一步：把能量素材煉化成熱魔力吧！', 'calm');
       render();
+      showStageIntro(ASSETS.background.settle, 'ENERGY ALCHEMY', '⚗️ 能量煉成陣', `把「${state.food.name}」的魔物素材煉化成熱魔力`);
       return;
     }
     state.qIndex = 0;
     state.qList = buildQList(currentOrgan());
     state.glandShuffled = shuffled(GLAND_OPTIONS);
     setWizard(currentOrgan().intro, 'calm');
+    render(); introForOrgan(); startTimer();
+    return;
   }
   render(); startTimer();
 }
@@ -1246,18 +1320,20 @@ function afterFood(){
     state.screen = 'intermission';
     setWizard(`漂亮！已淨化 ${state.runIndex} 道魔物料理。休息一下，下一道料理已經在石窟口蠢蠢欲動了……`, 'happy');
     render();
+    showStageIntro(ASSETS.background.settle, `${state.runIndex} / ${DISHES_PER_RUN} CLEARED`, '🏕️ 營火休息站', `已淨化 ${state.runIndex} 道魔物料理`);
   }
 }
 
 /* =========================================================
    計時（速攻加成）
    ========================================================= */
+let timerStartAt = 0;
 function startTimer(){
   stopTimer();
   state.speedEligible = true; state.timerPct = 100;
-  const start = Date.now();
+  timerStartAt = Math.max(Date.now(), introUntil);   // 開場畫面播放時，速攻時限先不倒數
   timerHandle = setInterval(()=>{
-    const pct = Math.max(0, 100 - (Date.now()-start)/SPEED_WINDOW_MS*100);
+    const pct = Math.max(0, Math.min(100, 100 - (Date.now()-timerStartAt)/SPEED_WINDOW_MS*100));
     state.timerPct = pct;
     if(pct <= 0) state.speedEligible = false;
     const bar = document.getElementById('timerbar');
@@ -1505,6 +1581,8 @@ function finishRun(type){
   if(urUnlocked) setWizard('天啊……三條修行之路你全部走完了！七彩神龍便從天而降，這可是傳說中的傳說！', 'happy');
   state.hintActive = false;
   state.screen = 'ending';
+  const endTitle = type === 'gameover' ? '☠️ 冒險失敗' : mode === 'warmup' ? '🏕️ 暖身完成' : '🏆 冒險完成';
+  showStageIntro(ASSETS.background.lobby, 'THE END', endTitle, mode === 'warmup' ? '來看看四站的成績吧' : '來看看掉落了什麼便便卡吧');
 }
 
 /* =========================================================
@@ -1551,6 +1629,7 @@ function restartGame(){
   state.online = online;
   setWizard('從泥石流中爬起來了嗎？很好，真正的魔法使不會被一次腹瀉打倒。再選一次修行之路吧！', 'calm');
   render();
+  showStageIntro(ASSETS.background.lobby, 'HUMAN DUNGEON', '🏰 人體地下城', '選擇你的修行之路');
 }
 function backToHall(){
   stopWuClock();
@@ -1558,6 +1637,7 @@ function backToHall(){
   state.ending = null;
   setWizard('歡迎回來，魔法使。休息夠了就再挑戰一次吧，說不定能拉出傳說中的黃金便便。', 'calm');
   render();
+  showStageIntro(ASSETS.background.lobby, 'HUMAN DUNGEON', '🏰 人體地下城', '選擇你的修行之路');
 }
 
 /* =========================================================
@@ -2158,7 +2238,8 @@ function endingHtml(tk){
   const e = state.ending;
   const titles = {S:'S 評價・完美攻略！', A:'A 評價・漂亮通關', B:'B 評價・勉強過關', C:'正確率不足 50%', X:'冒險失敗・生命耗盡'};
   const codex = loadCodex();
-  const cards = e.cards.map((c,i)=>cardHtml(c.card, {reveal:true, delay:0.3 + i*0.45, isNew:c.isNew, count:codex[c.card.id]})).join('');
+  const wait = introActive() ? (introUntil - Date.now())/1000 : 0;
+  const cards = e.cards.map((c,i)=>cardHtml(c.card, {reveal:true, delay:wait + 0.3 + i*0.45, isNew:c.isNew, count:codex[c.card.id]})).join('');
   const buttons = e.type === 'gameover'
     ? `<button class="cast-btn danger" id="restartBtn">🔄 重新踏上冒險</button>`
     : `<button class="cast-btn" id="hallBtn">🏰 返回大廳，再次冒險</button>`;
@@ -2412,13 +2493,16 @@ function bindEvents(){
 const WU_TRACT = ['口腔','咽','食道','胃','小腸','大腸','肛門'];
 const WU_GLANDS = ['唾腺','肝臟','膽囊','胰臟'];
 const WU_ICON = {'口腔':'🦷','咽':'🕳️','食道':'🌊','胃':'🔥','小腸':'🌿','大腸':'💧','肛門':'🚪','唾腺':'💦','肝臟':'🟤','膽囊':'🟢','胰臟':'🧪','胃腺':'🫧','腸腺':'🧬'};
-const WU_NAMES = ['鋪設通道','點亮地圖','公會任務','煉金管線'];
+/* 遊戲種類編號（sid）：0 鋪設通道、1 點亮地圖、2 公會任務、3 煉金管線；WU_ORDER＝實際遊玩順序 */
+const WU_ORDER = [1, 0, 2, 3];
+const WU_NAMES = ['點亮地圖','鋪設通道','公會任務','煉金管線'];
 const WU_INTRO = [
-  '歡迎來到見習營地！第一站：把散落的石板鋪成一條消化道。小心，裡面混了消化腺，食物可不會經過它們喔！',
-  '第二站：地下城地圖的名牌被魔物偷走了！把每個名牌放回正確的位置，連續放對還有連擊加成。',
+  '歡迎來到見習營地！第一站：地下城地圖的名牌被魔物偷走了！把每個名牌放回正確的位置，連續放對還有連擊加成。',
+  '第二站：把散落的石板依序鋪成一條消化道。小心，裡面混了消化腺，食物可不會經過它們喔！',
   '第三站：冒險者公會來了一堆任務卡！在卡片掉到底之前，派給負責的器官。',
-  '最後一站：煉金管線！先把每種消化液接到它注入的地方，再調整酸鹼值，最後找出酵素最有活力的溫度。'
+  '最後一站：煉金管線！先把每種消化液接到它注入的地方，再調整酸鹼性，最後完成酵素溫度實驗。'
 ];
+function wuSid(){ return state.wu ? WU_ORDER[state.wu.station] : -1; }
 const WU_PENALTY_SEC = 5;           // 暖身每答錯一次，排行榜時間加幾秒
 const WU_POINT = 5;                 // 每個正確動作的熱魔力
 
@@ -2449,7 +2533,7 @@ const WU_JOBS = [
   {text:'消化的主要場所', owner:'小腸'},
   {text:'吸收養分的主要場所', owner:'小腸'},
   {text:'皺褶、絨毛增加吸收面積', owner:'小腸'},
-  {text:'吸收水分', owner:'大腸'},
+  {text:'吸收剩餘的水分', owner:'大腸'},
   {text:'形成糞便並暫時儲存', owner:'大腸'},
   {text:'排遺', owner:'肛門'}
 ];
@@ -2462,8 +2546,18 @@ const WU_SOURCES = [
   {juice:'胰液', gland:'胰臟', color:'#ffc857'},
   {juice:'腸液', gland:'腸腺', color:'#c79bff'}
 ];
-const WU_PIPE_TARGETS = ['口腔','食道','胃','小腸','大腸'];
-const WU_PIPES_NEEDED = ['唾液>口腔','胃液>胃','膽汁>膽囊','膽囊>小腸','胰液>小腸','腸液>小腸'];
+const WU_PIPE_TARGETS = ['口腔','咽','食道','胃','小腸','大腸','肛門'];   // 七個消化道全部列出
+/* 要接的管線：消化腺 →（分泌）→ 消化液 →（注入）→ 消化道；膽汁先 →（濃縮、儲存）→ 膽囊 */
+const WU_PIPES_NEEDED = ['唾腺>唾液','胃腺>胃液','肝臟>膽汁','胰臟>胰液','腸腺>腸液',
+  '唾液>口腔','胃液>胃','膽汁>膽囊','膽囊>小腸','胰液>小腸','腸液>小腸'];
+const WU_GLAND_NAMES = WU_SOURCES.map(x=>x.gland);
+const WU_JUICE_NAMES = WU_SOURCES.map(x=>x.juice);
+function wuPipeVerb(key){
+  const [f, t] = key.split('>');
+  if(key === '膽汁>膽囊') return '濃縮、儲存';
+  if(WU_GLAND_NAMES.includes(f)) return '分泌';
+  return '注入';
+}
 const WU_PH_TARGETS = [
   {name:'口腔', ans:'中性', hint:'唾液接近中性，不酸也不鹼。'},
   {name:'胃',   ans:'酸性', hint:'胃液裡含有鹽酸。'},
@@ -2477,6 +2571,7 @@ let wuClockHandle = null;
 
 function startWarmup(){
   stopTimer();
+  showStageIntro(ASSETS.background.warmup, 'TRAINING CAMP', '🏕️ 見習營地', '四個小遊戲：點亮地圖、鋪設通道、公會任務、煉金管線');
   state.difficulty = 'warmup';
   state.screen = 'warmup';
   state.stats = {correct:0, total:0, speed:0};
@@ -2486,7 +2581,7 @@ function startWarmup(){
   state.uploadStatus = null;
   const randPh = ans => { let v; do { v = Math.floor(Math.random()*3); } while(phClass(v) === ans); return v; };
   state.wu = {
-    station:0, start:Date.now(), correct:0, mistakes:0, stMistakes:[0,0,0,0], stars:[], between:false, flash:null,
+    station:0, start:Math.max(Date.now(), introUntil), correct:0, mistakes:0, stMistakes:[0,0,0,0], stars:[], between:false, flash:null,
     s1:{tray:shuffled([...WU_TRACT, ...WU_GLANDS]), slots:Array(7).fill(null), locked:Array(7).fill(false), running:false, bad:[]},
     s2:{tray:shuffled([...WU_MAP.map(m=>m.name), ...WU_MAP_DECOYS]), placed:{}, combo:0, best:0, lit:false},
     s3:{deck:shuffled(WU_JOBS.map((_,i)=>i)), cur:null, dur:16000, t0:0, paused:0, dragAt:null, tries:0, done:0},
@@ -2536,14 +2631,14 @@ function wuNext(){
   wuSel = null;
   if(w.station >= 4){ finishWarmup(); return; }
   setWizard(WU_INTRO[w.station], 'calm');
-  if(w.station === 2) wuS3Spawn();
+  if(wuSid() === 2) wuS3Spawn();
   wuRender();
-  if(w.station === 2) requestAnimationFrame(wuS3Loop);
+  if(wuSid() === 2) requestAnimationFrame(wuS3Loop);
   wuScrollToPlay();
 }
 /* 換站時把遊戲區捲到畫面中，手機上不用邊拖邊捲 */
 function wuScrollToPlay(){
-  const el = document.querySelector(state.wu && state.wu.station === 2 ? '.wu-fallbar' : '.wu-head');
+  const el = document.querySelector(state.wu && wuSid() === 2 ? '.wu-fallbar' : '.wu-head');
   if(el) window.scrollTo({top: el.getBoundingClientRect().top + window.scrollY - 12, behavior:'smooth'});
 }
 function finishWarmup(){
@@ -2600,8 +2695,9 @@ function wuPointerMove(e){
     if(t) t.classList.add('drop-hover');
     c.hover = t;
   }
-  if(e.clientY < 60) window.scrollBy(0, -14);
-  else if(e.clientY > window.innerHeight - 60) window.scrollBy(0, 14);
+  /* 只有手指「往邊緣移動」超過 80px 後才自動捲動，避免一開始拖就把畫面捲走 */
+  if(e.clientY < 50 && c.sy - e.clientY > 80) window.scrollBy(0, -12);
+  else if(e.clientY > window.innerHeight - 50 && e.clientY - c.sy > 80) window.scrollBy(0, 12);
 }
 function wuCleanupDrag(){
   window.removeEventListener('pointermove', wuPointerMove);
@@ -2639,23 +2735,21 @@ function wuTargetClick(e){
   const id = wuSel; wuSel = null;
   wuDrop(id, e.currentTarget.dataset.drop);
 }
-function wuOnDragStart(id){ if(id.startsWith('job:') && state.wu) state.wu.s3.dragAt = performance.now(); }
-function wuOnDragEnd(id){
-  const s = state.wu && state.wu.s3;
-  if(id.startsWith('job:') && s && s.dragAt){ s.paused += performance.now() - s.dragAt; s.dragAt = null; }
-}
+function wuOnDragStart(id){}
+function wuOnDragEnd(id){}
 function wuDropNowhere(id){
   if(id.startsWith('tag:') && WU_MAP_DECOYS.includes(id.slice(4))) return;
-  if(id.startsWith('tile:') && state.wu.station === 0){ wuDrop(id, 'tray'); }
+  if(id.startsWith('tile:') && wuSid() === 0){ wuDrop(id, 'tray'); }
 }
 
 /* ---------- 放下時的判斷 ---------- */
 function wuDrop(id, target){
   const w = state.wu; if(!w || w.between) return;
-  if(w.station === 0) return wuS1Drop(id, target);
-  if(w.station === 1) return wuS2Drop(id, target);
-  if(w.station === 2) return wuS3Drop(id, target);
-  if(w.station === 3) return wuS4Drop(id, target);
+  const sid = wuSid();
+  if(sid === 0) return wuS1Drop(id, target);
+  if(sid === 1) return wuS2Drop(id, target);
+  if(sid === 2) return wuS3Drop(id, target);
+  if(sid === 3) return wuS4Drop(id, target);
 }
 
 /* 第 1 站：鋪設通道 */
@@ -2702,7 +2796,7 @@ function wuS1Go(){
         if(newlyOk) wuOk(newlyOk);
         const badIdx = [];
         s.slots.forEach((n,k)=>{ if(wrong[k]){ badIdx.push(k); s.tray.push(n); s.slots[k] = null; } });
-        badIdx.forEach(()=>{ state.wu.mistakes++; state.wu.stMistakes[0]++; });
+        badIdx.forEach(()=>{ state.wu.mistakes++; state.wu.stMistakes[state.wu.station]++; });
         s.bad = badIdx;
         s.running = false;
         const msg = WU_GLANDS.includes(name)
@@ -2764,18 +2858,19 @@ function wuS3Spawn(){
   s.t0 = performance.now(); s.paused = 0; s.dragAt = null; s.tries = 0;
 }
 function wuS3Loop(){
-  if(!(state.screen === 'warmup' && state.wu && state.wu.station === 2 && !state.wu.between)) return;
+  if(!(state.screen === 'warmup' && state.wu && wuSid() === 2 && !state.wu.between)) return;
   const s = state.wu.s3;
   if(s.cur !== null){
     const now = performance.now();
-    const elapsed = now - s.t0 - s.paused - (s.dragAt ? now - s.dragAt : 0);
+    const elapsed = now - s.t0;
     const frac = Math.min(1, elapsed / s.dur);
     const sky = document.getElementById('wuSky'), card = document.getElementById('wuJob');
-    if(sky && card && !card.classList.contains('drag-src')){
+    if(sky && card){
       card.style.top = (frac * Math.max(0, sky.clientHeight - card.offsetHeight)) + 'px';
     }
     const bar = document.getElementById('wuFall'); if(bar) bar.style.width = ((1-frac)*100) + '%';
-    if(frac >= 1 && !s.dragAt){
+    if(frac >= 1){
+      if(dragCtx && dragCtx.id && dragCtx.id.startsWith('job:')) wuCleanupDrag();   // 時間到：拖到一半也算掉落
       s.deck.push(s.cur);
       wuBad('任務卡掉到地上了！要在卡片掉到底之前派出去喔。');
       wuS3Spawn();
@@ -2810,19 +2905,27 @@ function wuS4Drop(id, target){
   if(from === to) return;
   const key = from + '>' + to;
   if(s.conns.includes(key)) return;
+  const fromGland = WU_GLAND_NAMES.includes(from);
   if(WU_PIPES_NEEDED.includes(key)){
     s.conns.push(key); s.lastConn = key; wuOk();
     state.wu.flash = {id:target, ok:true};
-    const msg = key === '膽汁>膽囊' ? '對！肝臟做出的膽汁會先存在膽囊。' : key === '膽囊>小腸' ? '膽囊把膽汁送進小腸，幫忙乳化脂肪！' : `「${from}」成功注入${to}！`;
+    const msg = fromGland ? `沒錯！${from}「分泌」${to}。`
+      : key === '膽汁>膽囊' ? '對！肝臟分泌的膽汁會先送到膽囊「濃縮、儲存」起來。'
+      : key === '膽囊>小腸' ? '膽囊把膽汁「注入」小腸，幫忙乳化脂肪！'
+      : `「${from}」成功「注入」${to}！`;
     setWizard(msg, 'happy');
     if(WU_PIPES_NEEDED.every(k=>s.conns.includes(k))){
       s.part = 'ph';
       setWizard('管線全部接好了！接著把每個注入點的旋鈕拉到正確的酸鹼性，再按「調和環境」。', 'happy');
     }
   } else {
-    const msg = (from === '膽汁' && to === '小腸') ? '膽汁不會直接送去，它會先存在某個地方，等食物來了再出發喔！'
-      : (from === '膽囊' && !s.conns.includes('膽汁>膽囊')) ? '膽囊裡還沒有膽汁！先把膽汁送進來吧。'
-      : `「${from}」不會注入${to}喔！`;
+    let msg;
+    if(fromGland && !WU_JUICE_NAMES.includes(to)) msg = '消化腺要先「分泌」出消化液，請把它接到中間那一列的消化液！';
+    else if(fromGland) msg = `${from}不會分泌「${to}」喔！`;
+    else if(from === '膽汁' && to === '小腸') msg = '膽汁不會直接送去，它會先被「濃縮、儲存」在某個地方，等食物來了再出發喔！';
+    else if(from === '膽囊' && !s.conns.includes('膽汁>膽囊')) msg = '膽囊裡還沒有膽汁！先把膽汁送進來吧。';
+    else if(!fromGland && !s.conns.some(k=>k.endsWith('>'+from)) && from !== '膽囊') msg = `先把消化腺接到「${from}」，才有消化液可以注入喔！`;
+    else msg = `「${from}」不會注入${to}喔！`;
     wuBad(msg);
     state.wu.flash = {id:target, ok:false};
   }
@@ -2835,7 +2938,7 @@ function wuPhGo(){
   WU_PH_TARGETS.forEach(t=>{
     if(s.phOk[t.name]) return;
     if(phClass(s.ph[t.name]) === t.ans){ s.phOk[t.name] = true; wuOk(); }
-    else { s.phBad.push(t.name); state.wu.mistakes++; state.wu.stMistakes[3]++; hints.push(`${t.name}：${t.hint}`); }
+    else { s.phBad.push(t.name); state.wu.mistakes++; state.wu.stMistakes[state.wu.station]++; hints.push(`${t.name}：${t.hint}`); }
   });
   if(s.phBad.length){ setWizard('還有地方的酸鹼值不對：' + hints.join(' '), 'sad'); }
   else { s.part = 'temp'; setWizard('環境調和完成！最後是溫度實驗：每一題都要選出正確答案，並把溫度計拉到同樣的溫度。', 'happy'); }
@@ -2922,7 +3025,7 @@ function wuInnerHtml(){
   const head = `
     <div class="wu-head">
       <div class="wu-steps">${steps}</div>
-      <div class="wu-meta">⏱️ <b id="wuClock">${fmtTime((Date.now()-w.start)/1000)}</b><span>❌ 失誤 <b>${w.mistakes}</b></span>${st===1 && !w.between ? `<span>🔥 連擊 <b>${w.s2.combo}</b></span>` : ''}</div>
+      <div class="wu-meta">⏱️ <b id="wuClock">${fmtTime((Date.now()-w.start)/1000)}</b><span>❌ 失誤 <b>${w.mistakes}</b></span>${WU_ORDER[st]===1 && !w.between ? `<span>🔥 連擊 <b>${w.s2.combo}</b></span>` : ''}</div>
     </div>`;
   let body;
   if(w.between){
@@ -2935,13 +3038,13 @@ function wuInnerHtml(){
         <p class="wu-desc">這一站失誤 ${w.stMistakes[st]} 次（0 次 3 星、1～2 次 2 星）</p>
         <div class="btn-row"><button class="cast-btn" id="wuNext">${last ? '🏆 完成暖身，領取獎勵！' : `➡️ 前往第 ${st+2} 站：${WU_NAMES[st+1]}`}</button></div>
       </div>`;
-  } else body = [wuS1Html, wuS2Html, wuS3Html, wuS4Html][st]();
+  } else body = [wuS1Html, wuS2Html, wuS3Html, wuS4Html][WU_ORDER[st]]();
   return head + body;
 }
 function wuTile(name, locked){
   const icon = WU_ICON[name] || '';
-  return locked ? `<div class="wu-tile locked">${icon} ${name}</div>`
-    : `<div class="wu-tile${wuSel==='tile:'+name?' wu-selected':''}" data-drag="tile:${name}">${icon} ${name}</div>`;
+  return locked ? `<div class="wu-tile locked">${name}</div>`
+    : `<div class="wu-tile${wuSel==='tile:'+name?' wu-selected':''}" data-drag="tile:${name}">${name}</div>`;
 }
 function wuS1Html(){
   const s = state.wu.s1;
@@ -2951,7 +3054,7 @@ function wuS1Html(){
       <span class="wu-slot-no">${i+1}</span>${n ? wuTile(n, s.locked[i]) : '<span class="wu-slot-empty">放這裡</span>'}<span class="wu-food" id="wuFood${i}"></span>
     </div>`).join('');
   return `
-    <div class="wu-title">🧱 第 1 站：鋪設地下城通道</div>
+    <div class="wu-title">🧱 第 ${state.wu.station+1} 站：鋪設地下城通道</div>
     <div class="wu-desc">把石板依照食物經過的順序放進 1～7 號格子，再按「放行」。可以拖曳，也可以先點石板、再點格子。</div>
     <div class="wu-track">${slots}</div>
     <div class="wu-tray-label">🪨 石板堆（混了不屬於消化道的陷阱）</div>
@@ -2970,7 +3073,7 @@ function wuS2Html(){
   const dots = WU_MAP.filter(m=>m.line).map(m=>`<span class="wu-dot" style="left:${m.line[2]}%;top:${m.line[3]}%"></span>`).join('');
   const tags = s.tray.map(n=>`<div class="wu-tag${wuSel==='tag:'+n?' wu-selected':''}${wuFlashCls('tag:'+n)}" data-drag="tag:${n}">${n}</div>`).join('');
   return `
-    <div class="wu-title">🗺️ 第 2 站：點亮地下城地圖</div>
+    <div class="wu-title">🗺️ 第 ${state.wu.station+1} 站：點亮地下城地圖</div>
     <div class="wu-desc">把名牌放到圖上正確的「？」位置。小心，有些名牌不是消化系統的構造！</div>
     <div class="wu-map-layout">
       <div class="wu-map">
@@ -2994,7 +3097,7 @@ function wuS3Html(){
   }).join('');
   return `
     <div class="wu-title">📜 第 3 站：冒險者公會派任務</div>
-    <div class="wu-desc">在任務卡掉到底之前，把它拖給負責的器官（或先點卡片、再點器官）。剩下 <b>${s.deck.length + (job?1:0)}</b> 張。</div>
+    <div class="wu-desc">在任務卡掉到底之前，把它拖給負責的器官（或先點卡片、再點器官）。拖曳時時間不會暫停喔！剩下 <b>${s.deck.length + (job?1:0)}</b> 張。</div>
     <div class="wu-fallbar"><div id="wuFall"></div></div>
     <div class="wu-sky" id="wuSky">${job ? `<div class="wu-job${wuSel==='job:'+s.cur?' wu-selected':''}" id="wuJob" data-drag="job:${s.cur}">📜 ${job.text}</div>` : ''}</div>
     <div class="wu-members">${members}</div>`;
@@ -3003,16 +3106,32 @@ function wuS4Html(){
   const s = state.wu.s4;
   if(s.part === 'pipe'){
     const used = from => WU_PIPES_NEEDED.filter(k=>k.startsWith(from+'>')).every(k=>s.conns.includes(k));
-    const srcs = WU_SOURCES.map(x=>`<div class="wu-node src${used(x.juice)?' done':''}${wuSel==='src:'+x.juice?' wu-selected':''}" id="wn-${x.juice}" data-drag="src:${x.juice}" data-dragmode="line" style="--c:${x.color}"><small>${WU_ICON[x.gland]||''} ${x.gland}</small><b>${x.juice}</b></div>`).join('');
-    const mid = `<div class="wu-node mid${used('膽囊')?' done':''}${wuSel==='src:膽囊'?' wu-selected':''}${wuFlashCls('dst:膽囊')}" id="wn-膽囊" data-drag="src:膽囊" data-dragmode="line" data-drop="dst:膽囊" style="--c:#9bd65a">${WU_ICON['膽囊']} <b>膽囊</b></div>`;
-    const dsts = WU_PIPE_TARGETS.map(n=>`<div class="wu-node dst${wuFlashCls('dst:'+n)}" id="wn-${n}" data-drop="dst:${n}">${WU_ICON[n]} <b>${n}</b></div>`).join('');
+    const node = (cls, name, label, opts) => {
+      opts = opts || {};
+      const drag = opts.drag ? ` data-drag="src:${name}" data-dragmode="line"` : '';
+      const drop = opts.drop ? ` data-drop="dst:${name}"` : '';
+      return `<div class="wu-node ${cls}${opts.drag && used(name)?' done':''}${wuSel==='src:'+name?' wu-selected':''}${opts.drop?wuFlashCls('dst:'+name):''}" id="wn-${name}"${drag}${drop}${opts.c?` style="--c:${opts.c}"`:''}>${label}</div>`;
+    };
+    const glands = WU_SOURCES.map(x=>node('src', x.gland, `${WU_ICON[x.gland]||''} <b>${x.gland}</b>`, {drag:true, c:x.color})).join('');
+    const juices = WU_SOURCES.map(x=>node('juice', x.juice, `<b>${x.juice}</b>`, {drag:true, drop:true, c:x.color})).join('');
+    const gb = node('mid', '膽囊', `${WU_ICON['膽囊']} <b>膽囊</b>`, {drag:true, drop:true, c:'#9bd65a'});
+    const dsts = WU_PIPE_TARGETS.map(n=>node('dst', n, `${WU_ICON[n]} <b>${n}</b>`, {drop:true})).join('');
     return `
-      <div class="wu-title">⚗️ 第 4 站：煉金管線（1/3）</div>
-      <div class="wu-desc">從左邊的消化液拉一條管線，接到它注入的地方。已完成 ${s.conns.length} / ${WU_PIPES_NEEDED.length} 條。</div>
+      <div class="wu-title">⚗️ 第 ${state.wu.station+1} 站：煉金管線（1/3）</div>
+      <div class="wu-desc">先從消化腺拉管線到它「分泌」的消化液，再從消化液拉到它「注入」的消化道。已完成 ${s.conns.length} / ${WU_PIPES_NEEDED.length} 條。</div>
+      <div class="wu-pipe-head">
+        <div class="wu-ph-title">🏭 消化腺</div>
+        <div class="wu-ph-arrow">分泌<span>➜</span></div>
+        <div class="wu-ph-title">🧪 消化液</div>
+        <div class="wu-ph-arrow">注入<span>➜</span></div>
+        <div class="wu-ph-title">🍽️ 消化道</div>
+      </div>
       <div class="wu-pipes" id="wuPipes">
         <svg class="wu-pipe-svg" id="wuPipeSvg"></svg>
-        <div class="wu-col">${srcs}</div>
-        <div class="wu-col mid">${mid}</div>
+        <div class="wu-col">${glands}</div>
+        <div></div>
+        <div class="wu-col">${juices}</div>
+        <div class="wu-col mid">${gb}<div class="wu-gb-note">膽汁先在這裡<br>「濃縮、儲存」</div></div>
         <div class="wu-col">${dsts}</div>
       </div>`;
   }
@@ -3069,7 +3188,7 @@ function wuDrawPipes(){
   if(!box || !svg) return;
   const b = box.getBoundingClientRect();
   svg.setAttribute('viewBox', `0 0 ${b.width} ${b.height}`);
-  const color = from => (WU_SOURCES.find(x=>x.juice===from) || {color:'#9bd65a'}).color;
+  const color = from => (WU_SOURCES.find(x=>x.juice===from || x.gland===from) || {color:'#9bd65a'}).color;
   const colors = [...new Set([...WU_SOURCES.map(x=>x.color), '#9bd65a', '#fff3c4'])];
   const defs = '<defs>' + colors.map(c=>`<marker id="ah${c.slice(1)}" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="${c}"/></marker>`).join('') + '</defs>';
   const s4 = state.wu.s4;
@@ -3080,7 +3199,10 @@ function wuDrawPipes(){
     const col = color(from), d = wuPipePath(wuCenter(a,b), wuCenter(c,b));
     const drop = k === s4.lastConn
       ? `<circle r="7" fill="${col}" stroke="#fff" stroke-width="2"><animateMotion dur="0.9s" repeatCount="1" fill="freeze" path="${d}"/><animate attributeName="opacity" values="1;1;0" keyTimes="0;0.85;1" dur="0.9s" fill="freeze"/></circle>` : '';
-    return `<path d="${d}" stroke="${col}" class="wu-pipe" marker-end="url(#ah${col.slice(1)})"/>${drop}`;
+    const A = wuCenter(a,b), C = wuCenter(c,b), mx = (A.r + C.l - 10)/2, my = (A.y + C.y)/2 - (k === '膽汁>膽囊' ? 26 : 0), verb = wuPipeVerb(k);
+    const tw = verb.length * 13 + 12;
+    const tag = `<g class="wu-pipe-tag"><rect x="${mx - tw/2}" y="${my - 11}" width="${tw}" height="22" rx="11" fill="#1d1518" stroke="${col}" stroke-width="1.5"/><text x="${mx}" y="${my + 5}" text-anchor="middle" fill="#fff3dc">${verb}</text></g>`;
+    return `<path d="${d}" stroke="${col}" class="wu-pipe" marker-end="url(#ah${col.slice(1)})"/>${drop}${tag}`;
   }).join('');
   s4.lastConn = null;
   svg.innerHTML = defs + paths + '<path id="wuTempPipe" class="wu-pipe temp" d="" marker-end="url(#ahfff3c4)"/>';
@@ -3116,6 +3238,7 @@ function wuBind(){
 window.addEventListener('resize', ()=>{ if(state.screen === 'warmup') wuDrawPipes(); });
 
 render();
+showStageIntro(ASSETS.background.lobby, 'HUMAN DUNGEON', '🏰 人體地下城：消化魔法使的考驗', '蔡譯禎老師設計');
 </script>
 </body>
 </html>
