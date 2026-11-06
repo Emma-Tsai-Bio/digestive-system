@@ -640,6 +640,16 @@ button{font-family:inherit; cursor:pointer;}
 .wu-summary th{font-size:12px; color:var(--muted);}
 .wu-summary td.stars{letter-spacing:2px;}
 .wu-summary tfoot td{font-weight:900; color:var(--gold-hi); border-bottom:none;}
+.wu-tdots{display:flex; gap:6px; flex-wrap:wrap; margin:2px 0 12px;}
+.wu-tdot{font-size:12.5px; font-weight:700; padding:4px 10px; border-radius:999px; background:rgba(0,0,0,0.35); border:1px solid rgba(217,178,95,0.2); color:var(--muted);}
+.wu-tdot.on{color:#2a1805; background:linear-gradient(180deg,#f0d283,#c0912f);}
+.wu-tdot.done{color:#9be7c0; border-color:rgba(76,195,138,0.5);}
+.wu-tq{font-size:17px; font-weight:800; line-height:1.6; margin-bottom:10px;}
+.wu-topts{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:14px;}
+@media(max-width:560px){.wu-topts{grid-template-columns:1fr;}}
+.wu-topt{text-align:left; background:linear-gradient(180deg,#3a2e30,#272022); border:2px solid rgba(217,178,95,0.25); color:var(--text); border-radius:10px; padding:11px 12px; font-size:14.5px; font-weight:700; line-height:1.5;}
+.wu-topt.on{border-color:var(--gold-hi); background:rgba(217,178,95,0.16);}
+.wu-tdrag{font-size:14px; font-weight:700; color:var(--gold-hi); background:rgba(217,178,95,0.08); border:1px dashed rgba(217,178,95,0.4); border-radius:8px; padding:8px 12px; margin-bottom:6px; text-align:center;}
 </style>
 </head>
 <body>
@@ -2480,7 +2490,7 @@ function startWarmup(){
     s1:{tray:shuffled([...WU_TRACT, ...WU_GLANDS]), slots:Array(7).fill(null), locked:Array(7).fill(false), running:false, bad:[]},
     s2:{tray:shuffled([...WU_MAP.map(m=>m.name), ...WU_MAP_DECOYS]), placed:{}, combo:0, best:0, lit:false},
     s3:{deck:shuffled(WU_JOBS.map((_,i)=>i)), cur:null, dur:16000, t0:0, paused:0, dragAt:null, tries:0, done:0},
-    s4:{part:'pipe', conns:[], ph:{'口腔':randPh('中性'), '胃':randPh('酸性'), '小腸':randPh('鹼性')}, phOk:{}, phBad:[], temp:10, denatured:false}
+    s4:{part:'pipe', conns:[], ph:{'口腔':randPh('中性'), '胃':randPh('酸性'), '小腸':randPh('鹼性')}, phOk:{}, phBad:[], temp:20, denatured:false, tRound:0, tPick:null, tOrder:WU_TEMP_ROUNDS.map(r=>shuffled(r.opts.map((_,i)=>i)))}
   };
   wuSel = null;
   setWizard(WU_INTRO[0], 'calm');
@@ -2828,9 +2838,21 @@ function wuPhGo(){
     else { s.phBad.push(t.name); state.wu.mistakes++; state.wu.stMistakes[3]++; hints.push(`${t.name}：${t.hint}`); }
   });
   if(s.phBad.length){ setWizard('還有地方的酸鹼值不對：' + hints.join(' '), 'sad'); }
-  else { s.part = 'temp'; setWizard('環境調和完成！最後一個實驗：拉動溫度計，找出酵素最有活力的溫度。小心別把牠熱壞了……', 'happy'); }
+  else { s.part = 'temp'; setWizard('環境調和完成！最後是溫度實驗：每一題都要選出正確答案，並把溫度計拉到同樣的溫度。', 'happy'); }
   wuRender();
 }
+/* 第 4 站第 3 段：溫度情境題（每題都要「選對情境」＋「把溫度計拉到同樣的位置」） */
+const WU_TEMP_ROUNDS = [
+  {title:'低溫', q:'把含有酵素的唾液放進冰箱（約 4 °C），酵素會怎樣？', drag:'把溫度計拉到冰箱的溫度（10 °C 以下）', min:0, max:10,
+    opts:['動作變慢、活性降低，拿出來回溫後就能恢復', '活性最強，消化得最快', '變性「掛掉」，回溫也救不回來', '完全不受影響，和平常一樣'], ans:0,
+    ok:'沒錯！低溫只會讓酵素暫時變慢，回到適當溫度後就會恢復活性。'},
+  {title:'最適溫度', q:'在什麼情境下，消化酵素最有活力？', drag:'把溫度計拉到這個溫度（36～38 °C）', min:36, max:38,
+    opts:['在人體裡，接近正常體溫的時候', '放進冰箱冷藏的時候', '發高燒到 42 °C 的時候', '用熱水燙過的時候'], ans:0,
+    ok:'沒錯！約 37 °C，也就是接近我們的體溫，消化酵素最有活力。'},
+  {title:'高溫', q:'什麼情況下，酵素會「掛掉」（變性），而且降溫也救不回來？', drag:'把溫度計拉到會讓酵素掛掉的溫度（50 °C 以上）', min:50, max:100,
+    opts:['加熱到 50 °C 以上，就像蛋被煮熟一樣', '放進冰箱冷藏', '回到 37 °C 體溫', '冷凍到 0 °C'], ans:0,
+    ok:'沒錯！高溫會破壞酵素的形狀（變性），就像煮熟的蛋變不回生蛋，降溫也救不回來。'}
+];
 /* 人體消化酵素最適溫度約 37 °C；超過後活性快速下降，約 40～50 °C 以上會變性且無法恢復；低溫只是暫時變慢 */
 const WU_DENATURE_AT = 50;
 function enzymeActivity(T){ return T <= 37 ? Math.exp(-Math.pow((T-37)/14, 2)) : Math.exp(-Math.pow((T-37)/5.5, 2)); }
@@ -2852,19 +2874,32 @@ function wuTempUpdate(T){
   set('wuEnz', el=>{ el.textContent = face; el.style.transform = `scale(${0.8 + act*0.5})`; });
   set('wuEnzMsg', el=>el.textContent = msg);
   set('wuAct', el=>el.style.width = Math.round(act*100) + '%');
-  set('wuTempReset', el=>el.style.display = s.denatured ? '' : 'none');
+  set('wuTempReset', el=>el.style.display = (s.denatured && WU_TEMP_ROUNDS[s.tRound] && WU_TEMP_ROUNDS[s.tRound].title !== '高溫') ? '' : 'none');
 }
+function wuTempPick(i){ const s = state.wu.s4; if(s.part !== 'temp') return; s.tPick = i; wuRender(); }
 function wuTempGo(){
   const s = state.wu.s4; if(s.part !== 'temp') return;
-  if(!s.denatured && s.temp >= 36 && s.temp <= 38){
+  const r = WU_TEMP_ROUNDS[s.tRound];
+  if(s.tPick === null){ setWizard('先選一個答案，再把溫度計拉到對應的位置喔！', 'calm'); refreshWizardDom(); return; }
+  const pickOk = s.tPick === r.ans;
+  const tempOk = s.temp >= r.min && s.temp <= r.max && (r.title === '高溫' || !s.denatured);
+  if(pickOk && tempOk){
     wuOk();
-    wuStationDone(`沒錯！約 ${s.temp} °C，也就是接近我們的體溫 37 °C，消化酵素在這裡最有活力。`);
-    return;
+    s.tRound++; s.tPick = null;
+    if(s.tRound >= WU_TEMP_ROUNDS.length){ wuStationDone(r.ok + ' 溫度實驗全部完成！'); return; }
+    s.temp = 20; s.denatured = false;
+    setWizard(r.ok + ' 下一題！', 'happy');
+    wuRender(); return;
   }
-  wuBad(s.denatured ? '這隻酵素已經變性了，先重新培養一隻吧！' : s.temp > 38 ? '有點太熱了，酵素開始無力，降一點看看！' : '再溫暖一點，看著活力條找找看！');
+  let msg;
+  if(!pickOk && !tempOk) msg = '答案和溫度計的位置都不對，再想想看！';
+  else if(!pickOk) msg = '溫度計拉對了，但答案不對喔！看看酵素的樣子，再選一次。';
+  else if(s.denatured) msg = '答案對了，但這隻酵素在剛才已經被熱到變性了！先重新培養一隻，再拉到正確的溫度。';
+  else msg = `答案對了，但溫度計的位置和情境不一樣喔！${r.drag}。`;
+  wuBad(msg);
   wuRender();
 }
-function wuTempReset(){ const s = state.wu.s4; s.denatured = false; s.temp = 10; setWizard('新的酵素培養好了。這次小心溫度，別讓牠變性囉！', 'calm'); wuRender(); }
+function wuTempReset(){ const s = state.wu.s4; s.denatured = false; s.temp = 20; setWizard('新的酵素培養好了。這次小心溫度，別讓牠變性囉！', 'calm'); wuRender(); }
 
 /* ---------- 畫面 ---------- */
 function wuFlashCls(id){ const f = state.wu.flash; return f && f.id === id ? (f.ok ? ' wu-flash-ok' : ' wu-flash-bad') : ''; }
@@ -2999,9 +3034,15 @@ function wuS4Html(){
       ${rows}
       <div class="btn-row"><button class="cast-btn" id="wuPhGo">⚗️ 調和環境！</button></div>`;
   }
+  const r = WU_TEMP_ROUNDS[s.tRound];
+  const opts = s.tOrder[s.tRound].map(i=>`<button class="wu-topt${s.tPick===i?' on':''}" data-topt="${i}">${s.tPick===i?'✅':'⬜'} ${r.opts[i]}</button>`).join('');
+  const dots = WU_TEMP_ROUNDS.map((x,i)=>`<span class="wu-tdot ${i<s.tRound?'done':i===s.tRound?'on':''}">${i<s.tRound?'✓':i+1} ${x.title}</span>`).join('');
   return `
     <div class="wu-title">🌡️ 第 4 站：酵素溫度實驗（3/3）</div>
-    <div class="wu-desc">拉動溫度計，觀察酵素的活力，找出牠最有精神的溫度，再按「就是這個溫度」。</div>
+    <div class="wu-tdots">${dots}</div>
+    <div class="wu-tq">❓ ${r.q}</div>
+    <div class="wu-topts">${opts}</div>
+    <div class="wu-tdrag">🌡️ ${r.drag}</div>
     <div class="wu-lab">
       <div class="wu-enzyme" id="wuEnz">🙂</div>
       <div class="wu-enz-msg" id="wuEnzMsg"></div>
@@ -3011,7 +3052,7 @@ function wuS4Html(){
       <div class="wu-temp-scale"><span>0 °C 冰水</span><span>50 °C</span><span>100 °C 沸水</span></div>
       <div class="wu-temp-val" id="wuTempVal">${s.temp} °C</div>
       <div class="btn-row">
-        <button class="cast-btn" id="wuTempGo">🎯 就是這個溫度！</button>
+        <button class="cast-btn" id="wuTempGo">🔬 確認答案！</button>
         <button class="cast-btn ghost" id="wuTempReset" style="display:none">🧫 重新培養一隻酵素</button>
       </div>
     </div>`;
@@ -3062,6 +3103,7 @@ function wuBind(){
   on('wuPhGo', wuPhGo);
   on('wuTempGo', wuTempGo);
   on('wuTempReset', wuTempReset);
+  document.querySelectorAll('[data-topt]').forEach(b=>b.addEventListener('click', ()=>wuTempPick(+b.dataset.topt)));
   document.querySelectorAll('.wu-ph').forEach(r=>r.addEventListener('input', ()=>{
     const v = +r.value; state.wu.s4.ph[r.dataset.ph] = v;
     const lab = document.getElementById('phv-'+r.dataset.ph); if(lab) lab.textContent = phClass(v);
