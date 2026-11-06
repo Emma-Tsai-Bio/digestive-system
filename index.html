@@ -598,7 +598,7 @@ button.wu-member:active{transform:scale(0.96);}
 .wu-ph-arrow{display:flex; flex-direction:column; align-items:center; font-size:13px; font-weight:800; color:#ffcf73; line-height:1.1; padding:0 4px;}
 .wu-ph-arrow span{font-size:26px; color:var(--gold);}
 .wu-pipe-tag text{font-size:12px; font-weight:800; font-family:'Noto Sans TC',sans-serif;}
-.wu-pipes .wu-col.mid{padding-left:54px; justify-content:flex-end; padding-bottom:2px;}
+.wu-pipes .wu-col.mid{padding-left:28px; justify-content:flex-end; padding-bottom:2px;}
 .wu-col.gl,.wu-col.ju{padding-bottom:64px;}
 .wu-gb-note{font-size:12px; color:#bfe8a0; text-align:center; margin-bottom:6px; line-height:1.4;}
 .wu-pipe-svg{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:visible;}
@@ -696,6 +696,37 @@ button.wu-member:active{transform:scale(0.96);}
 .wu-rules-list li::marker{color:var(--gold); font-weight:900;}
 .wu-rules-how{background:rgba(217,178,95,0.1); border:1px solid rgba(217,178,95,0.35); border-radius:10px; padding:10px 14px; font-size:15px; font-weight:700; margin-bottom:8px;}
 .wu-rules-note{font-size:13px; color:var(--muted); margin-bottom:6px;}
+
+.mon{position:relative;}
+.mon-target .mon-pic{border-color:var(--gold-hi); box-shadow:0 0 0 4px rgba(243,220,156,0.35), 0 0 22px rgba(243,220,156,0.8); animation:hintPulse 1s infinite;}
+.mon-target .mon-cap{color:var(--gold-hi);}
+.mon-dim{opacity:0.35; filter:grayscale(0.7);}
+.mon-arrow{position:absolute; top:-22px; left:50%; transform:translateX(-50%); white-space:nowrap; font-size:12px; font-weight:900; color:#2a1805; background:linear-gradient(180deg,#f0d283,#c0912f); border-radius:999px; padding:2px 8px; animation:monBob 0.9s ease-in-out infinite; z-index:2;}
+@keyframes monBob{0%,100%{transform:translate(-50%,0);} 50%{transform:translate(-50%,4px);}}
+.show-mons{padding-top:16px;}
+.si-dish{position:absolute; left:50%; top:46%; transform:translate(-50%,-50%); text-align:center; animation:dishIn .7s cubic-bezier(.2,.8,.3,1.2) .2s both; z-index:2;}
+.si-dish-label{display:inline-block; font-family:'Noto Serif TC',serif; font-weight:900; font-size:15px; color:#2a1805; background:linear-gradient(180deg,#f0d283,#c0912f); border-radius:999px; padding:4px 14px; margin-bottom:10px; box-shadow:0 4px 12px rgba(0,0,0,0.5);}
+.si-dish-pic{display:block; width:min(64vw, 360px); aspect-ratio:4/3; height:auto; border-radius:14px; border:4px solid var(--gold); box-shadow:0 0 40px rgba(243,220,156,0.55), 0 16px 40px rgba(0,0,0,0.6); font-size:90px; background:#2b2022; margin:0 auto;}
+.si-dish-name{margin-top:8px; font-family:'Noto Serif TC',serif; font-weight:900; font-size:22px; color:#fff3dc; text-shadow:0 2px 0 #000, 0 0 12px rgba(0,0,0,0.8);}
+@keyframes dishIn{from{opacity:0; transform:translate(-50%,-40%) scale(0.7) rotate(-6deg);} to{opacity:1; transform:translate(-50%,-50%) scale(1) rotate(0);}}
+
+/* 營養標示：古老卷軸風格（不需要圖片） */
+.nlabel{position:relative; background:
+    radial-gradient(ellipse at 20% 15%, rgba(255,255,255,0.35), transparent 45%),
+    radial-gradient(ellipse at 80% 85%, rgba(120,72,20,0.22), transparent 50%),
+    linear-gradient(180deg, #f3e2b8, #e8cf98 55%, #dcbd7f);
+  color:#3a2408; border:none; border-left:3px solid rgba(120,72,20,0.35); border-right:3px solid rgba(120,72,20,0.35); border-radius:2px;
+  padding:16px 22px 12px; margin:30px auto 26px; max-width:360px; font-family:'Noto Serif TC',serif; box-shadow:0 10px 26px rgba(0,0,0,0.55), inset 0 0 30px rgba(120,72,20,0.25);}
+.nlabel::before,.nlabel::after{content:''; position:absolute; left:-16px; right:-16px; height:22px; border-radius:11px;
+  background:linear-gradient(180deg,#c89a52,#f4dca0 40%,#a8762e 85%,#6e4816); box-shadow:0 4px 8px rgba(0,0,0,0.5);}
+.nlabel::before{top:-14px;} .nlabel::after{bottom:-14px;}
+.nl-title{font-size:21px; font-weight:900; text-align:center; letter-spacing:6px; color:#5a2e08; border-bottom:3px double #7a4a18; padding-bottom:6px; margin-bottom:4px;}
+.nl-row{display:flex; justify-content:space-between; font-size:15.5px; padding:6px 2px; border-bottom:1px dashed rgba(90,46,8,0.45);}
+.nl-row b{font-weight:900; font-family:'Noto Sans TC',sans-serif;}
+.nl-servings{border-bottom:3px double #7a4a18;}
+.nl-head{display:flex; justify-content:flex-end; font-size:13px; font-weight:900; padding:4px 2px; border-bottom:1px dashed rgba(90,46,8,0.45); color:#7a4a18;}
+.nl-kcal b{color:#a8261a;}
+.nl-last{border-bottom:none;}
 </style>
 </head>
 <body>
@@ -780,9 +811,9 @@ const CLOUD = {
 const ORGANS = [
   {key:'mouth', name:'口腔', stage:'咀嚼石窟', icon:'🦷', hasChemical:true, pH:'中性', gland:'唾腺', juice:'唾液', nutrients:['醣類'], askNutrient:true, askGlandPH:true,
     intro:'歡迎來到口腔（咀嚼石窟）！牙齒巨石會把食物磨碎，唾腺的泉水也從這裡湧出……仔細觀察吧。'},
-  {key:'pharynx', name:'咽', stage:'吞嚥閘門', icon:'🕳️', hasChemical:false, askGlandPH:false, note:'食物快速通過，沒有消化作用。',
-    intro:'這裡是咽（吞嚥閘門）。食物只是匆匆路過，別被它騙了。'},
-  {key:'esophagus', name:'食道', stage:'黑暗滑水道', icon:'🌊', hasChemical:false, askGlandPH:false, note:'靠蠕動把食物推往胃部，沒有消化作用。',
+  {key:'pharynx', name:'咽', stage:'吞嚥閘門', icon:'🕳️', hasChemical:false, askGlandPH:false, note:'食物和空氣共同經過的通道；吞嚥時，會厭軟骨會蓋住氣管，避免嗆到。',
+    intro:'這裡是咽（吞嚥閘門）。閘門正在開開關關，看清楚這裡到底在做什麼工作。'},
+  {key:'esophagus', name:'食道', stage:'黑暗滑水道', icon:'🌊', hasChemical:false, askGlandPH:false, note:'管壁的肌肉會一波波蠕動，把食團推往胃部。',
     intro:'食道（黑暗滑水道）到了！牆壁會一波波蠕動，把食物推向深處。'},
   {key:'stomach', name:'胃', stage:'胃酸沸騰之池', icon:'🔥', hasChemical:true, pH:'酸性', gland:'胃腺', juice:'胃液', nutrients:['蛋白質'], askNutrient:true, askGlandPH:true,
     intro:'小心腳下！這是胃（胃酸沸騰之池），強酸翻滾，某些魔物會在這裡現出原形……'},
@@ -795,9 +826,9 @@ const ORGANS = [
     nutrients:['醣類','蛋白質','脂質'],
     note:'肝臟、胰臟、腸腺並不在小腸「裡面」，而是分別藉由導管，把分泌的消化液運送到小腸中！',
     intro:'小腸（絨毛迷宮）是最終決戰之地！肝臟、胰臟、腸腺會從迷宮外送來援軍。'},
-  {key:'large', name:'大腸', stage:'汲水深淵', icon:'💧', hasChemical:false, askGlandPH:false, note:'主要負責吸收水分，把殘渣變成糞便。',
+  {key:'large', name:'大腸', stage:'汲水深淵', icon:'💧', hasChemical:false, askGlandPH:false, note:'吸收剩餘的水分，把殘渣形成糞便並暫時儲存。',
     intro:'大腸（汲水深淵）……水分在這裡被一點一滴吸走，殘渣逐漸成形。'},
-  {key:'anus', name:'肛門', stage:'終焉之門', icon:'🚪', hasChemical:false, askGlandPH:false, note:'消化之旅的終點站，殘渣在此排出。',
+  {key:'anus', name:'肛門', stage:'終焉之門', icon:'🚪', hasChemical:false, askGlandPH:false, note:'消化之旅的終點站，糞便從這裡排出體外（排遺）。',
     intro:'肛門（終焉之門）就在眼前。殘渣將從這裡離開地下城，旅程即將結束。'}
 ];
 
@@ -933,7 +964,7 @@ function freshState(player){
 const INTRO_MS = 2500;
 let introUntil = 0, introTimer = null;
 function introActive(){ return Date.now() < introUntil; }
-function showStageIntro(bgSrc, kicker, title, sub){
+function showStageIntro(bgSrc, kicker, title, sub, extraHtml){
   const box = document.getElementById('stageIntro');
   if(!box || !bgSrc || BAD_IMG.has(bgSrc)) return;
   clearTimeout(introTimer);
@@ -941,6 +972,7 @@ function showStageIntro(bgSrc, kicker, title, sub){
   box.className = 'on';
   box.innerHTML = `<div class="si-blur" style="background-image:url('${bgSrc}')"></div>
     <img class="si-img" src="${bgSrc}" alt="" onerror="BAD_IMG.add('${bgSrc}'); hideStageIntro();">
+    ${extraHtml || ''}
     <div class="si-cap"><div class="si-kicker">${kicker||''}</div><div class="si-title">${title||''}</div><div class="si-sub">${sub||''}</div><div class="si-skip">點一下畫面直接開始</div></div>
     <div class="si-bar" style="animation-duration:${INTRO_MS}ms"></div>`;
   introTimer = setTimeout(hideStageIntro, INTRO_MS);
@@ -959,7 +991,10 @@ function hideStageIntro(){
 (function(){ const b = document.getElementById('stageIntro'); if(b) b.addEventListener('click', hideStageIntro); })();
 function introForOrgan(){
   const o = currentOrgan();
-  showStageIntro(ASSETS.background[o.key], `FLOOR ${state.organIndex+1} / ${ORGANS.length}`, `${o.icon} ${o.name}（${o.stage}）`, `料理 ${state.runIndex+1} / ${DISHES_PER_RUN}：${state.food.name}`);
+  const f = state.food;
+  const dish = state.organIndex === 0
+    ? `<div class="si-dish"><div class="si-dish-label">這一關的魔物料理</div>${pic(ASSETS.foods[f.id], f.emoji, 'si-dish-pic')}<div class="si-dish-name">${f.name}</div></div>` : '';
+  showStageIntro(ASSETS.background[o.key], `FLOOR ${state.organIndex+1} / ${ORGANS.length}`, `${o.icon} ${o.name}（${o.stage}）`, `料理 ${state.runIndex+1} / ${DISHES_PER_RUN}：${f.name}`, dish);
 }
 
 let state = freshState();
@@ -1263,7 +1298,7 @@ function beginFood(){
   state.food = state.runFoods[state.runIndex];
   state.organIndex = 0; state.qIndex = 0;
   state.qList = buildQList(ORGANS[0]);
-  state.hintUses = 0; state.hintActive = false; state.answered = false;
+  state.hintUses = 0; state.hintActive = false; state.answered = false; state.qWrong = false;
   state.glandShuffled = shuffled(GLAND_OPTIONS);
   state.screen = 'organ';
   setWizard(ORGANS[0].intro, 'calm');
@@ -1272,7 +1307,7 @@ function beginFood(){
 
 function nextQuestion(){
   state.qIndex++;
-  state.answered = false; state.hintActive = false;
+  state.answered = false; state.hintActive = false; state.qWrong = false;
   if(state.qIndex >= state.qList.length){
     state.organIndex++;
     if(state.organIndex >= ORGANS.length){
@@ -1305,7 +1340,21 @@ function earn(points){
   state.runEarned += points;
   refreshHud();
 }
+/* 每題只有「第一次作答」列入正確率；答錯後重試答對，不加熱魔力 */
+function recordFirst(ok){ if(!state.qWrong) record(ok); }
+function failRetry(hint){
+  state.qWrong = true;
+  loseHeart();
+  openWrongModal('', 'retryQuestion', hint, {hideAnswer:true});
+}
 function award(qType){
+  if(state.qWrong){
+    const zone = document.getElementById('feedbackZone');
+    if(zone) zone.innerHTML = '<div class="feedback-banner ok">✅ 這次答對了！（重試不加熱魔力）繼續前進！</div>';
+    setWizard('很好，修正過來了！記住這次的經驗。', 'happy'); refreshWizardDom();
+    setTimeout(()=>{ if(state.screen==='organ') nextQuestion(); }, 1100);
+    return;
+  }
   let e = pointsFor(qType);
   let bonus = false;
   if(state.speedEligible){ e += SPEED_BONUS; bonus = true; state.stats.speed++; }
@@ -1363,13 +1412,13 @@ function answerSingle(qType, chosen, correct){
   let correctText = correct;
   document.querySelectorAll('.opt-btn').forEach(b=>{
     b.disabled = true;
-    if(b.dataset.val === correct){ b.classList.add('correct-flash'); correctText = b.textContent.trim(); }
+    if(isCorrect && b.dataset.val === correct) b.classList.add('correct-flash');
     else if(b.dataset.val === chosen && !isCorrect) b.classList.add('wrong-flash');
   });
   stopTimer();
-  record(isCorrect);
+  recordFirst(isCorrect);
   if(isCorrect) award(qType);
-  else { loseHeart(); openWrongModal(correctText, 'nextQuestion', explainFor(qType)); }
+  else failRetry(hintFor(qType));
 }
 
 function sameSet(a, b){ return [...a].sort().join(',') === [...b].sort().join(','); }
@@ -1380,9 +1429,9 @@ function answerNutrient(selected){
   const o = currentOrgan();
   const correctSet = o.nutrients.filter(n=>foodHasNutrient(state.food, n));
   const ok = sameSet(selected, correctSet);
-  stopTimer(); record(ok);
+  stopTimer(); recordFirst(ok);
   if(ok) award('nutrient');
-  else { loseHeart(); openWrongModal(correctSet.map(monLabel).join('、'), 'nextQuestion'); }
+  else failRetry(hintFor('nutrient'));
 }
 
 function answerMatch(){
@@ -1390,11 +1439,11 @@ function answerMatch(){
   state.answered = true;
   const o = currentOrgan();
   const ok = o.glands.every(g=>matchSelections[g.gland] === g.juice);
-  stopTimer(); record(ok);
+  stopTimer(); recordFirst(ok);
   document.querySelectorAll('.match-opt').forEach(b=>b.disabled = true);
   const btn = document.getElementById('submitMatch'); if(btn) btn.disabled = true;
   if(ok) award('si_match');
-  else { loseHeart(); openWrongModal(o.glands.map(g=>`${g.gland} → ${g.juice}`).join('、'), 'nextQuestion'); }
+  else failRetry(hintFor('si_match'));
 }
 
 function answerEnzyme(nutrient, selected){
@@ -1403,18 +1452,24 @@ function answerEnzyme(nutrient, selected){
   const o = currentOrgan();
   const correctSet = o.glands.filter(g=>g.enzymes.includes(nutrient)).map(g=>g.juice);
   const ok = sameSet(selected, correctSet);
-  stopTimer(); record(ok);
+  stopTimer(); recordFirst(ok);
   if(ok) award('si_enzyme');
-  else {
-    loseHeart();
-    const label = `能分解${monLabel(nutrient)}的是：${correctSet.join('、')}`;
-    const explain = nutrient==='脂質'
-      ? '補充：膽汁不含酵素，但能把脂肪乳化成小油滴（物理消化），讓胰液更容易分解它。'
-      : '補充：膽汁不含消化酵素，所以不能對任何養分進行化學消化。';
-    openWrongModal(label, 'nextQuestion', explain);
-  }
+  else failRetry('想一想：三種消化液裡，哪幾種含有消化酵素？膽汁不含酵素，它只能把脂肪乳化成小油滴（物理消化），不能進行化學消化。');
 }
 
+/* 答錯時的提示：引導思考，不直接說出答案 */
+function hintFor(qType){
+  const o = currentOrgan();
+  if(qType === 'chem'){
+    if(!o.hasChemical) return `${o.name}的工作是：${o.note} 想想看，這些工作需要消化酵素嗎？這裡有分泌含酵素的消化液嗎？`;
+    return `「${state.food.name}」含有：${foodNutrients(state.food).map(monLabel).join('、')}。想想看，${o.name}分泌的消化液能分解哪一種養分？`;
+  }
+  if(qType === 'pH') return '回想一下：哪裡有「胃酸」？哪裡的消化液能中和從胃來的酸？哪裡的消化液接近中性？';
+  if(qType === 'gland') return `${o.name}的消化液，是由${o.name}附近的哪一個消化腺分泌的？消化腺和消化液的名字通常有關聯喔。`;
+  if(qType === 'nutrient') return `想想看，${o.name}的消化液能分解哪一種養分？再看看這道料理裡有沒有那種魔物。`;
+  if(qType === 'si_match') return '提示：消化液的名字常常和分泌它的器官有關（例如胰臟 → 胰液）。肝臟比較特別，它分泌的消化液不含酵素，卻能乳化脂肪。';
+  return '再仔細想一想，重新作答一次吧！';
+}
 function explainFor(qType){
   if(qType==='chem'){
     const o = currentOrgan();
@@ -1435,7 +1490,7 @@ let wrongCountdown = null;
 function wrongReady(){ return !state.wrongModal || Date.now() >= state.wrongModal.readyAt; }
 function wrongBtnLabel(){
   const w = state.wrongModal;
-  return state.screen === 'ending' ? '面對結局……' : (w.action === 'retrySettle' ? '🔁 重新詠唱' : '⚔️ 重整旗鼓，繼續前進');
+  return state.screen === 'ending' ? '面對結局……' : w.action === 'retrySettle' ? '🔁 重新詠唱' : w.action === 'retryQuestion' ? '🔁 再試一次' : '⚔️ 重整旗鼓，繼續前進';
 }
 function startWrongCountdown(){
   clearInterval(wrongCountdown);
@@ -1458,7 +1513,11 @@ function closeWrongModal(){
   const action = state.wrongModal ? state.wrongModal.action : null;
   state.wrongModal = null;
   if(state.screen === 'ending'){ render(); return; }
-  if(action === 'nextQuestion'){
+  if(action === 'retryQuestion'){
+    state.answered = false;
+    setWizard('看完提示了嗎？再試一次，答對才能前進喔！', 'calm');
+    render(); startTimer();
+  } else if(action === 'nextQuestion'){
     setWizard('別氣餒，失敗也是修行的一部分。繼續前進吧！', 'calm');
     nextQuestion();
   } else {
@@ -1483,7 +1542,7 @@ function answerSettleSelect(){
     render();
   } else {
     loseHeart();
-    openWrongModal(correctSet.join('、'), 'retrySettle', '只有醣類、蛋白質、脂質能產生熱量；水分、維生素、礦物質、纖維質都不會。');
+    openWrongModal('', 'retrySettle', '提示：只有三大類養分能產生熱量。維生素、礦物質、水分、纖維質和鈉，都不會產生熱量。再選一次吧！', {hideAnswer:true});
   }
 }
 
@@ -2023,9 +2082,12 @@ function menuHtml(tk){
 /* ---------- 魔物料理展示 ---------- */
 function showcaseHtml(){
   const f = state.food;
+  const qt = state.screen === 'organ' ? currentQType() : '';
+  const target = qt && qt.startsWith('si_enzyme:') ? qt.split(':')[1] : null;
   const mons = foodNutrients(f).map(n=>{
     const m = MONSTERS[n];
-    return `<div class="mon">${pic(ASSETS.monsters[m.key], m.emoji, 'mon-pic')}<div class="mon-cap">${m.name}<small>（${n}）</small></div></div>`;
+    const cls = target ? (n === target ? ' mon-target' : ' mon-dim') : '';
+    return `<div class="mon${cls}">${n === target ? '<div class="mon-arrow">⬇ 正在分解</div>' : ''}${pic(ASSETS.monsters[m.key], m.emoji, 'mon-pic')}<div class="mon-cap">${m.name}<small>（${n}）</small></div></div>`;
   }).join('');
   return `
   <div class="showcase">
@@ -2098,7 +2160,7 @@ function pillsHtml(boxId, items, correctVals){
 
 function nutrientQuestionHtml(o){
   const correct = o.nutrients.filter(n=>foodHasNutrient(state.food, n));
-  const items = ['醣類','蛋白質','脂質'].map(n=>({val:n, label:`${MONSTERS[n].emoji} ${monLabel(n)}`}));
+  const items = ['醣類','蛋白質','脂質'].map(n=>({val:n, label:monLabel(n)}));
   return `
   <div class="q-prompt">此刻在【${stageLabel(o)}】，哪些魔物正在被分解？（可複選）</div>
   ${pillsHtml('nutrientBox', items, correct)}
@@ -2128,7 +2190,7 @@ function siEnzymeHtml(o, nutrient){
   const correct = o.glands.filter(g=>g.enzymes.includes(nutrient)).map(g=>g.juice);
   const items = shuffled(o.glands.map(g=>({val:g.juice, label:`${g.icon} ${g.juice}`})));
   return `
-  <div class="q-prompt">${MONSTERS[nutrient].emoji} ${monLabel(nutrient)}擋住了去路！三種消化液之中，哪幾種含有酵素，能對牠施展化學消化？（可複選）</div>
+  <div class="q-prompt">${monLabel(nutrient)}擋住了去路！三種消化液之中，哪幾種含有酵素，能對牠施展化學消化？（可複選）</div>
   ${pillsHtml('enzymeBox', items, correct)}
   <button class="cast-btn" id="submitEnzyme">🧪 釋放酵素攻擊！</button>`;
 }
@@ -2337,12 +2399,12 @@ function npcLine(text, mood){
 function wrongModalHtml(){
   const w = state.wrongModal;
   const isOver = state.screen === 'ending';
-  const btnLabel = isOver ? '面對結局……' : (w.action === 'retrySettle' ? '🔁 重新詠唱' : '⚔️ 重整旗鼓，繼續前進');
+  const btnLabel = wrongBtnLabel();
   return `
   <div class="modal-overlay">
     <div class="modal panel npc-modal">
       ${w.hideAnswer
-        ? npcLine('唔……這道煉金術失手了。老夫不會直接告訴你答案，看看提示，再仔細算一次吧！', 'sad')
+        ? npcLine(w.action === 'retryQuestion' ? '唔……這道咒文失手了。老夫不會直接告訴你答案，看看提示，再試一次吧！' : '唔……這道煉金術失手了。老夫不會直接告訴你答案，看看提示，再仔細算一次吧！', 'sad')
         : npcLine('唔……這道咒文失手了。看清楚，正確的答案是這個：', 'sad') + `<div class="answer-reveal">✅ <b>${w.correctLabel}</b></div>`}
       ${w.explain ? `<div class="explain">${w.hideAnswer ? '💡' : '📜'} ${w.explain}</div>` : ''}
       <div class="hp-loss">💔 生命 -1（剩下 ${state.hp} 點）</div>
@@ -3046,9 +3108,9 @@ function wuTempReset(){ const s = state.wu.s4; s.denatured = false; s.temp = 20;
 /* 各站規則（依遊戲種類 sid） */
 const WU_RULES = [
   {icon:'🧱', title:'鋪設地下城通道', rules:['把石板依照「食物經過的順序」放進 1～7 號格子。','石板堆裡混了 4 塊消化腺陷阱，食物不會經過消化腺，不要放進通道。','全部放好後按「放行食物」，食物會在第一個放錯的格子卡住。','放對的石板會固定，放錯的退回石板堆，每退回一塊算一次失誤。'], how:'拖曳石板，或先點石板、再點格子。'},
-  {icon:'🗺️', title:'點亮地下城地圖', rules:['地圖上的名牌被魔物偷走了，「？」是名牌原本的位置。','把每個名牌放回正確的位置；連續放對有連擊加成。','有些名牌不是消化系統的構造（例如心臟、肺），它們沒有位置。','放錯位置或拿干擾名牌去放，都算一次失誤。'], how:'拖曳名牌，或先點名牌、再點「？」。'},
+  {icon:'🗺️', title:'點亮地下城地圖', rules:['地圖上的名牌被魔物偷走了，「？」是名牌原本的位置。','把每個名牌放回正確的位置；連續放對有連擊加成。','有些名牌不是消化系統的構造，它們在地圖上沒有位置。','放錯位置或拿干擾名牌去放，都算一次失誤。'], how:'拖曳名牌，或先點名牌、再點「？」。'},
   {icon:'📜', title:'冒險者公會派任務', rules:['任務卡會從上方慢慢掉下來，越後面掉得越快。','看清楚卡片上的工作，點一下下方負責這項工作的消化道。','卡片掉到底就算失誤，那張卡會排到最後再出現一次。','同一張卡錯兩次，負責的消化道會發亮提示。'], how:'直接點下方的消化道卡片。'},
-  {icon:'⚗️', title:'煉金管線', rules:['① 接管線：先從消化腺拉到它「分泌」的消化液，再從消化液拉到它「注入」的消化道。','　 膽汁比較特別：要先送到膽囊「濃縮、儲存」，再從膽囊注入小腸。','② 調和環境：把口腔、胃、小腸的旋鈕拉到正確的酸鹼性。','③ 溫度實驗：每一題都要選對答案，並把溫度計拉到同樣的溫度。'], how:'按住方塊拉出管線，或先點起點、再點終點。'}
+  {icon:'⚗️', title:'煉金管線', rules:['接管線：先從消化腺拉到它「分泌」的消化液，再從消化液拉到它「注入」的消化道。','調和環境：把口腔、胃、小腸的旋鈕拉到正確的酸鹼性。','溫度實驗：每一題都要選對答案，並把溫度計拉到同樣的溫度。'], how:'按住方塊拉出管線，或先點起點、再點終點。'}
 ];
 function wuRulesHtml(){
   const w = state.wu, r = WU_RULES[wuSid()];
@@ -3190,7 +3252,7 @@ function wuS4Html(){
         <div class="wu-col gl">${glands}</div>
         <div></div>
         <div class="wu-col ju">${juices}</div>
-        <div class="wu-col mid"><div class="wu-gb-note">膽汁先在這裡<br>「濃縮、儲存」</div>${gb}</div>
+        <div class="wu-col mid">${gb}</div>
         <div class="wu-col">${dsts}</div>
       </div>`;
   }
