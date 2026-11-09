@@ -931,7 +931,9 @@ img{-webkit-user-drag:none;}
 .pro-bubble{flex:1; background:linear-gradient(180deg,rgba(239,226,194,0.97),rgba(220,199,154,0.97)); color:#2b1d10; border:2px solid #8c6a2a; border-radius:14px; padding:12px 18px; min-height:96px; box-shadow:0 6px 0 rgba(0,0,0,0.4);}
 .pro-name{font-family:'Noto Serif TC',serif; font-weight:900; color:#6b3f8f; font-size:15px; margin-bottom:4px;}
 .pro-say{font-size:clamp(16px, 2.3vw, 20px); line-height:1.7; font-weight:600;}
-.pro-say.typing::after{content:'▍'; animation:markerPulse .7s infinite; color:#8c6a2a;}
+.pro-say .ph, .pro-line .ph, .pro-act-title .ph{display:inline-block;}
+.pro-say .hid, .pro-line .hid{visibility:hidden;}
+.pro-act-no.sub{margin-top:8px; letter-spacing:10px; font-size:22px;}
 .pro-bottom{position:absolute; left:0; right:0; bottom:18px; display:flex; justify-content:center; align-items:center; gap:16px; pointer-events:none;}
 .pro-hint{font-size:13px; color:rgba(255,243,220,0.6); animation:markerPulse 1.6s infinite;}
 .pro-skip{position:absolute; right:18px; bottom:-4px; pointer-events:auto; background:rgba(0,0,0,0.55); border:1px solid var(--line); color:var(--gold-hi); border-radius:999px; padding:9px 16px; font-weight:800; font-size:14px; font-family:inherit; cursor:pointer;}
@@ -1527,6 +1529,7 @@ function buildQList(organ){
 }
 
 function startRun(difficulty){
+  state.runStartScore = state.score;
   state.difficulty = difficulty;
   state.runFoods = shuffled(FOODS[difficulty]).slice(0, DISHES_PER_RUN);
   state.runIndex = 0;
@@ -1663,6 +1666,9 @@ function quitToHome(){
   state.paused = false; pauseInfo = null;
   state.wrongModal = null; state.hintModalOpen = false; state.shopOpen = false;
   state.wu = null; state.lab = null; state.ending = null;
+  /* 沒闖完就離開：這一場賺到（和花掉）的熱魔力都不算，回到開局時的數字 */
+  if(typeof state.runStartScore === 'number'){ state.score = state.runStartScore; }
+  state.runEarned = 0; state.runStartScore = null;
   state.screen = 'menu';
   setWizard('冒險暫時告一段落。休息夠了，再選一條修行之路吧！', 'calm');
   render();
@@ -1683,7 +1689,7 @@ function pauseHtml(){
   if(state.paused === 'quit') return `
   <div class="modal-overlay pause-overlay">
     <div class="modal panel npc-modal">
-      ${npcLine('確定要返回主畫面嗎？這場冒險的進度不會保存，也不會掉落便便卡喔。', 'sad')}
+      ${npcLine('確定要返回主畫面嗎？這場冒險的進度不會保存，這一場獲得的熱魔力也不會計算，更不會掉落便便卡喔。', 'sad')}
       <div class="btn-row">
         <button class="cast-btn danger" id="quitYes">🏰 確定返回主畫面</button>
         <button class="cast-btn ghost" id="quitNo">▶️ 繼續遊戲</button>
@@ -1937,6 +1943,7 @@ function loadModes(){ try{ return JSON.parse(localStorage.getItem(modesKey())) |
 function saveModes(m){ try{ localStorage.setItem(modesKey(), JSON.stringify(m)); }catch(e){} }
 
 function finishRun(type){
+  state.runStartScore = null;   // 正常結束：熱魔力照算
   stopTimer();
   if(typeof stopWuClock === 'function') stopWuClock();
   const acc = state.stats.total ? state.stats.correct / state.stats.total : 0;
@@ -3021,6 +3028,7 @@ let wuClockHandle = null;
 
 function startWarmup(){
   stopTimer();
+  state.runStartScore = state.score;
   showStageIntro(ASSETS.background.warmup, 'TRAINING CAMP', '🏕️ 見習營地', '四個小遊戲：點亮地圖、鋪設通道、公會任務、煉金管線');
   state.difficulty = 'warmup';
   state.screen = 'warmup';
@@ -3826,6 +3834,7 @@ function labNew(mode){
 }
 function startLab(mode){
   stopTimer();
+  state.runStartScore = state.score;
   state.difficulty = mode;
   state.screen = 'lab';
   state.stats = {correct:0, total:0, speed:0};
@@ -4403,38 +4412,36 @@ function labBind(){
    fx：circle＝金色魔法陣、wizard＝大賢者登場、shake＝震動、portals＝五道傳送門、dragon＝七彩神龍
    ========================================================= */
 const PROLOGUE = [
-  {type:'act', no:'第一幕', title:'黃金地下城的傳說', bg:'lobby'},
+  {type:'act', title:'黃金地下城－魔法屎的考驗', sub:'冒險序章', bg:'lobby'},
   {type:'narr', text:'傳說中，在每個人的體內，都隱藏著一座神祕的地下城。'},
-  {type:'narr', text:'在這座地下城裡，食物將化身為各種營養魔物，沿著錯綜複雜的消化道展開旅程。'},
-  {type:'narr', text:'唯有掌握消化奧祕的人，才能破解地下城中的機關，將營養魔物轉化為珍貴的熱魔力。'},
-  {type:'narr', text:'而那些能夠駕馭消化魔法的冒險者，被人們稱為——'},
+  {type:'narr', text:'在這裡，食物化身為各種營養魔物，沿著錯綜複雜的消化道展開旅程。'},
+  {type:'narr', text:'唯有掌握消化奧祕的人，才能擊敗魔物，將養分轉化為珍貴的熱魔力。'},
+  {type:'narr', text:'而這些擁有特殊力量的冒險者，被稱為——'},
   {type:'big',  text:'「魔法屎」！'},
-  {type:'narr', text:'相傳，在地下城的最深處，沉睡著一股神祕的黃金之力。', fx:'glow'},
-  {type:'narr', text:'然而，至今仍沒有人能完全揭開它的祕密……'},
-  {type:'act', no:'第二幕', title:'腸道大賢者的召喚', bg:'warmup'},
-  {type:'narr', text:'某一天，一道金色魔法陣突然出現在你腳下。', fx:'circle'},
-  {type:'narr', text:'轉眼間，你已站在一座古老的地下城入口。'},
-  {type:'narr', text:'一位白鬍子老者，手持發光的法杖與厚重的魔法書，緩緩走向你。', fx:'wizard'},
-  {type:'say', text:'終於等到你了，年輕的魔法屎。'},
-  {type:'say', text:'老夫是腸道大賢者，黃金地下城的守護者。'},
-  {type:'say', text:'在這裡，你將面對醣類史萊姆、蛋白質巨獸與脂質護盾怪。', fx:'monsters'},
-  {type:'say', text:'你必須穿越咀嚼石窟、胃酸沸騰之池、絨毛迷宮等重重關卡，破解消化魔法的奧祕。'},
-  {type:'say', text:'但想成為真正的強者，光是擊倒魔物還不夠。'},
-  {type:'say', text:'你還必須學會追蹤魔物的變化、辨識魔法藥劑的反應，甚至將養分煉化為熱魔力！'},
-  {type:'act', no:'第三幕', title:'五界試煉', bg:'lobby'},
-  {type:'narr', text:'大賢者將法杖重重敲向地面。'},
-  {type:'big',  text:'轟隆——！', fx:'shake'},
-  {type:'narr', text:'五道散發不同光芒的傳送門，緩緩出現在你眼前。', fx:'portals'},
-  {type:'say', text:'這裡有五條修行之路，每一條都隱藏著不同的考驗。'},
-  {type:'say', text:'你可以從見習營地開始，掌握地下城的基本構造；也可以踏上見習魔法屎與大魔導屎之路，迎戰強大的營養魔物。'},
-  {type:'say', text:'若你想進一步鑽研消化的祕密，魔物追蹤所與魔藥學教室，也正等待著你的挑戰。'},
-  {type:'narr', text:'大賢者翻開手中的古老魔法書。'},
-  {type:'narr', text:'書頁上浮現一條盤旋而上的七彩神龍。', fx:'dragon'},
-  {type:'say', text:'傳說，唯有完成五條修行之路，才能召喚至高無上的終極寶物——'},
-  {type:'big',  text:'「五界制霸・七彩神龍便」！', rainbow:true},
-  {type:'say', text:'那麼，年輕的魔法屎……'},
-  {type:'say', text:'你的黃金傳奇，現在正式開始！', last:true}
+  {type:'narr', text:'某一天，一道金色魔法陣突然出現在你腳下。', fx:'circle', bg:'warmup'},
+  {type:'narr', text:'當你再次睜開眼睛，眼前已是一座古老的地下城。'},
+  {type:'narr', text:'一位白鬍子老巫師緩緩走來，手中的法杖散發著神祕光芒。', fx:'wizard'},
+  {type:'say', text:'終於等到你了，年輕的魔法屎！'},
+  {type:'say', text:'我是腸道大賢者，將引導你完成這場消化試煉。'},
+  {type:'say', text:'在這裡，你將遭遇醣類史萊姆、蛋白質巨獸與脂質護盾怪，穿越重重關卡，破解消化魔法的祕密。', fx:'monsters'},
+  {type:'say', text:'但想成為真正的強者，光靠勇氣可不夠！'},
+  {type:'narr', text:'大賢者舉起法杖，五道閃耀著不同光芒的傳送門緩緩開啟。', fx:'portals', bg:'lobby'},
+  {type:'say', text:'眼前是五條修行之路，每一條都考驗著不同的能力。'},
+  {type:'say', text:'據說，只有完成五條修行之路的魔法屎，才能喚醒傳說中的終極寶物……', fx:'dragon'},
+  {type:'big',  text:'「五界制霸・七彩神龍便！」', rainbow:true},
+  {type:'narr', text:'大賢者將法杖指向前方。'},
+  {type:'say', text:'那麼，年輕的魔法屎——你的黃金冒險，現在正式開始！', last:true}
 ];
+/* 依標點把句子切成「詞組」，每組不拆開換行；n 之後的字先隱形（打字時版面不跳動） */
+function proWrap(text, n){
+  if(n === undefined) n = text.length;
+  const parts = text.match(/[^，。！？、；：…—・」－]+[，。！？、；：…—・」－]*|[，。！？、；：…—・」－]+/g) || [text];
+  let i = 0;
+  return parts.map(p=>{
+    const a = Math.max(0, Math.min(p.length, n - i)); i += p.length;
+    return `<span class="ph">${p.slice(0, a)}${a < p.length ? `<span class="hid">${p.slice(a)}</span>` : ''}</span>`;
+  }).join('');
+}
 const PRO_TYPE_MS = 55;
 const PRO_SEEN_KEY = 'goldenDungeonPrologueSeen:';
 function prologueSeen(p){ try{ return !!localStorage.getItem(PRO_SEEN_KEY + p.id); }catch(e){ return false; } }          // 打字速度（每個字毫秒）
@@ -4479,18 +4486,17 @@ function proNext(){
   const lines = document.getElementById('proLines');
   if(b.type === 'act'){
     pro.act = b;
-    const bg = document.getElementById('proBg');
-    bg.style.backgroundImage = `url("${ASSETS.background[b.bg]}")`;
-    bg.classList.remove('kb'); void bg.offsetWidth; bg.classList.add('kb');
+    proBg(b.bg);
     lines.innerHTML = ''; document.getElementById('proFx').innerHTML = '';
     document.getElementById('proDialog').classList.remove('on');
     document.getElementById('prologue').classList.remove('talking');
     const act = document.getElementById('proAct');
-    act.innerHTML = `<div class="pro-act-no">${b.no}</div><div class="pro-act-title">${b.title}</div>`;
+    act.innerHTML = b.sub ? `<div class="pro-act-title">${proWrap(b.title)}</div><div class="pro-act-no sub">${b.sub}</div>` : `<div class="pro-act-no">${b.no}</div><div class="pro-act-title">${proWrap(b.title)}</div>`;
     act.className = 'pro-act big';
     pro.timer = setTimeout(()=>{ act.className = 'pro-act small'; proNext(); }, 2200);
     return;
   }
+  if(b.bg) proBg(b.bg);
   if(b.fx) proFx(b.fx);
   if(b.type === 'say'){
     proClearLines();                         // 大賢者說話時，畫面上只留對話框
@@ -4506,27 +4512,34 @@ function proNext(){
   while(lines.children.length >= 3) lines.removeChild(lines.firstChild);
   const el = document.createElement('div');
   el.className = 'pro-line' + (b.type === 'big' ? ' big' : '') + (b.rainbow ? ' rainbow' : '') + (b.fx === 'glow' ? ' glow' : '');
-  el.textContent = b.text;
+  el.innerHTML = proWrap(b.text);
   lines.appendChild(el);
   pro.timer = setTimeout(proNext, b.type === 'big' ? 2200 : 1400 + b.text.length * 80);
 }
 function proType(text, done){
   const el = document.getElementById('proSay');
   let n = 0;
-  el.textContent = '';
+  el.innerHTML = proWrap(text, 0);
   el.classList.add('typing');
   pro.typing = {text, done};
   pro.typeTimer = setInterval(()=>{
-    n++; el.textContent = text.slice(0, n);
+    n++; el.innerHTML = proWrap(text, n);
     if(n >= text.length) proFinishTyping();
   }, PRO_TYPE_MS);
 }
 function proFinishTyping(){
   const t = pro.typing; if(!t) return;
   clearInterval(pro.typeTimer);
-  const el = document.getElementById('proSay'); el.textContent = t.text; el.classList.remove('typing');
+  const el = document.getElementById('proSay'); el.innerHTML = proWrap(t.text); el.classList.remove('typing');
   pro.typing = null;
   t.done && t.done();
+}
+function proBg(name){
+  const bg = document.getElementById('proBg'); if(!bg) return;
+  const url = `url("${ASSETS.background[name]}")`;
+  if(bg.style.backgroundImage === url) return;
+  bg.style.backgroundImage = url;
+  bg.classList.remove('kb'); void bg.offsetWidth; bg.classList.add('kb');
 }
 function proClearLines(){ const l = document.getElementById('proLines'); if(l) l.innerHTML = ''; }
 function proFx(kind){
