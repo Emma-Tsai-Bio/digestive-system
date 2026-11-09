@@ -889,6 +889,15 @@ img{-webkit-user-drag:none;}
 .lg-legend::after{content:'（點圖例可以突顯那條曲線）'; width:100%; text-align:center; font-size:11.5px; font-weight:500; color:var(--muted);}
 .hud-btn.ctl{background:linear-gradient(180deg,#2c3a4a,#1b2230); color:#cfe3ff; border-color:rgba(140,180,240,0.4);}
 .pause-overlay{z-index:110;}
+/* 序幕：畫面高度不夠時，圖案依螢幕高度縮小；大賢者說話時圖案再縮小，避免被對話框擋住 */
+.pro-fx{transition:transform .5s ease; transform-origin:top center;}
+#prologue.talking .pro-fx{transform:scale(0.78);}
+@media(max-height:700px){.pro-act.small{transform:scale(0.5); margin-top:-14px;} .pro-stage{padding-top:3vh;}}
+.pro-dragon{position:relative;}
+.pro-dragon-pic{height:min(29vh, 260px); width:auto; aspect-ratio:3/4; border-radius:12px; image-rendering:pixelated; filter:drop-shadow(0 0 26px rgba(255,106,213,0.8));}
+.pro-dragon-q{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Noto Serif TC',serif; font-weight:900; font-size:clamp(30px, 5vw, 46px); color:#fff; text-shadow:0 3px 0 #000, 0 0 20px rgba(0,0,0,0.9); letter-spacing:4px;}
+.pro-wiz-pic{width:min(30vh, 190px) !important; height:min(30vh, 190px) !important;}
+.pro-circle{width:min(32vh, 240px) !important;}
 </style>
 </head>
 <body>
@@ -1113,7 +1122,7 @@ function freshState(player){
     player: player || null,
     online:false, uploadStatus:null,
     loginDraft:{}, loginConfirm:null, loginBusy:false, loginError:'',
-    paused:false, leaderOpen:false, leaderTab:'basic', leaderStatus:'idle', leaderData:null,
+    paused:false, proAsk:false, leaderOpen:false, leaderTab:'basic', leaderStatus:'idle', leaderData:null,
     hp:MAX_HP, score:0,
     difficulty:null, runFoods:[], runIndex:0, clearedFoods:[],
     food:null, organIndex:0, qList:[], qIndex:0,
@@ -1380,6 +1389,10 @@ async function doLogin(){
   else if(isNew) setWizard(`初次見面，${hello}！老夫已把你的名號刻進冒險者名冊。選擇你的修行之路吧。`, 'happy');
   else setWizard(`歡迎回來，${hello}！你的便便圖鑑已從雲端召喚回來了。`, 'happy');
   render();
+  /* 第一次登入：自動播序幕；看過的人：讓他選擇要不要看 */
+  if(prologueSeen(p) || isNew === false) state.proAsk = true;
+  else { startPrologue(); return; }
+  render();
 }
 function switchPlayer(){
   stopTimer();
@@ -1597,6 +1610,18 @@ function quitToHome(){
   state.screen = 'menu';
   setWizard('冒險暫時告一段落。休息夠了，再選一條修行之路吧！', 'calm');
   render();
+}
+function proAskHtml(){
+  return `
+  <div class="modal-overlay pause-overlay">
+    <div class="modal panel npc-modal">
+      ${npcLine('歡迎回來，年輕的魔法屎！要再聽老夫說一次黃金地下城的傳說嗎？', 'happy')}
+      <div class="btn-row">
+        <button class="cast-btn" id="proAskWatch">📜 觀看序幕</button>
+        <button class="cast-btn ghost" id="proAskSkip">⏭ 直接進入地下城</button>
+      </div>
+    </div>
+  </div>`;
 }
 function pauseHtml(){
   if(state.paused === 'quit') return `
@@ -2031,7 +2056,8 @@ function render(){
     (state.leaderOpen ? leaderHtml() : '') +
     (state.wrongModal ? wrongModalHtml() : '') +
     (state.hintModalOpen ? hintModalHtml() : '') +
-    (state.paused ? pauseHtml() : '');
+    (state.paused ? pauseHtml() : '') +
+    (state.proAsk ? proAskHtml() : '');
   app.classList.toggle('steady', lastRenderedScreen === state.screen);
   lastRenderedScreen = state.screen;
   bindEvents();
@@ -2796,6 +2822,8 @@ function bindEvents(){
   on('pickBasic', ()=>startRun('basic'));
   on('pickAdv', ()=>startRun('advanced'));
   on('pickWarm', startWarmup);
+  on('proAskWatch', ()=>{ state.proAsk = false; render(); startPrologue(); });
+  on('proAskSkip', ()=>{ state.proAsk = false; render(); });
   on('pauseBtn', ()=>pauseGame('pause'));
   on('homeBtn', ()=>pauseGame('quit'));
   on('resumeBtn', resumeGame);
@@ -3739,7 +3767,7 @@ function startLab(mode){
   state.runEarned = 0; state.ending = null; state.clearedFoods = []; state.uploadStatus = null;
   state.lab = labNew(mode);
   const d = LAB_DEF[mode];
-  setWizard(`歡迎來到${d.title.slice(2)}！先看清楚規則，再開始挑戰。`, 'calm');
+  setWizard(`歡迎來到${d.title.slice(2).trim()}！先看清楚規則，再開始挑戰。`, 'calm');
   render();
   showStageIntro(ASSETS.background[d.bg], d.kicker, d.title, d.stations.map(x=>x.name).join('・'));
 }
@@ -4145,7 +4173,9 @@ const PROLOGUE = [
   {type:'say', text:'那麼，年輕的魔法屎……'},
   {type:'say', text:'你的黃金傳奇，現在正式開始！', last:true}
 ];
-const PRO_TYPE_MS = 55;          // 打字速度（每個字毫秒）
+const PRO_TYPE_MS = 55;
+const PRO_SEEN_KEY = 'goldenDungeonPrologueSeen:';
+function prologueSeen(p){ try{ return !!localStorage.getItem(PRO_SEEN_KEY + p.id); }catch(e){ return false; } }          // 打字速度（每個字毫秒）
 let pro = null;
 
 function startPrologue(onDone){
@@ -4192,6 +4222,7 @@ function proNext(){
     bg.classList.remove('kb'); void bg.offsetWidth; bg.classList.add('kb');
     lines.innerHTML = ''; document.getElementById('proFx').innerHTML = '';
     document.getElementById('proDialog').classList.remove('on');
+    document.getElementById('prologue').classList.remove('talking');
     const act = document.getElementById('proAct');
     act.innerHTML = `<div class="pro-act-no">${b.no}</div><div class="pro-act-title">${b.title}</div>`;
     act.className = 'pro-act big';
@@ -4202,10 +4233,12 @@ function proNext(){
   if(b.type === 'say'){
     proClearLines();                         // 大賢者說話時，畫面上只留對話框
     document.getElementById('proDialog').classList.add('on');
+    document.getElementById('prologue').classList.add('talking');
     proType(b.text, ()=>{ if(b.last) proShowStart(); else pro.timer = setTimeout(proNext, 1100 + b.text.length * 45); });
     return;
   }
   document.getElementById('proDialog').classList.remove('on');
+  document.getElementById('prologue').classList.remove('talking');
   /* 敘述／大字：淡入，舊的句子變淡，最多留 4 句 */
   [...lines.children].forEach(n=>n.classList.add('old'));
   while(lines.children.length >= 3) lines.removeChild(lines.firstChild);
@@ -4246,7 +4279,19 @@ function proFx(kind){
     const P = [['見習營地','255,190,90'],['見習魔法屎','76,195,138'],['大魔導屎','224,72,59'],['魔物追蹤所','111,156,255'],['魔藥學教室','176,124,255']];
     fx.innerHTML = `<div class="pro-row">${P.map((p,i)=>`<div class="pro-portal" style="--pc:${p[1]}; animation-delay:${i*0.3}s"><i></i><span>${p[0]}</span></div>`).join('')}</div>`;
   }
-  if(kind === 'dragon') fx.innerHTML = `<div class="pro-dragon">${pic(ASSETS.cards.ur_rainbow, '🐉', 'pro-dragon-pic')}</div>`;
+  if(kind === 'dragon'){
+    /* 終極寶物先保密：用馬賽克顯示 */
+    fx.innerHTML = `<div class="pro-dragon"><canvas class="pro-dragon-pic" id="proDragon" width="300" height="400"></canvas><div class="pro-dragon-q">？？？</div></div>`;
+    const cv = document.getElementById('proDragon'), im = new Image();
+    im.onload = ()=>{
+      const sm = document.createElement('canvas'); sm.width = 12; sm.height = 16;
+      sm.getContext('2d').drawImage(im, 0, 0, 12, 16);
+      const ctx = cv.getContext('2d'); ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(sm, 0, 0, 300, 400);
+    };
+    im.onerror = ()=>{ const ctx = cv.getContext('2d'); const g = ctx.createLinearGradient(0,0,300,400); ['#ff6ad5','#ffd36a','#6af0ff','#b06aff'].forEach((c,i)=>g.addColorStop(i/3,c)); ctx.fillStyle = g; ctx.fillRect(0,0,300,400); };
+    im.src = ASSETS.cards.ur_rainbow;
+  }
 }
 function proShowStart(){
   const hint = document.getElementById('proHint');
@@ -4258,14 +4303,14 @@ function endPrologue(){
   clearTimeout(pro.timer); clearInterval(pro.typeTimer);
   const box = document.getElementById('prologue'), done = pro.onDone;
   pro = null;
-  try{ localStorage.setItem('goldenDungeonPrologueSeen', '1'); }catch(e){}
+  try{ localStorage.setItem(PRO_SEEN_KEY + (state.player ? state.player.id : 'guest'), '1'); }catch(e){}
   box.classList.add('out');
   setTimeout(()=>{ box.className = ''; box.innerHTML = ''; box.onclick = null; }, 500);
   done && done();
 }
 
 render();
-showStageIntro(ASSETS.background.lobby, 'GOLDEN DUNGEON', '🏰 黃金地下城 - 魔法屎的考驗', '蔡譯禎老師設計', '', {button:'▶️ 開始遊戲', onStart:()=>startPrologue()});
+showStageIntro(ASSETS.background.lobby, 'GOLDEN DUNGEON', '🏰 黃金地下城 - 魔法屎的考驗', '蔡譯禎老師設計', '', {button:'▶️ 開始遊戲'});
 </script>
 </body>
 </html>
