@@ -779,7 +779,7 @@ img{-webkit-user-drag:none;}
 .lg-wrap{background:rgba(0,0,0,0.35); border:1px solid rgba(217,178,95,0.25); border-radius:12px; padding:8px 8px 2px; margin:6px 0 14px;}
 .lg-legend{display:flex; flex-wrap:wrap; gap:6px 16px; justify-content:center; font-size:14px; font-weight:800; margin-bottom:2px;}
 .lg-leg{display:flex; align-items:center; gap:6px;}
-.lg-leg.dim{opacity:0.4;}
+.lg-leg.dim{opacity:0.45;}
 .lg-leg i{display:inline-block; width:26px; height:5px; border-radius:3px;}
 .lg-svg{width:100%; height:auto; display:block; touch-action:manipulation;}
 .lg-band{opacity:0.16;}
@@ -883,6 +883,12 @@ img{-webkit-user-drag:none;}
 .pro-start{pointer-events:auto; font-size:17px; padding:11px 26px; animation:bigIn .6s ease both, hintPulse 1.4s 0.6s infinite;}
 @media(max-width:640px){ .pro-dialog{bottom:64px;} .pro-bubble{min-height:84px; padding:10px 12px;} .pro-act.big{margin-top:16vh;} .pro-stage{padding-top:5vh;} .pro-skip{right:12px;} }
 .replay-link{background:none; border:1px solid var(--line); color:var(--gold-hi); border-radius:999px; padding:5px 14px; font-size:12.5px; font-weight:700; margin-top:10px; cursor:pointer; font-family:inherit;}
+.lg-leg.click{cursor:pointer; padding:4px 10px; border-radius:999px; border:1px solid rgba(217,178,95,0.25); background:rgba(0,0,0,0.3);}
+.lg-leg.click:hover{border-color:var(--gold);}
+.lg-leg.on{border-color:var(--gold-hi); background:rgba(217,178,95,0.18);}
+.lg-legend::after{content:'（點圖例可以突顯那條曲線）'; width:100%; text-align:center; font-size:11.5px; font-weight:500; color:var(--muted);}
+.hud-btn.ctl{background:linear-gradient(180deg,#2c3a4a,#1b2230); color:#cfe3ff; border-color:rgba(140,180,240,0.4);}
+.pause-overlay{z-index:110;}
 </style>
 </head>
 <body>
@@ -922,11 +928,6 @@ const ASSETS = {
     warmup:   'card_warmup.png',   // 見習營地（暖身）
     tracker:  'card_tracker.png',  // 魔物追蹤所
     potion:   'card_potion.png'    // 魔藥學教室
-  },
-  molecules: {                 // 小分子精靈（可以不做，沒有圖會用表情符號）
-    glucose: 'molecule_glucose.png',  // 葡萄糖
-    amino:   'molecule_amino.png',    // 胺基酸
-    fatty:   'molecule_fatty.png'     // 脂肪酸和甘油
   },
   monsters: {                  // 分子魔物圖（建議正方形）
     carbs:   'monster_carbs.png',    // 醣類史萊姆
@@ -1112,7 +1113,7 @@ function freshState(player){
     player: player || null,
     online:false, uploadStatus:null,
     loginDraft:{}, loginConfirm:null, loginBusy:false, loginError:'',
-    leaderOpen:false, leaderTab:'basic', leaderStatus:'idle', leaderData:null,
+    paused:false, leaderOpen:false, leaderTab:'basic', leaderStatus:'idle', leaderData:null,
     hp:MAX_HP, score:0,
     difficulty:null, runFoods:[], runIndex:0, clearedFoods:[],
     food:null, organIndex:0, qList:[], qIndex:0,
@@ -1561,11 +1562,72 @@ function afterFood(){
    計時（速攻加成）
    ========================================================= */
 let timerStartAt = 0;
+/* =========================================================
+   ⏸️ 暫停／返回主畫面（遊玩中的畫面才會出現）
+   ========================================================= */
+function inGame(){ return ['organ','settlement','intermission','warmup','lab'].includes(state.screen); }
+let pauseInfo = null;
+function pauseGame(mode){
+  if(state.paused){ state.paused = mode; render(); return; }
+  const w = state.wu;
+  pauseInfo = {at:Date.now(), perf:performance.now(), wuRunning: !!(w && state.screen === 'warmup' && w.runAt)};
+  if(pauseInfo.wuRunning) wuPause();
+  state.paused = mode;     // 'pause' 或 'quit'
+  render();
+}
+function resumeGame(){
+  if(!state.paused) return;
+  const dur = Date.now() - pauseInfo.at, pdur = performance.now() - pauseInfo.perf;
+  timerStartAt += dur;                                                // 速攻時限
+  if(state.wrongModal) state.wrongModal.readyAt += dur;               // 答錯視窗的 3 秒
+  const w = state.wu;
+  if(w && state.screen === 'warmup'){
+    if(pauseInfo.wuRunning) w.runAt = Date.now();                     // 暖身計時
+    if(w.s3 && w.s3.cur !== null) w.s3.t0 += pdur;                    // 公會任務掉落
+  }
+  state.paused = false; pauseInfo = null;
+  render();
+  if(state.screen === 'warmup' && w && wuSid() === 2 && !w.rules && !w.between) requestAnimationFrame(wuS3Loop);
+}
+function quitToHome(){
+  stopTimer(); stopWuClock();
+  state.paused = false; pauseInfo = null;
+  state.wrongModal = null; state.hintModalOpen = false; state.shopOpen = false;
+  state.wu = null; state.lab = null; state.ending = null;
+  state.screen = 'menu';
+  setWizard('冒險暫時告一段落。休息夠了，再選一條修行之路吧！', 'calm');
+  render();
+}
+function pauseHtml(){
+  if(state.paused === 'quit') return `
+  <div class="modal-overlay pause-overlay">
+    <div class="modal panel npc-modal">
+      ${npcLine('確定要返回主畫面嗎？這場冒險的進度不會保存，也不會掉落便便卡喔。', 'sad')}
+      <div class="btn-row">
+        <button class="cast-btn danger" id="quitYes">🏰 確定返回主畫面</button>
+        <button class="cast-btn ghost" id="quitNo">▶️ 繼續遊戲</button>
+      </div>
+    </div>
+  </div>`;
+  return `
+  <div class="modal-overlay pause-overlay">
+    <div class="modal panel center">
+      <div class="big-icon">⏸️</div>
+      <h2 class="ending-title">遊戲暫停中</h2>
+      <p class="wu-desc">計時已經停止，準備好再繼續吧！</p>
+      <div class="btn-row">
+        <button class="cast-btn" id="resumeBtn">▶️ 繼續遊戲</button>
+        <button class="cast-btn ghost" id="pauseHome">🏰 返回主畫面</button>
+      </div>
+    </div>
+  </div>`;
+}
 function startTimer(){
   stopTimer();
   state.speedEligible = true; state.timerPct = 100;
   timerStartAt = Math.max(Date.now(), introUntil);   // 開場畫面播放時，速攻時限先不倒數
   timerHandle = setInterval(()=>{
+    if(state.paused) return;
     const pct = Math.max(0, Math.min(100, 100 - (Date.now()-timerStartAt)/SPEED_WINDOW_MS*100));
     state.timerPct = pct;
     if(pct <= 0) state.speedEligible = false;
@@ -1671,6 +1733,7 @@ function startWrongCountdown(){
   const tick = ()=>{
     const btn = document.getElementById('wrongContinueBtn');
     if(!btn || !state.wrongModal){ clearInterval(wrongCountdown); return; }
+    if(state.paused) return;
     const left = Math.ceil((state.wrongModal.readyAt - Date.now())/1000);
     if(left > 0){ btn.disabled = true; btn.textContent = `📖 請先讀完說明（${left}）`; }
     else { btn.disabled = false; btn.textContent = wrongBtnLabel(); clearInterval(wrongCountdown); }
@@ -1967,7 +2030,8 @@ function render(){
     (state.codexOpen ? codexHtml() : '') +
     (state.leaderOpen ? leaderHtml() : '') +
     (state.wrongModal ? wrongModalHtml() : '') +
-    (state.hintModalOpen ? hintModalHtml() : '');
+    (state.hintModalOpen ? hintModalHtml() : '') +
+    (state.paused ? pauseHtml() : '');
   app.classList.toggle('steady', lastRenderedScreen === state.screen);
   lastRenderedScreen = state.screen;
   bindEvents();
@@ -2008,6 +2072,7 @@ function topBarHtml(){
     <div class="hud">
       <div class="hearts">${hearts}</div>
       <div class="mana-chip">🔥 熱魔力 <b id="scoreVal">${state.score}</b></div>
+      ${inGame() ? `<button class="hud-btn ctl" id="pauseBtn">⏸️ 暫停</button><button class="hud-btn ctl" id="homeBtn">🏰 返回主畫面</button>` : ''}
       ${shopBtn}
       <button class="hud-btn" id="openCodex">📖 便便圖鑑</button>
       ${canBrowse() ? `<button class="hud-btn" id="openLeader">🏆 排行榜</button>` : ''}
@@ -2245,7 +2310,7 @@ function menuHtml(tk){
       ${diffCardHtml('track', 'pickTrack', '魔物追蹤所（進階）', `
         <span class="diff-tag">進階・分解追蹤</span>
         <h3>🔍 魔物追蹤所</h3>
-        <p>追蹤三種養分在哪裡被分解，看懂大分子和小分子的趨勢圖。</p>
+        <p>追蹤三種養分在哪裡被分解，看懂養分在消化道中的變化趨勢圖。</p>
         <span class="diff-go">📈 開始追蹤！</span>`)}
       ${diffCardHtml('potion', 'pickPotion', '魔藥學教室（實驗）', `
         <span class="diff-tag">實驗・魔藥檢驗</span>
@@ -2537,7 +2602,7 @@ function endingHtml(tk){
       <div class="stat"><b>${Math.round(e.acc*100)}%</b><span>正確率（${state.stats.correct}/${state.stats.total}）</span></div>
       <div class="stat"><b>${state.runEarned}</b><span>本次熱魔力</span></div>
       ${LAB_MODES.includes(e.mode) && state.lab ? `
-      <div class="stat"><b>${state.lab.stars.reduce((a,b)=>a+b,0)}/9</b><span>⭐ 星星</span></div>
+      <div class="stat"><b>${state.lab.stars.reduce((a,b)=>a+b,0)}/${LAB_DEF[state.lab.mode].stations.length*3}</b><span>⭐ 星星</span></div>
       <div class="stat"><b>${state.lab.mistakes}</b><span>失誤次數</span></div>` : e.mode === 'warmup' && state.wu ? `
       <div class="stat"><b>${fmtTime(state.wu.timeSec)}</b><span>暖身成績（含失誤 +${WU_PENALTY_SEC} 秒×${state.wu.mistakes}）</span></div>
       <div class="stat"><b>${state.wu.stars.reduce((a,b)=>a+b,0)}/12</b><span>⭐ 星星</span></div>` : `
@@ -2731,6 +2796,12 @@ function bindEvents(){
   on('pickBasic', ()=>startRun('basic'));
   on('pickAdv', ()=>startRun('advanced'));
   on('pickWarm', startWarmup);
+  on('pauseBtn', ()=>pauseGame('pause'));
+  on('homeBtn', ()=>pauseGame('quit'));
+  on('resumeBtn', resumeGame);
+  on('pauseHome', ()=>pauseGame('quit'));
+  on('quitYes', quitToHome);
+  on('quitNo', resumeGame);
   on('replayPrologue', ()=>startPrologue());
   on('pickTrack', ()=>startLab('tracker'));
   on('pickPotion', ()=>startLab('potion'));
@@ -3162,6 +3233,7 @@ function wuS3Spawn(){
 }
 function wuS3Loop(){
   if(!(state.screen === 'warmup' && state.wu && wuSid() === 2 && !state.wu.between)) return;
+  if(state.paused) return;   // 暫停時停止掉落（繼續遊戲時重新啟動）
   const s = state.wu.s3;
   if(s.cur !== null){
     const now = performance.now();
@@ -3605,12 +3677,6 @@ const BIG_CURVES = {
   '蛋白質':[[100],[100],[100],[100,60],[60,0],[0],[0]],
   '脂質':  [[100],[100],[100],[100],[100,0],[0],[0]]
 };
-/* 小分子的量：在小腸先增加，接著被吸收而下降 */
-const SMALL_INFO = {
-  '醣類':  {small:'葡萄糖', big:'澱粉', key:'glucose', emoji:'🍬', curve:[[0,25],[25],[25],[25],[25,90,0],[0],[0]]},
-  '蛋白質':{small:'胺基酸', big:'蛋白質', key:'amino', emoji:'🔮', curve:[[0],[0],[0],[0],[0,90,0],[0],[0]]},
-  '脂質':  {small:'脂肪酸和甘油', big:'脂質', key:'fatty', emoji:'💧', curve:[[0],[0],[0],[0],[0,90,0],[0],[0]]}
-};
 /* 血條判讀：每一次下降與造成下降的消化液（膽汁不含酵素） */
 const DROP_EVENTS = [
   {nut:'醣類', organ:4-4, nth:1, juices:['唾液']},
@@ -3640,8 +3706,7 @@ const LAB_DEF = {
     title:'🔍 魔物追蹤所', kicker:'MONSTER TRACKING', bg:'tracker',
     stations:[
       {icon:'🐾', name:'魔物追蹤', rules:['三隻魔物會沿著七個消化道前進。','為每一隻魔物選出：它「從哪裡開始被分解」，以及「在哪裡分解完成」。','全部選好再按確認；選錯的魔物要重選，選對的會固定。'], how:'點選每隻魔物下方的消化道按鈕。'},
-      {icon:'📉', name:'血條判讀', rules:['圖上三條曲線代表三種養分「大分子」剩下的量，每個色塊是一個消化道。','先認出甲、乙、丙三條曲線各是哪一種養分。','接著逐一找出每次下降發生在哪個消化道，再選出造成下降的消化液（可複選）。'], how:'點選曲線圖上的色塊，再點選下方的選項。'},
-      {icon:'🔄', name:'反向判讀', rules:['這次反過來：實線是「小分子」的量，虛線是它原本的大分子。','判斷虛線是哪一種大分子、實線是分解後的哪一種小分子。','注意小分子在小腸裡先增加、後來又下降，想想看為什麼。'], how:'看圖後點選下方的選項。'}
+      {icon:'📉', name:'血條判讀', rules:['圖上三條曲線代表三種養分「大分子」剩下的量，每個色塊是一個消化道。','先認出甲、乙、丙三條曲線各是哪一種養分。','接著逐一找出每次下降發生在哪個消化道，再選出造成下降的消化液（可複選）。'], how:'點選曲線圖上的色塊，再點選下方的選項。'}
     ]},
   potion:{
     title:'⚗️ 魔藥學教室', kicker:'POTION LAB', bg:'potion',
@@ -3656,11 +3721,10 @@ const LAB_MODES = ['tracker','potion'];
 function labNew(mode){
   const order = shuffled(LAB_NUT);
   return {
-    mode, station:0, rules:true, between:false, stars:[], stMistakes:[0,0,0], mistakes:0, correct:0, total:0, qWrong:false,
+    mode, station:0, rules:true, between:false, stars:[], stMistakes:[0,0,0,0], mistakes:0, correct:0, total:0, qWrong:false,
     /* 追蹤所 */
     t1:{pick:{'醣類':{},'蛋白質':{},'脂質':{}}, ok:{}},
     t2:{labels:{甲:order[0], 乙:order[1], 丙:order[2]}, idPick:{}, idOk:false, ev:0, band:null, bandOk:false, juice:[]},
-    t3:{order:shuffled(LAB_NUT), round:0, step:'big', pick:null},
     /* 魔藥學 */
     p1:{step:'setup', pred:{}, ok:{}, q:0, pick:null},
     p2:{step:'add', pred:{}, ok:{}, q:0, pick:null},
@@ -3715,7 +3779,7 @@ function labStationDone(msg){
 function labNext(){
   const L = state.lab;
   L.between = false; L.station++; L.rules = true;
-  if(L.station >= 3){ labFinish(); return; }
+  if(L.station >= LAB_DEF[L.mode].stations.length){ labFinish(); return; }
   setWizard('下一站！先看規則再開始。', 'calm');
   render(); window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -3754,7 +3818,7 @@ function labGraph(curves, opts){
     const d = pts.map((p,i)=>`${i?'L':'M'}${p[0].toFixed(1)},${(y(p[1])+off).toFixed(1)}`).join(' ');
     g += `<path d="${d}" fill="none" stroke="${c.color}" stroke-width="${c.hl?6:4}" stroke-linejoin="round" ${c.dash?'stroke-dasharray="9 7"':''} ${c.dim?'opacity="0.28"':''}/>`;
   });
-  const legend = curves.map(c=>`<span class="lg-leg${c.dim?' dim':''}"><i style="background:${c.color};${c.dash?'background:repeating-linear-gradient(90deg,'+c.color+' 0 7px,transparent 7px 12px)':''}"></i>${c.name}</span>`).join('');
+  const legend = curves.map(c=>`<span class="lg-leg${c.dim?' dim':''}${c.key?' click':''}${c.on?' on':''}"${c.key?` data-lgfocus="${c.key}"`:''}><i style="background:${c.color};${c.dash?'background:repeating-linear-gradient(90deg,'+c.color+' 0 7px,transparent 7px 12px)':''}"></i>${c.name}</span>`).join('');
   return `<div class="lg-wrap"><div class="lg-legend">${legend}</div><svg class="lg-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${g}</svg></div>`;
 }
 const CURVE_COLORS = {甲:'#9be76a', 乙:'#ff8a7a', 丙:'#ffd36a'};
@@ -3827,7 +3891,9 @@ function t2Label(nut){ const s = state.lab.t2; return Object.keys(s.labels).find
 function trackerS2Html(){
   const s = state.lab.t2;
   const ev = s.idOk ? DROP_EVENTS[s.ev] : null;
-  const curves = ['甲','乙','丙'].map(l=>({name:l + (s.idOk ? `（${s.labels[l]}）` : ''), color:CURVE_COLORS[l], seg:BIG_CURVES[s.labels[l]], hl: ev && s.labels[l] === ev.nut, dim: ev && s.labels[l] !== ev.nut}));
+  /* 點圖例可以突顯某一條曲線（再點一次取消）；沒有點時，判讀下降階段會自動突顯題目那一條 */
+  const focusLbl = s.focus || (ev ? t2Label(ev.nut) : null);
+  const curves = ['甲','乙','丙'].map(l=>({key:l, name:l + (s.idOk ? `（${s.labels[l]}）` : ''), color:CURVE_COLORS[l], seg:BIG_CURVES[s.labels[l]], hl: focusLbl === l, dim: !!focusLbl && focusLbl !== l, on: s.focus === l}));
   const graph = labGraph(curves, {clickable: s.idOk && !s.bandOk, band: s.band, okBand: s.bandOk ? ev.organ : null});
   let q;
   if(!s.idOk){
@@ -3846,70 +3912,6 @@ function trackerS2Html(){
     ${graph}
     ${q}`;
 }
-
-/* ---------- 追蹤所 第 3 站：反向判讀 ---------- */
-const T3_ABSORB_OPTS = ['被小腸的絨毛吸收，進入血液', '在大腸又被分解掉了', '又重新組合變回大分子', '直接從肛門排出體外'];
-const T3_MOUTH_OPTS = ['唾液把澱粉分解成葡萄糖', '食物在口腔被咬碎就會變成葡萄糖', '口腔會吸收葡萄糖', '胃液流到口腔分解澱粉'];
-function t3Steps(nut, round){
-  const st = ['big','small'];
-  if(round === 0) st.push('absorb');
-  if(nut === '醣類') st.push('mouth');
-  return st;
-}
-function t3Pick(v){ state.lab.t3.pick = v; render(); }
-function t3Go(){
-  const s = state.lab.t3, nut = s.order[s.round], info = SMALL_INFO[nut];
-  if(s.pick === null){ setWizard('先選一個答案喔！', 'calm'); refreshWizardDom(); return; }
-  const ans = {big:info.big, small:info.small, absorb:T3_ABSORB_OPTS[0], mouth:T3_MOUTH_OPTS[0]}[s.step];
-  if(s.pick !== ans){
-    const hint = {
-      big:'看虛線「第一次下降」的位置：在口腔就下降的是澱粉；在胃開始下降的是蛋白質；到小腸才下降的是脂質。',
-      small:'大分子分解後會變成對應的小分子：澱粉 → 葡萄糖、蛋白質 → 胺基酸、脂質 → 脂肪酸和甘油。',
-      absorb:'小分子養分是在哪裡、透過什麼構造進入身體的？想想小腸的皺褶和絨毛。',
-      mouth:'口腔裡有哪一種消化液，可以進行化學消化？'
-    }[s.step];
-    labAnswer(false, hint); return;
-  }
-  labAnswer(true);
-  const steps = t3Steps(nut, s.round);
-  const i = steps.indexOf(s.step);
-  s.pick = null;
-  if(i < steps.length - 1){ s.step = steps[i+1]; setWizard('答對了！再回答下一個問題。', 'happy'); render(); return; }
-  s.round++; s.step = 'big';
-  if(s.round >= 3){ labStationDone('反向判讀完成！小分子在小腸被分解出來，又被小腸的絨毛吸收，所以曲線最後會下降。'); return; }
-  setWizard('答對了！來看下一張圖。', 'happy'); render();
-}
-function trackerS3Html(){
-  const s = state.lab.t3, nut = s.order[s.round], info = SMALL_INFO[nut];
-  const curves = [
-    {name:'虛線：某種大分子', color:'#c7b9ff', seg:BIG_CURVES[nut], dash:true},
-    {name:'實線：某種小分子', color:'#ffd36a', seg:info.curve, hl:true}
-  ];
-  const opts = {
-    big:['澱粉','蛋白質','脂質'],
-    small:['葡萄糖','胺基酸','脂肪酸和甘油'],
-    absorb:T3_ABSORB_OPTS, mouth:T3_MOUTH_OPTS
-  }[s.step];
-  const qText = {
-    big:'❓ 虛線是哪一種「大分子」？',
-    small:'❓ 實線是它分解後的哪一種「小分子」？',
-    absorb:'❓ 實線在小腸後段下降了，這是為什麼？',
-    mouth:'❓ 實線在口腔就開始上升，這是為什麼？'
-  }[s.step];
-  const order = s.step === 'absorb' || s.step === 'mouth' ? labShuffleFixed(opts, s.round + s.step.length) : opts;
-    return `
-    <div class="wu-title">🔄 第 3 站：反向判讀 <small class="lab-prog">第 ${s.round+1} / 3 張圖</small></div>
-    ${labGraph(curves, {ylabel:'相對量'})}
-    <div class="wu-tq">${qText}</div>
-    <div class="wu-topts">${order.map(o=>`<button class="wu-topt${s.pick===o?' on':''}" data-t3="${o}">${s.pick===o?'✅':'⬜'} ${o}${s.step==='small'?' '+labSmallPic(o):''}</button>`).join('')}</div>
-    <div class="btn-row"><button class="cast-btn" id="t3Go">🔬 確認答案！</button></div>`;
-}
-function labSmallPic(name){
-  const n = LAB_NUT.find(k=>SMALL_INFO[k].small === name); if(!n) return '';
-  const i = SMALL_INFO[n];
-  return pic(ASSETS.molecules[i.key], i.emoji, 'lab-mol');
-}
-function labShuffleFixed(arr, seed){ const a = [...arr]; for(let i=a.length-1;i>0;i--){ seed = (seed*9301+49297)%233280; const j = Math.floor(seed/233280*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
 
 /* ---------- 試管繪製 ---------- */
 function tubeSvg(color, label, opts){
@@ -4061,7 +4063,7 @@ function labHtml(tk){
   const head = `<div class="wu-head"><div class="wu-steps">${steps}</div><div class="wu-meta"><span>❌ 失誤 <b>${L.mistakes}</b></span></div></div>`;
   let body;
   if(L.between){
-    const last = st === 2;
+    const last = st === d.stations.length - 1;
     body = `<div class="wu-between center">
       <div class="big-icon">🏅</div>
       <h2 class="ending-title">第 ${st+1} 站「${d.stations[st].name}」完成！</h2>
@@ -4080,7 +4082,7 @@ function labHtml(tk){
       <div class="btn-row"><button class="cast-btn" id="labBegin">▶️ 我看懂了，開始！</button></div>
     </div>`;
   } else {
-    body = L.mode === 'tracker' ? [trackerS1Html, trackerS2Html, trackerS3Html][st]() : [potionTestHtml, potionTestHtml, potionS3Html][st]();
+    body = L.mode === 'tracker' ? [trackerS1Html, trackerS2Html][st]() : [potionTestHtml, potionTestHtml, potionS3Html][st]();
   }
   return `<div class="panel stage wu-panel">${fxHtml(tk)}${head}${body}</div>`;
 }
@@ -4089,14 +4091,14 @@ function labBind(){
   const L = state.lab;
   on('labBegin', ()=>{ L.rules = false; render(); });
   on('labNext', labNext);
-  on('t1Go', t1Go); on('t2IdGo', t2IdGo); on('t2JuiceGo', t2JuiceGo); on('t3Go', t3Go);
+  on('t1Go', t1Go); on('t2IdGo', t2IdGo); on('t2JuiceGo', t2JuiceGo);
   on('pPredGo', pPredGo); on('pQGo', pQGo); on('p3Go', p3Go);
   const each = (sel, fn) => document.querySelectorAll(sel).forEach(b=>b.addEventListener('click', ()=>fn(b)));
   each('[data-t1]', b=>{ const [n,k,o] = b.dataset.t1.split('|'); t1Pick(n,k,o); });
   each('[data-t2id]', b=>{ const [l,n] = b.dataset.t2id.split('|'); t2IdPick(l,n); });
   each('[data-t2j]', b=>t2Juice(b.dataset.t2j));
+  each('[data-lgfocus]', b=>{ const s = state.lab.t2; s.focus = s.focus === b.dataset.lgfocus ? null : b.dataset.lgfocus; render(); });
   each('.lg-band.click', b=>t2Band(+b.dataset.band));
-  each('[data-t3]', b=>t3Pick(b.dataset.t3));
   each('[data-pstep]', b=>pStep(b.dataset.pstep));
   each('[data-pp]', b=>{ const [id,c] = b.dataset.pp.split('|'); pPred(id,c); });
   each('[data-pq]', b=>pQPick(b.dataset.pq));
