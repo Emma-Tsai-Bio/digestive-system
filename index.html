@@ -873,10 +873,15 @@ img{-webkit-user-drag:none;}
 .lab-key{margin:0 0 10px; padding-left:20px; font-size:14px; line-height:1.8; background:rgba(0,0,0,0.25); border-radius:10px; padding:8px 12px 8px 30px;}
 .lab-key b{color:var(--gold-hi);}
 .diff-grid.five{grid-template-columns:repeat(6, 1fr);}
-.diff-grid.five > .diff-card{grid-column:span 2;}
-.diff-grid.five > .diff-card:nth-child(4){grid-column:2 / span 2;}
-.diff-grid.five > .diff-card:nth-child(5){grid-column:4 / span 2;}
-@media(max-width:780px){.diff-grid.five{grid-template-columns:1fr;} .diff-grid.five > .diff-card,.diff-grid.five > .diff-card:nth-child(4),.diff-grid.five > .diff-card:nth-child(5){grid-column:auto;}}
+.diff-grid.five > .diff-item{grid-column:span 2;}
+.diff-grid.five > .diff-item:nth-child(4){grid-column:2 / span 2;}
+.diff-grid.five > .diff-item:nth-child(5){grid-column:4 / span 2;}
+@media(max-width:780px){.diff-grid.five{grid-template-columns:1fr;} .diff-grid.five > .diff-item,.diff-grid.five > .diff-item:nth-child(4),.diff-grid.five > .diff-item:nth-child(5){grid-column:auto;}}
+.diff-item{position:relative; display:flex; flex-direction:column; gap:6px;}
+.diff-item > .diff-card{width:100%;}
+.diff-desc{font-size:13.5px; line-height:1.6; color:var(--muted); text-align:center; padding:0 6px;}
+.diff-desc .nocard{display:block; font-style:normal; font-weight:800; color:#f0b85a; margin-top:2px;}
+.diff-badge{position:absolute; top:-10px; left:50%; transform:translateX(-50%); z-index:2; white-space:nowrap; background:linear-gradient(180deg,#ffe08a,#d9a63a); color:#3a2408; font-weight:900; font-size:12.5px; padding:3px 12px; border-radius:999px; box-shadow:0 2px 8px rgba(0,0,0,0.5), 0 0 12px rgba(255,210,94,0.6); animation:hintPulse 1.6s infinite;}
 .diff-card.track{border-color:rgba(111,156,255,0.6);}
 .track .diff-tag{background:rgba(111,156,255,0.2); color:#a9c4ff;}
 .diff-card.potion{border-color:rgba(176,124,255,0.6);}
@@ -931,7 +936,7 @@ img{-webkit-user-drag:none;}
 .pro-bubble{flex:1; background:linear-gradient(180deg,rgba(239,226,194,0.97),rgba(220,199,154,0.97)); color:#2b1d10; border:2px solid #8c6a2a; border-radius:14px; padding:12px 18px; min-height:96px; box-shadow:0 6px 0 rgba(0,0,0,0.4);}
 .pro-name{font-family:'Noto Serif TC',serif; font-weight:900; color:#6b3f8f; font-size:15px; margin-bottom:4px;}
 .pro-say{font-size:clamp(16px, 2.3vw, 20px); line-height:1.7; font-weight:600;}
-.pro-say .ph, .pro-line .ph, .pro-act-title .ph{display:inline-block;}
+.pro-say .ph, .pro-line .ph, .pro-act-title .ph, .menu-intro .ph, .diff-desc .ph{display:inline-block;}
 .pro-say .hid, .pro-line .hid{visibility:hidden;}
 .pro-act-no.sub{margin-top:8px; letter-spacing:10px; font-size:22px;}
 .pro-bottom{position:absolute; left:0; right:0; bottom:18px; display:flex; justify-content:center; align-items:center; gap:16px; pointer-events:none;}
@@ -2363,13 +2368,13 @@ function screenHtml(tk){
 }
 
 /* ---------- 大廳 ---------- */
-function diffCardHtml(cls, id, label, textHtml){
+function diffCardHtml(cls, id, label, textHtml, desc, badge){
   const src = ASSETS.difficultyCards[{basic:'basic', adv:'advanced', warm:'warmup', track:'tracker', potion:'potion'}[cls]];
   const hasImg = src && !BAD_IMG.has(src);
   const img = hasImg
     ? `<img class="diff-img" src="${src}" alt="${label}" onerror="BAD_IMG.add('${src}'); this.closest('.diff-card').classList.remove('has-img'); this.remove();">`
     : '';
-  return `<button class="diff-card ${cls}${hasImg ? ' has-img' : ''}" id="${id}" aria-label="${label}">${img}<span class="diff-text">${textHtml}</span></button>`;
+  return `<div class="diff-item ${cls}">${badge ? `<div class="diff-badge">${badge}</div>` : ''}<button class="diff-card ${cls}${hasImg ? ' has-img' : ''}" id="${id}" aria-label="${label}">${img}<span class="diff-text">${textHtml}</span></button>${desc ? `<div class="diff-desc">${proWrap(desc)}${cls === 'warm' ? '<em class="nocard">⚠️ 不會掉落便便卡</em>' : ''}</div>` : ''}</div>`;
 }
 function menuHtml(tk){
   return `
@@ -2379,34 +2384,34 @@ function menuHtml(tk){
       <div class="crest">🏰</div>
       <h2>踏入黃金地下城</h2>
       <button class="replay-link" id="replayPrologue">📜 重看序幕</button>
-      <p>每場冒險會召喚 <b>${DISHES_PER_RUN} 道魔物料理</b>。跟著它們從口腔（咀嚼石窟）一路闖到肛門（終焉之門），擊倒體內的營養魔物，最後煉化出熱魔力！通關後依正確率掉落便便卡。</p>
+      <p class="menu-intro"><span class="ph">眼前有<b>五條修行之路</b>，</span><span class="ph">每一條都考驗不同的消化魔法。</span><br><span class="ph">第一次來的魔法屎，</span><span class="ph">建議先從<b>🏕️ 見習營地</b>開始暖身</span><span class="ph">（見習營地不會掉落便便卡）。</span><br><span class="ph">其他四條路完成後，</span><span class="ph">會依正確率掉落便便卡；</span><br><span class="ph">五條全部完成，</span><span class="ph">就能喚醒傳說中的</span><span class="ph"><b>「五界制霸・七彩神龍便」</b>！</span></p>
     </div>
     <div class="diff-grid five">
       ${diffCardHtml('warm', 'pickWarm', '見習營地（暖身）', `
         <span class="diff-tag">暖身・四個小遊戲</span>
         <h3>🏕️ 見習營地</h3>
         <p>鋪通道、點亮地圖、派任務、接管線，先熟悉消化系統的構造與功能。</p>
-        <span class="diff-go">🔥 開始暖身！</span>`)}
+        <span class="diff-go">🔥 開始暖身！</span>`, '用四個小遊戲認識消化道的構造與功能，適合第一次冒險時暖身。', '⭐ 建議從這裡開始')}
       ${diffCardHtml('basic', 'pickBasic', '見習魔法屎（新手）', `
         <span class="diff-tag">新手・單一魔物</span>
         <h3>🟢 見習魔法屎</h3>
-        <p>每道料理只藏著一種魔物，關卡較單純，適合先熟悉地下城的路線。</p>
-        <span class="diff-go">⚔️ 踏入地下城！</span>`)}
+        <p>召喚 ${DISHES_PER_RUN} 道魔物料理，從口腔（咀嚼石窟）一路闖到肛門（終焉之門）。每道料理只藏著一種魔物，適合先熟悉地下城的路線。</p>
+        <span class="diff-go">⚔️ 踏入地下城！</span>`, `召喚 ${DISHES_PER_RUN} 道料理，每道只有一種營養魔物。從口腔一路闖到肛門，認識每個消化器官的工作。`)}
       ${diffCardHtml('adv', 'pickAdv', '大魔導屎（資深）', `
         <span class="diff-tag">資深・魔物軍團</span>
         <h3>🔴 大魔導屎</h3>
-        <p>多種魔物同時出沒，還要辨識正在被分解的魔物。風險更高，但熱魔力非常可觀！</p>
-        <span class="diff-go">🔥 挑戰魔物軍團！</span>`)}
+        <p>同樣闖過 ${DISHES_PER_RUN} 道料理，但多種魔物同時出沒，最後還要看營養標示計算熱量。風險更高，熱魔力也非常可觀！</p>
+        <span class="diff-go">🔥 挑戰魔物軍團！</span>`, '多種營養魔物同時出沒，還要讀懂營養標示、計算熱量，是最難的闖關路線。')}
       ${diffCardHtml('track', 'pickTrack', '魔物追蹤所（進階）', `
         <span class="diff-tag">進階・分解追蹤</span>
         <h3>🔍 魔物追蹤所</h3>
         <p>追蹤三種養分在哪裡被分解，看懂養分在消化道中的變化趨勢圖。</p>
-        <span class="diff-go">📈 開始追蹤！</span>`)}
+        <span class="diff-go">📈 開始追蹤！</span>`, '追蹤醣類、蛋白質、脂質從哪裡開始分解、在哪裡分解完成，並看懂消化趨勢圖。')}
       ${diffCardHtml('potion', 'pickPotion', '魔藥學教室（實驗）', `
         <span class="diff-tag">實驗・魔藥檢驗</span>
         <h3>⚗️ 魔藥學教室</h3>
         <p>唾液分解澱粉的實驗：用碘液和本氏液檢驗，看懂溫度對酵素的影響。</p>
-        <span class="diff-go">🧪 開始調配！</span>`)}
+        <span class="diff-go">🧪 開始調配！</span>`, '唾液分解澱粉的實驗：用碘液和本氏液檢驗，看懂溫度對酵素的影響。')}
     </div>
     <details class="rules">
       <summary>📜 冒險規則與便便卡掉落表</summary>
