@@ -813,6 +813,59 @@ img{-webkit-user-drag:none;}
 .lab-result small{display:block; font-weight:500; font-size:12px; color:var(--muted);}
 .lab-pair{display:flex; gap:4px;}
 .lab-pair .lab-tube-svg{width:40px;}
+/* 魔藥學：步驟／？／滴管／鷹架 */
+.lab-tube{position:relative;}
+.lab-tube.dropping{padding-top:46px;}
+.lab-dropper{position:absolute; top:0; left:50%; width:22px; margin-left:-11px; animation:dropperIn 2s ease both;}
+@keyframes dropperIn{0%{transform:translateY(-24px); opacity:0;} 20%{transform:translateY(0); opacity:1;} 75%{opacity:1; transform:translateY(0);} 100%{opacity:0; transform:translateY(-16px);}}
+.lab-drip{position:absolute; top:44px; left:50%; width:7px; height:9px; margin-left:-3.5px; border-radius:50% 50% 50% 50%/60% 60% 40% 40%; opacity:0; animation:drip 2s ease-in both;}
+@keyframes drip{0%,30%{transform:translateY(0); opacity:0;} 35%{opacity:1;} 62%{transform:translateY(52px); opacity:1;} 66%,100%{transform:translateY(56px); opacity:0;}}
+.lab-qm.late{animation:qIn .5s ease both;}
+@keyframes qIn{from{opacity:0;} to{opacity:1;}}
+.lab-tcard.cold{background:linear-gradient(180deg, rgba(0,0,0,0.3) 30%, rgba(70,140,220,0.25));}
+.lab-tcard.warm{background:linear-gradient(180deg, rgba(0,0,0,0.3) 30%, rgba(230,140,60,0.16));}
+.lab-tcard.focus{border-color:var(--gold-hi); box-shadow:0 0 0 3px rgba(243,220,156,0.3);}
+.lab-tags{display:flex; flex-wrap:wrap; justify-content:center; gap:4px; min-height:24px;}
+.lab-tag{font-size:12.5px; font-weight:700; padding:2px 8px; border-radius:999px; background:rgba(217,178,95,0.15); border:1px solid rgba(217,178,95,0.35);}
+.lab-tag.new{animation:fadein .5s;}
+.lab-tag.cold{background:rgba(90,160,230,0.22); border-color:rgba(120,180,240,0.55);}
+.lab-tag.warm{background:rgba(230,140,60,0.2); border-color:rgba(240,160,90,0.5);}
+.lab-steps{list-style:none; padding:0; margin:0 0 10px; display:flex; flex-direction:column; gap:6px;}
+.lab-steps li{background:rgba(0,0,0,0.25); border-radius:10px; padding:8px 12px; font-size:15px; line-height:1.6; border-left:4px solid rgba(217,178,95,0.3); color:var(--muted);}
+.lab-steps li.now{animation:fadein .4s; border-left-color:var(--gold-hi); color:var(--text); background:rgba(217,178,95,0.12);}
+.lab-steps li .n{font-weight:900; color:var(--gold-hi); margin-right:8px;}
+.lab-sc{background:rgba(0,0,0,0.32); border:1px solid rgba(243,220,156,0.45); border-radius:12px; padding:12px; margin-bottom:10px;}
+.lab-sc-h{font-weight:900; font-size:16px; margin-bottom:10px; color:var(--gold-hi); line-height:1.5;}
+.lab-sc-row{margin-bottom:12px;}
+.lab-sc-row.new{animation:fadein .35s;}
+.lab-sc-q{font-weight:800; font-size:15px; margin-bottom:6px;}
+.lab-sc-tip{font-size:13px; color:var(--muted); text-align:center;}
+.lab-chip.okk{border-color:var(--green); background:rgba(76,195,138,0.2); color:var(--text); opacity:1;}
+.lab-recap{width:100%; box-sizing:border-box; background:rgba(255,255,255,0.06); border-radius:8px; padding:6px 8px; font-size:12.5px; text-align:left; line-height:1.65;}
+.lab-recap .rc-h{font-weight:900; color:var(--gold-hi);}
+.lab-recap i{display:inline-block; width:11px; height:11px; border-radius:50%; vertical-align:-1px; margin-right:3px; border:1px solid rgba(255,255,255,0.5);}
+.lab-bench.bath{position:relative; padding:4px 4px 30px; border-radius:12px; background:linear-gradient(180deg, transparent 35%, rgba(70,140,220,0.22) 35%);}
+.lab-bench.bath::after{content:'🔥 🔥 🔥 🔥 🔥 🔥'; position:absolute; left:0; right:0; bottom:4px; text-align:center; font-size:16px; letter-spacing:4px; animation:breathe 1s ease-in-out infinite;}
+.rg-intro{display:flex; justify-content:center; gap:24px; margin:6px 0 12px;}
+.rg-card{display:flex; flex-direction:column; align-items:center; gap:2px; background:rgba(0,0,0,0.3); border-radius:12px; padding:10px 18px; border:1px solid rgba(217,178,95,0.25); opacity:0.7;}
+.rg-card.on{border-color:var(--gold-hi); box-shadow:0 0 0 3px rgba(243,220,156,0.25); opacity:1;}
+.rg-card .lab-tube-label{font-size:16px;}
+.rg-card small{color:var(--muted); font-size:13px;}
+.rg-prog{text-align:center; color:var(--muted); font-size:13px; margin-bottom:6px;}
+.rg-opts{display:grid; grid-template-columns:repeat(2, 1fr); gap:8px; margin:8px 0 12px;}
+.rg-opt{display:flex; align-items:center; gap:10px; background:linear-gradient(180deg,#3a2e30,#272022); border:2px solid rgba(217,178,95,0.3); color:var(--text); border-radius:10px; padding:10px 12px; font-size:16px; font-weight:800; font-family:inherit; cursor:pointer; text-align:left;}
+.rg-opt.on{border-color:var(--gold-hi); background:rgba(217,178,95,0.2); color:var(--gold-hi);}
+.rg-opt i{width:28px; height:28px; border-radius:50%; border:2px solid rgba(255,255,255,0.55); flex-shrink:0;}
+.rg-ic{font-size:24px; width:28px; text-align:center;}
+.rg-seq{display:grid; grid-template-columns:repeat(5, 1fr); gap:6px; margin-top:8px;}
+.rg-slot{height:66px; border-radius:10px; border:2px dashed rgba(217,178,95,0.45); display:flex; align-items:center; justify-content:center; flex-direction:column; font-weight:900; font-size:18px; color:var(--muted); background:rgba(0,0,0,0.2); font-family:inherit;}
+.rg-slot.fill{border:2px solid rgba(255,255,255,0.6); color:#fff; text-shadow:0 1px 3px rgba(0,0,0,0.8); cursor:pointer;}
+.rg-slot small{font-size:10px; font-weight:600; opacity:0.85;}
+.rg-axis{display:flex; justify-content:space-between; font-size:13px; font-weight:800; color:var(--gold-hi); margin:6px 2px 12px;}
+.rg-pool{display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:10px; min-height:58px; align-items:center;}
+.rg-ball{width:56px; height:56px; border-radius:50%; border:3px solid rgba(255,255,255,0.6); color:#fff; font-weight:900; font-size:18px; text-shadow:0 1px 3px rgba(0,0,0,0.8); cursor:pointer; font-family:inherit;}
+.rg-done{color:var(--muted); font-size:14px;}
+@media(max-width:480px){.rg-opts{grid-template-columns:1fr;} .rg-ball{width:50px; height:50px;}}
 .lab-pair .lab-tube-label{font-size:13px;}
 .lab-key{margin:0 0 10px; padding-left:20px; font-size:14px; line-height:1.8; background:rgba(0,0,0,0.25); border-radius:10px; padding:8px 12px 8px 30px;}
 .lab-key b{color:var(--gold-hi);}
@@ -3739,13 +3792,15 @@ const LAB_DEF = {
   potion:{
     title:'⚗️ 魔藥學教室', kicker:'POTION LAB', bg:'potion',
     stations:[
-      {icon:'🟤', name:'碘液檢驗', rules:['四支試管都裝了等量的澱粉液，再分別加入不同材料、放在不同溫度 10 分鐘。','先預測：滴入碘液後，每一管會變成什麼顏色？','預測正確後滴入碘液觀察，再回答實驗的問題。'], how:'點選每支試管下方的顏色選項。'},
-      {icon:'🔵', name:'本氏液檢驗', rules:['取同樣的四管溶液，改用本氏液檢驗有沒有葡萄糖。','本氏液要先「隔水加熱」才會變色，記得步驟！','預測加熱後的顏色，再觀察並回答問題。'], how:'依照步驟按鈕操作，再點選顏色選項。'},
+      {icon:'🧪', name:'認識試劑', rules:['做實驗之前，先認識兩種檢驗用的試劑：碘液和本氏液。','回答它們「本來的顏色」和「反應後的顏色」。','最後依照葡萄糖由少到多，排出本氏液加熱後的顏色順序。'], how:'點選答案；排序題依序點選顏色球。'},
+      {icon:'🟤', name:'碘液檢驗', rules:['跟著步驟看清楚：甲、乙、丙、丁四管各加入了什麼、放在幾度。','放置 10 分鐘後滴入碘液——試管會先顯示「？」。','一管一管推理：澱粉酶還有活性嗎？澱粉會被分解嗎？碘液會變色嗎？答對後才會揭曉真正的顏色。'], how:'按「下一步」看實驗步驟，再點選每一題的選項。'},
+      {icon:'🔵', name:'本氏液檢驗', rules:['取同一批四管溶液，改用本氏液檢驗有沒有葡萄糖。','每管下方會顯示你在碘液檢驗的判斷和結果，可以當作線索。','記得本氏液要「隔水加熱」！加熱後試管會顯示「？」，再一管一管推理。'], how:'依照步驟按鈕操作，再點選每一題的選項。'},
       {icon:'🏷️', name:'忘記標號', rules:['糟糕！助手把試管的標籤弄掉了，只留下碘液和本氏液的檢驗結果。','依照檢驗結果，判斷每一組結果分別來自甲、乙、丙、丁哪一支試管。'], how:'在每組結果下方點選它的試管編號。'}
     ]}
 };
 const LAB_MODES = ['tracker','potion'];
 
+function pTubeMap(){ const m = {}; POTION_TUBES.forEach(t=>{ m[t.id] = {}; }); return m; }
 function labNew(mode){
   const order = shuffled(LAB_NUT);
   return {
@@ -3754,8 +3809,9 @@ function labNew(mode){
     t1:{pick:{'醣類':{},'蛋白質':{},'脂質':{}}, ok:{}},
     t2:{labels:{甲:order[0], 乙:order[1], 丙:order[2]}, idPick:{}, idOk:false, ev:0, band:null, bandOk:false, juice:[]},
     /* 魔藥學 */
-    p1:{step:'setup', pred:{}, ok:{}, q:0, pick:null},
-    p2:{step:'add', pred:{}, ok:{}, q:0, pick:null},
+    p0:{q:0, pick:null, pool:p0Pool(), seq:[]},
+    p1:{step:'setup', si:0, sc:pTubeMap(), lock:pTubeMap(), cur:0, q:0, pick:null},
+    p2:{step:'recap', sc:pTubeMap(), lock:pTubeMap(), cur:0, q:0, pick:null},
     p3:{order:shuffled(POTION_TUBES.map(t=>t.id)), pick:{}, ok:{}}
   };
 }
@@ -3942,17 +3998,22 @@ function trackerS2Html(){
 }
 
 /* ---------- 試管繪製 ---------- */
+const DROPPER_SVG = '<svg viewBox="0 0 22 50" width="22" height="50"><ellipse cx="11" cy="9" rx="8" ry="9" fill="#b8402f"/><rect x="6.5" y="16" width="9" height="4" rx="1" fill="#8c7a5e"/><path d="M8 20 L14 20 L12.4 47 L9.6 47 Z" fill="rgba(255,255,255,0.45)" stroke="rgba(255,255,255,0.85)" stroke-width="1"/></svg>';
 function tubeSvg(color, label, opts){
   opts = opts || {};
-  const fill = color || '#e9e4d8';
-  return `<div class="lab-tube${opts.cls?' '+opts.cls:''}">
+  const lv = opts.level || 58;
+  const fill = opts.q && !opts.drop ? '#77737f' : (color || '#e9e4d8');
+  const liq = `M19.5 ${lv} L19.5 128 A10.5 10.5 0 0 0 40.5 128 L40.5 ${lv} Z`;
+  const qm = opts.q ? `<text x="30" y="${Math.round((lv + 138) / 2) + 10}" text-anchor="middle" font-size="30" font-weight="900" fill="#fff" stroke="rgba(0,0,0,0.35)" stroke-width="1" class="lab-qm${opts.qDelay ? ' late' : ''}"${opts.qDelay ? ` style="animation-delay:${opts.qDelay}s"` : ''}>?</text>` : '';
+  const drop = opts.drop ? `<div class="lab-dropper" style="animation-delay:${opts.dropDelay||0}s">${DROPPER_SVG}</div><span class="lab-drip" style="background:${opts.dropColor};animation-delay:${opts.dropDelay||0}s"></span>` : '';
+  return `<div class="lab-tube${opts.cls?' '+opts.cls:''}${opts.drop?' dropping':''}">${drop}
     <svg viewBox="0 0 60 150" class="lab-tube-svg">
       <defs><linearGradient id="tg${label}${opts.k||''}" x1="0" x2="1"><stop offset="0" stop-color="rgba(255,255,255,0.35)"/><stop offset="0.35" stop-color="rgba(255,255,255,0.05)"/><stop offset="1" stop-color="rgba(0,0,0,0.15)"/></linearGradient></defs>
       <rect x="14" y="4" width="32" height="8" rx="3" fill="#8c7a5e"/>
       <path d="M18 12 L18 128 A12 12 0 0 0 42 128 L42 12 Z" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.55)" stroke-width="2"/>
-      <path d="M19.5 ${opts.level||58} L19.5 128 A10.5 10.5 0 0 0 40.5 128 L40.5 ${opts.level||58} Z" fill="${fill}" class="lab-liquid"/>
-      <path d="M19.5 ${opts.level||58} L19.5 128 A10.5 10.5 0 0 0 40.5 128 L40.5 ${opts.level||58} Z" fill="url(#tg${label}${opts.k||''})"/>
+      ${opts.empty ? '' : `<path d="${liq}" fill="${fill}" class="lab-liquid"/><path d="${liq}" fill="url(#tg${label}${opts.k||''})"/>`}
       ${opts.bubbles ? '<circle cx="26" cy="110" r="2.5" fill="rgba(255,255,255,0.6)" class="lab-bub"/><circle cx="34" cy="96" r="2" fill="rgba(255,255,255,0.5)" class="lab-bub b2"/>' : ''}
+      ${qm}
     </svg>
     <div class="lab-tube-label">${label}</div>
   </div>`;
@@ -3962,7 +4023,103 @@ function tubeCardHtml(t, color, extra, opts){
     <div class="lab-tinfo"><b>澱粉液 ＋ ${t.add}</b><small>${t.env}</small></div>${extra||''}</div>`;
 }
 
-/* ---------- 魔藥學 第 1、2 站：碘液／本氏液 ---------- */
+/* 固定種子的洗牌：每次重畫順序不變 */
+function labShuffleFixed(arr, seed){
+  const a = arr.slice(); let x = (seed * 9301 + 49297) % 233280;
+  for(let i = a.length - 1; i > 0; i--){ x = (x * 9301 + 49297) % 233280; const j = Math.floor(x / 233280 * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+/* ---------- 魔藥學 第 1 站：認識試劑 ---------- */
+const REAGENT_SW = {'黃褐色':'#c98a2e','藍色':'#2f74c9','藍黑色':'#1f2448','無色透明':'rgba(255,255,255,0.08)','磚紅色':'#b4452a','綠色':'#3fa34d','紅色':'#d8343a'};
+const REAGENT_ICON = {'隔水加熱':'🔥','放進冰水':'🧊','直接觀察':'👀','用力搖晃':'🤝'};
+const REAGENT_QS = [
+  {r:'i', q:'碘液「本來」是什麼顏色？', ans:'黃褐色', opts:['黃褐色','藍色','藍黑色','無色透明'], hint:'碘液看起來像一杯淡淡的紅茶。'},
+  {r:'i', q:'碘液遇到「澱粉」後，會變成什麼顏色？', ans:'藍黑色', opts:['藍黑色','磚紅色','黃褐色','綠色'], hint:'碘液是用來檢驗澱粉的，遇到澱粉會變成很深、很暗的顏色。'},
+  {r:'b', q:'本氏液「本來」是什麼顏色？', ans:'藍色', opts:['藍色','黃褐色','紅色','無色透明'], hint:'本氏液裡含有硫酸銅，看起來是清澈的天空色。'},
+  {r:'b', q:'用本氏液檢驗葡萄糖時，要怎麼做才會變色？', ans:'隔水加熱', opts:['隔水加熱','放進冰水','直接觀察','用力搖晃'], hint:'本氏液要「加熱」才會和葡萄糖反應，而且要用比較安全、溫度穩定的加熱方式。', text:true},
+  {r:'b', q:'本氏液遇到「大量葡萄糖」並隔水加熱後，會變成什麼顏色？', ans:'磚紅色', opts:['磚紅色','藍黑色','藍色','黃褐色'], hint:'葡萄糖越多，顏色越偏向紅色，像磚塊一樣。'}
+];
+const BEN_SCALE = [{n:'藍',c:'#2f74c9'},{n:'綠',c:'#3fa34d'},{n:'黃',c:'#e8c93a'},{n:'橙',c:'#e8862e'},{n:'紅',c:'#b4452a'}];
+function p0Pool(){ let p; do { p = shuffled(BEN_SCALE.map(x=>x.n)); } while(p.join('') === '藍綠黃橙紅'); return p; }
+function p0Pick(o){ state.lab.p0.pick = o; render(); }
+function p0Go(){
+  const s = state.lab.p0, q = REAGENT_QS[s.q];
+  if(s.pick === null){ setWizard('先選一個答案喔！', 'calm'); refreshWizardDom(); return; }
+  if(s.pick !== q.ans){ s.pick = null; labAnswer(false, q.hint); return; }
+  labAnswer(true); s.q++; s.pick = null;
+  setWizard(s.q < REAGENT_QS.length ? '答對了！下一題。' : '最後一題：依照葡萄糖由少到多，排出本氏液的顏色！', 'happy'); render();
+}
+function p0Seq(n){ const s = state.lab.p0; s.seq = s.seq.includes(n) ? s.seq.filter(x=>x!==n) : s.seq.concat(n); render(); }
+function p0Clear(){ state.lab.p0.seq = []; render(); }
+function p0OrderGo(){
+  const s = state.lab.p0;
+  if(s.seq.length < BEN_SCALE.length){ setWizard('五種顏色都要排進格子裡喔！', 'calm'); refreshWizardDom(); return; }
+  if(s.seq.join('') !== '藍綠黃橙紅'){ s.seq = []; labAnswer(false, '葡萄糖越少，越接近本氏液「原本」的顏色；葡萄糖越多，越接近「磚紅色」。中間的顏色就像彩虹一樣慢慢變過去。'); return; }
+  labAnswer(true);
+  labStationDone('試劑認識完成！碘液：黃褐色，遇澱粉變藍黑色。本氏液：藍色，隔水加熱後遇葡萄糖，由少到多變成 綠 → 黃 → 橙 → 紅。');
+}
+function potionReagentHtml(){
+  const s = state.lab.p0, n = REAGENT_QS.length + 1;
+  const cur = s.q < REAGENT_QS.length ? REAGENT_QS[s.q].r : 'b';
+  const intro = `<div class="rg-intro">
+    <div class="rg-card${cur==='i'?' on':''}">${tubeSvg(null, '碘液', {k:'ri', q:true})}<small>用來檢驗：<b>澱粉</b></small></div>
+    <div class="rg-card${cur==='b'?' on':''}">${tubeSvg(null, '本氏液', {k:'rb', q:true})}<small>用來檢驗：<b>葡萄糖</b></small></div>
+  </div>`;
+  let body;
+  if(s.q < REAGENT_QS.length){
+    const q = REAGENT_QS[s.q];
+    body = `<div class="rg-prog">第 ${s.q+1} / ${n} 題</div>
+      <div class="wu-tq">❓ ${q.r==='i'?'🟤':'🔵'} ${q.q}</div>
+      <div class="rg-opts">${labShuffleFixed(q.opts, s.q*5+2).map(o=>`<button class="rg-opt${s.pick===o?' on':''}" data-p0o="${o}">${q.text ? `<span class="rg-ic">${REAGENT_ICON[o]}</span>` : `<i style="background:${REAGENT_SW[o]}"></i>`}${o}</button>`).join('')}</div>
+      <div class="btn-row"><button class="cast-btn" id="p0Go">🔬 確認答案！</button></div>`;
+  } else {
+    const slots = BEN_SCALE.map((_,i)=>{ const v = s.seq[i], c = v && BEN_SCALE.find(x=>x.n===v).c;
+      return v ? `<button class="rg-slot fill" style="background:${c}" data-p0s="${v}">${v}<small>點一下取消</small></button>` : `<div class="rg-slot">${i+1}</div>`; }).join('');
+    const pool = s.pool.filter(x=>!s.seq.includes(x)).map(v=>`<button class="rg-ball" style="background:${BEN_SCALE.find(x=>x.n===v).c}" data-p0s="${v}">${v}</button>`).join('');
+    body = `<div class="rg-prog">第 ${n} / ${n} 題</div>
+      <div class="wu-tq">❓ 🔵 本氏液隔水加熱後，葡萄糖由「少」到「多」，顏色會怎麼變化？依序點選下方的顏色球，排進格子裡。</div>
+      <div class="rg-seq">${slots}</div>
+      <div class="rg-axis"><span>⬅ 葡萄糖最少</span><span>葡萄糖最多 ➡</span></div>
+      <div class="rg-pool">${pool || '<span class="rg-done">都排好了！確認看看吧</span>'}</div>
+      <div class="btn-row"><button class="cast-btn ghost" id="p0Clear">↺ 重新排</button><button class="cast-btn" id="p0OrderGo">🌈 確認排序！</button></div>`;
+  }
+  return `
+    <div class="wu-title">🧪 第 1 站：認識試劑</div>
+    <div class="wu-desc">做實驗之前，先認識兩種檢驗用的試劑：<b>碘液</b>檢驗澱粉，<b>本氏液</b>檢驗葡萄糖。</div>
+    ${intro}${body}`;
+}
+
+/* ---------- 魔藥學 第 2、3 站：碘液／本氏液 ---------- */
+const SETUP_STEPS = [
+  '先在甲、乙、丙、丁四支試管中，各加入<b>等量的澱粉液</b>。',
+  '<b>甲管</b>：加入<b>唾液</b>，放進 <b>37 °C 溫水</b>（和人的體溫差不多）。',
+  '<b>乙管</b>：不加唾液，改加入等量的<b>清水</b>，放進 <b>37 °C 溫水</b>。',
+  '<b>丙管</b>：加入<b>唾液</b>，放進<b>冰水（約 4 °C）</b>。',
+  '<b>丁管</b>：加入<b>煮沸過的唾液</b>，放進 <b>37 °C 溫水</b>。'
+];
+const ADD_ICON = {'甲':'💧', '乙':'🚰', '丙':'💧', '丁':'♨️'};
+const TUBE_SC = {
+  '甲':{act:'有活性', brk:'大部分被分解', glu:'產生大量葡萄糖'},
+  '乙':{act:'沒有澱粉酶', brk:'不會被分解', glu:'沒有產生葡萄糖'},
+  '丙':{act:'活性變差', brk:'只有少部分被分解', glu:'產生少量葡萄糖'},
+  '丁':{act:'失去活性', brk:'不會被分解', glu:'沒有產生葡萄糖'}
+};
+const SC_ROWS_I = [
+  {k:'act', q:'① 這管的澱粉酶還有活性嗎？', opts:['有活性','活性變差','失去活性','沒有澱粉酶']},
+  {k:'brk', q:'② 澱粉會被分解成葡萄糖嗎？', opts:['大部分被分解','只有少部分被分解','不會被分解']},
+  {k:'col', q:'③ 滴入碘液後，碘液會變色嗎？', opts:['不變色（維持黃褐色）','變成淡藍黑色','變成藍黑色'], map:{'黃褐色':'不變色（維持黃褐色）','淡藍黑色':'變成淡藍黑色','藍黑色':'變成藍黑色'}}
+];
+const SC_ROWS_B = [
+  {k:'glu', q:'① 這管裡有葡萄糖嗎？', opts:['產生大量葡萄糖','產生少量葡萄糖','沒有產生葡萄糖']},
+  {k:'col', q:'② 隔水加熱後，本氏液會變色嗎？', opts:['不變色（維持藍色）','變成黃綠色','變成磚紅色'], map:{'藍色':'不變色（維持藍色）','黃綠色':'變成黃綠色','磚紅色':'變成磚紅色'}}
+];
+const SC_HINT = {
+  act:{'甲':'甲管加了唾液，放在 37 °C（接近體溫），這是唾液澱粉酶最適合的溫度。', '乙':'乙管加的是清水——清水裡有澱粉酶嗎？', '丙':'低溫會讓酵素「動作變慢」，但不會把酵素破壞掉。', '丁':'酵素遇到高溫（煮沸）會被破壞，就算放回 37 °C 也無法恢復。'},
+  brk:'澱粉酶活性越好，澱粉被分解得越多；活性變差只會分解一點點；沒有澱粉酶或失去活性，澱粉就不會被分解。',
+  glu:'澱粉被分解多少，就會產生多少葡萄糖。看看上面「碘液檢驗回顧」裡你的判斷！',
+  colI:'碘液遇到澱粉會變藍黑色。澱粉被分解光了，碘液就維持原本的黃褐色；澱粉只剩一些，顏色會比較淡。',
+  colB:'本氏液隔水加熱：沒有葡萄糖就維持原本的藍色；葡萄糖少，偏綠、黃；葡萄糖多，變成磚紅色。'
+};
 const P1_QS = [
   {q:'為什麼甲管不會變成藍黑色？', opts:['唾液中的酵素把澱粉分解了','碘液在溫水中失效了','溫水把澱粉沖淡了','甲管沒有加入澱粉液'], hint:'碘液遇到什麼才會變藍黑色？甲管和乙管差在哪裡？'},
   {q:'乙管（加清水）在實驗中的作用是什麼？', opts:['對照組：用來比較有沒有唾液的差別','實驗組：用來證明清水能分解澱粉','用來測試碘液的溫度','沒有作用，可以省略'], hint:'乙管只把唾液換成清水，其他條件都一樣。這種用來「比較」的試管叫做什麼？'}
@@ -3971,36 +4128,52 @@ const P2_QS = [
   {q:'丁管（煮沸過的唾液）為什麼和乙管結果一樣？', opts:['高溫使唾液中的酵素變性，失去作用','煮沸讓唾液變成清水','煮沸讓澱粉消失了','本氏液在高溫下失效'], hint:'酵素遇到高溫會發生什麼事？降溫後還能恢復嗎？'},
   {q:'丙管（冰水）為什麼只出現黃綠色？', opts:['低溫使酵素活性降低，分解得比較少','低溫讓酵素完全死掉','冰水把葡萄糖凍住了','冰水裡沒有澱粉'], hint:'低溫會破壞酵素嗎？還是只會讓它變慢？'}
 ];
-function pState(){ return labSt() === 0 ? state.lab.p1 : state.lab.p2; }
-function pAns(t){ return labSt() === 0 ? t.iodine : t.benedict; }
-function pOpts(){ return labSt() === 0 ? IODINE_OPTS : BENEDICT_OPTS; }
-function pColors(){ return labSt() === 0 ? IODINE_COLORS : BENEDICT_COLORS; }
-function pQs(){ return labSt() === 0 ? P1_QS : P2_QS; }
+function pIsI(){ return labSt() === 1; }
+function pState(){ return pIsI() ? state.lab.p1 : state.lab.p2; }
+function pQs(){ return pIsI() ? P1_QS : P2_QS; }
+function pRows(){ return pIsI() ? SC_ROWS_I : SC_ROWS_B; }
+function pRes(t){ return pIsI() ? t.iodine : t.benedict; }
+function scAns(t, r){ return r.map ? r.map[pRes(t)] : TUBE_SC[t.id][r.k]; }
+function scHint(t, r){
+  const h = r.k === 'col' ? (pIsI() ? SC_HINT.colI : SC_HINT.colB) : SC_HINT[r.k];
+  return `<b>${t.id}管・${r.q.replace(/^[①②③]\s*/, '')}</b><br>${typeof h === 'string' ? h : h[t.id]}`;
+}
+function pLater(s, from, to, ms, msg){
+  setTimeout(()=>{ if(state.lab && s.step === from){ s.step = to; if(msg) setWizard(msg, 'calm'); render(); } }, ms);
+}
 function pStep(step){
   const s = pState();
-  if(labSt() === 0 && step === 'wait' && s.step === 'setup'){ s.step = 'waiting'; render(); setTimeout(()=>{ if(state.lab && s.step === 'waiting'){ s.step = 'predict'; setWizard('10 分鐘到了！先預測：滴入碘液後，每一管會是什麼顏色？', 'calm'); render(); } }, 1800); return; }
-  if(labSt() === 1){
-    if(step === 'add' && s.step === 'add'){ s.step = 'added'; setWizard('本氏液加好了，現在四管都是藍色。接下來要怎麼做？', 'calm'); render(); return; }
+  if(pIsI()){
+    if(step === 'next' && s.step === 'setup' && s.si < SETUP_STEPS.length - 1){ s.si++; render(); return; }
+    if(step === 'wait' && s.step === 'setup' && s.si === SETUP_STEPS.length - 1){ s.step = 'waiting'; render(); pLater(s, 'waiting', 'drop', 1800, '10 分鐘到了！接下來在四管中各滴入碘液。'); return; }
+    if(step === 'drop' && s.step === 'drop'){ s.step = 'dropping'; render(); pLater(s, 'dropping', 'scaffold', 2200, '碘液滴好了！先別急著看顏色，一管一管推理看看。'); return; }
+  } else {
+    if(step === 'add' && s.step === 'recap'){ s.step = 'added'; setWizard('本氏液加好了，現在四管都是藍色。接下來要怎麼做？', 'calm'); render(); return; }
     if(step === 'look' && s.step === 'added'){ labStepMistake('本氏液必須「隔水加熱」，才會和葡萄糖反應變色喔！直接看是看不出差別的。'); return; }
-    if(step === 'heat' && s.step === 'added'){ s.step = 'heating'; render(); setTimeout(()=>{ if(state.lab && s.step === 'heating'){ s.step = 'predict'; setWizard('加熱中……先預測：加熱後每一管會是什麼顏色？', 'calm'); render(); } }, 1800); return; }
+    if(step === 'heat' && s.step === 'added'){ s.step = 'heating'; render(); pLater(s, 'heating', 'scaffold', 2000, '加熱完成！試管裡變成什麼顏色了呢？先一管一管推理看看。'); return; }
   }
 }
-function pPred(id, c){ const s = pState(); if(s.ok[id] || s.step !== 'predict') return; s.pred[id] = c; render(); }
-function pPredGo(){
+function pSc(id, k, o){
   const s = pState();
-  if(POTION_TUBES.some(t=>!s.ok[t.id] && !s.pred[t.id])){ setWizard('四支試管都要預測喔！', 'calm'); refreshWizardDom(); return; }
-  const wrong = POTION_TUBES.filter(t=>!s.ok[t.id] && s.pred[t.id] !== pAns(t));
-  const items = POTION_TUBES.filter(t=>!s.ok[t.id]).map(t=>({key:'p'+labSt()+':'+t.id, ok:!wrong.includes(t)}));
-  POTION_TUBES.forEach(t=>{ if(!wrong.includes(t)) s.ok[t.id] = true; });
-  if(!wrong.length){
-    labItems(items); s.step = 'reveal';
-    setWizard(labSt() === 0 ? '預測完全正確！看看滴入碘液後的結果。' : '預測完全正確！看看加熱後的結果。', 'happy');
-    render(); setTimeout(()=>{ if(state.lab && s.step === 'reveal'){ s.step = 'qa'; render(); } }, 1600);
+  if(s.step !== 'scaffold' || POTION_TUBES[s.cur].id !== id || s.lock[id][k]) return;
+  s.sc[id][k] = o; render();
+}
+function pScGo(){
+  const s = pState(), t = POTION_TUBES[s.cur], rows = pRows(), a = s.sc[t.id], lk = s.lock[t.id];
+  if(rows.some(r=>!a[r.k])){ setWizard('這一管的每一題都要選喔！', 'calm'); refreshWizardDom(); return; }
+  const wrong = rows.filter(r=>!lk[r.k] && a[r.k] !== scAns(t, r));
+  const items = rows.filter(r=>!lk[r.k]).map(r=>({key:'p'+labSt()+':'+t.id+':'+r.k, ok:!wrong.includes(r)}));
+  rows.forEach(r=>{ if(!wrong.includes(r)) lk[r.k] = true; });
+  if(wrong.length){ wrong.forEach(r=>{ delete a[r.k]; }); labItems(items, wrong.map(r=>scHint(t, r)).join('<br><br>')); return; }
+  labItems(items);
+  s.cur++;
+  if(s.cur >= POTION_TUBES.length){
+    s.step = 'reveal';
+    setWizard(`${t.id}管也答對了！四管的結果全部揭曉。`, 'happy'); render();
+    pLater(s, 'reveal', 'qa', 1500, '最後回答兩個實驗問題。');
     return;
   }
-  const iod = {'甲':'甲管：唾液在 37 °C 時，能把澱粉分解多少？', '乙':'乙管：清水能分解澱粉嗎？', '丙':'丙管：低溫時唾液還有作用嗎？是全部分解、完全沒分解，還是分解得比較少？', '丁':'丁管：煮沸過的唾液還能分解澱粉嗎？'};
-  const ben = {'甲':'甲管：澱粉被分解成葡萄糖了嗎？量多還是量少？', '乙':'乙管：沒有唾液，會產生葡萄糖嗎？', '丙':'丙管：低溫時酵素活性降低，產生的葡萄糖是多還是少？', '丁':'丁管：酵素變性後，還能產生葡萄糖嗎？'};
-  labItems(items, (labSt() === 0 ? '碘液遇到澱粉會變藍黑色。' : '本氏液加熱後，葡萄糖越多顏色越偏磚紅色。') + '<br>' + wrong.map(t=>(labSt()===0?iod:ben)[t.id]).join('<br>'));
+  setWizard(`${t.id}管推理正確！顏色揭曉：${pRes(t)}。接著換${POTION_TUBES[s.cur].id}管。`, 'happy'); render();
 }
 function pQPick(o){ pState().pick = o; render(); }
 function pQGo(){
@@ -4008,41 +4181,89 @@ function pQGo(){
   if(s.pick === null){ setWizard('先選一個答案喔！', 'calm'); refreshWizardDom(); return; }
   if(s.pick !== q.opts[0]){ labAnswer(false, q.hint); return; }
   labAnswer(true); s.q++; s.pick = null;
-  if(s.q >= qs.length){ labStationDone(labSt() === 0 ? '碘液檢驗完成！碘液可以檢驗「澱粉」還在不在。' : '本氏液檢驗完成！本氏液隔水加熱後，可以檢驗有沒有「葡萄糖」。'); return; }
+  if(s.q >= qs.length){ labStationDone(pIsI() ? '碘液檢驗完成！碘液遇到澱粉會變藍黑色，可以檢驗「澱粉」還在不在。' : '本氏液檢驗完成！本氏液隔水加熱後，可以檢驗有沒有「葡萄糖」。'); return; }
   setWizard('答對了！下一題。', 'happy'); render();
 }
+function pTags(t, has, fresh){
+  const n = fresh ? ' new' : '';
+  return `<div class="lab-tags"><span class="lab-tag">🥣 澱粉液</span>${has ? `<span class="lab-tag${n}">${ADD_ICON[t.id]} ${t.add}</span><span class="lab-tag${n}${t.id==='丙'?' cold':' warm'}">${t.id==='丙' ? '🧊 冰水 4 °C' : '🌡️ 37 °C 溫水'}</span>` : ''}</div>`;
+}
+function pRecap(t){
+  const a = TUBE_SC[t.id];
+  return `<div class="lab-recap"><div class="rc-h">🟤 碘液檢驗回顧</div>
+    <div>澱粉酶：<b>${a.act}</b></div><div>澱粉：<b>${a.brk}</b></div>
+    <div>碘液：<i style="background:${IODINE_COLORS[t.iodine]}"></i><b>${t.iodine}</b></div></div>`;
+}
+function scChip(t, r, o, s){
+  const pick = s.sc[t.id][r.k], locked = s.lock[t.id][r.k];
+  let sw = '';
+  if(r.map){ const name = Object.keys(r.map).find(c=>r.map[c] === o); sw = `<i style="background:${(pIsI() ? IODINE_COLORS : BENEDICT_COLORS)[name]}"></i>`; }
+  return `<button class="lab-chip${sw?' sw':''}${pick===o?(locked?' okk':' on'):''}" data-psc="${t.id}|${r.k}|${o}" ${locked?'disabled':''}>${sw}${o}</button>`;
+}
 function potionTestHtml(){
-  const st = labSt(), s = pState(), colors = pColors();
-  const isI = st === 0;
-  let tubeColor = t => isI ? (['reveal','qa'].includes(s.step) ? colors[t.iodine] : '#e9e4d8')
-                           : (['added','heating','predict'].includes(s.step) ? colors['藍色'] : ['reveal','qa'].includes(s.step) ? colors[t.benedict] : '#e9e4d8');
-  const showPred = s.step === 'predict';
-  const tubes = POTION_TUBES.map(t=>{
-    const extra = showPred ? `<div class="lab-chips col">${pOpts().map(c=>`<button class="lab-chip sw${s.pred[t.id]===c?' on':''}" data-pp="${t.id}|${c}" ${s.ok[t.id]?'disabled':''}><i style="background:${colors[c]}"></i>${c}</button>`).join('')}</div>${s.ok[t.id]?'<div class="lab-ok">✅</div>':''}`
-      : ['reveal','qa'].includes(s.step) ? `<div class="lab-result">${pAns(t)}<small>${isI ? IODINE_HINT[pAns(t)] : BENEDICT_HINT[pAns(t)]}</small></div>` : '';
-    return tubeCardHtml(t, tubeColor(t), extra, {bubbles: s.step === 'waiting' || s.step === 'heating', cls: ['waiting','heating'].includes(s.step) ? 'shake' : '', k:st});
+  const st = labSt(), s = pState(), isI = pIsI(), colors = isI ? IODINE_COLORS : BENEDICT_COLORS;
+  const post = ['scaffold','reveal','qa'].includes(s.step);
+  const tubes = POTION_TUBES.map((t,i)=>{
+    const o = {k:st+'_'+i};
+    let color = '#e9e4d8', cls = t.id === '丙' ? 'cold' : 'warm', info = '', extra = '';
+    if(isI && s.step === 'setup'){
+      const has = s.si >= i + 1;
+      o.level = has ? 58 : 74; info = pTags(t, has, s.si === i + 1);
+      cls = has ? cls : ''; if(s.si === i + 1 || s.si === 0) cls += ' focus';
+    } else if(isI && ['waiting','drop','dropping'].includes(s.step)){
+      info = pTags(t, true);
+      if(s.step === 'waiting'){ o.bubbles = true; o.cls = 'shake'; }
+      if(s.step === 'dropping'){ o.drop = true; o.dropColor = IODINE_COLORS['黃褐色']; o.dropDelay = i * 0.25; o.q = true; o.qDelay = 1.3 + i * 0.25; }
+    } else {
+      info = `<div class="lab-tinfo"><b>澱粉液 ＋ ${t.add}</b><small>${t.env}</small></div>`;
+      if(!isI && s.step === 'added') color = colors['藍色'];
+      if(!isI && s.step === 'heating'){ o.q = true; o.bubbles = true; o.cls = 'shake'; }
+      if(post){
+        const done = s.step !== 'scaffold' || i < s.cur;
+        if(done){ color = colors[pRes(t)]; extra += `<div class="lab-result">${pRes(t)}<small>${isI ? IODINE_HINT[pRes(t)] : BENEDICT_HINT[pRes(t)]}</small></div>`; }
+        else { o.q = true; if(i === s.cur) cls += ' focus'; }
+        if(done && s.step === 'scaffold') extra += '<div class="lab-ok">✅</div>';
+      }
+    }
+    if(!isI) extra = pRecap(t) + extra;
+    return `<div class="lab-tcard ${cls}">${tubeSvg(color, t.id, o)}${info}${extra}</div>`;
   }).join('');
   let ctrl = '';
-  if(isI && s.step === 'setup') ctrl = `<div class="wu-tq">四支試管都準備好了，放置 10 分鐘讓唾液作用。</div><div class="btn-row"><button class="cast-btn" data-pstep="wait">⏳ 放置 10 分鐘</button></div>`;
-  else if(s.step === 'waiting') ctrl = `<div class="wu-tq center">⏳ 等待中……</div>`;
-  else if(!isI && s.step === 'add') ctrl = `<div class="wu-tq">取同樣的四管溶液（都已放置 10 分鐘），先加入本氏液。</div><div class="btn-row"><button class="cast-btn" data-pstep="add">🔵 加入本氏液</button></div>`;
-  else if(!isI && s.step === 'added') ctrl = `<div class="wu-tq">本氏液加好了，下一步要怎麼做？</div><div class="btn-row"><button class="cast-btn" data-pstep="heat">🔥 隔水加熱</button><button class="cast-btn ghost" data-pstep="look">👀 直接觀察顏色</button></div>`;
-  else if(s.step === 'heating') ctrl = `<div class="wu-tq center">🔥 隔水加熱中……</div>`;
-  else if(showPred) ctrl = `<div class="wu-tq">❓ 預測：${isI ? '滴入碘液後' : '隔水加熱後'}，每一管會變成什麼顏色？</div><div class="btn-row"><button class="cast-btn" id="pPredGo">🔮 確認預測</button></div>`;
-  else if(s.step === 'reveal') ctrl = `<div class="wu-tq center">${isI ? '💧 滴入碘液……' : '✨ 顏色出現了……'}</div>`;
+  if(isI && s.step === 'setup'){
+    const last = s.si === SETUP_STEPS.length - 1;
+    ctrl = `<ol class="lab-steps">${SETUP_STEPS.slice(0, s.si + 1).map((x,i)=>`<li class="${i===s.si?'now':''}"><span class="n">步驟 ${i+1}</span>${x}</li>`).join('')}</ol>
+      <div class="btn-row">${last ? '<button class="cast-btn" data-pstep="wait">⏳ 四管都準備好了，放置 10 分鐘</button>' : '<button class="cast-btn" data-pstep="next">➡️ 下一步</button>'}</div>`;
+  }
+  else if(s.step === 'waiting') ctrl = `<div class="wu-tq center">⏳ 放置 10 分鐘，讓唾液作用中……</div>`;
+  else if(s.step === 'drop') ctrl = `<div class="wu-tq">10 分鐘到了！在四支試管中，各滴入幾滴<b>碘液</b>（碘液本來是黃褐色）。</div><div class="btn-row"><button class="cast-btn" data-pstep="drop">💧 滴入碘液</button></div>`;
+  else if(s.step === 'dropping') ctrl = `<div class="wu-tq center">💧 滴入碘液中……</div>`;
+  else if(!isI && s.step === 'recap') ctrl = `<div class="wu-tq">這是<b>同一批</b>四管溶液（另外取出的一份，也放置了 10 分鐘）。每管下方是你在碘液檢驗的判斷和結果，等一下可以當作線索！先加入<b>本氏液</b>（本來是藍色）。</div><div class="btn-row"><button class="cast-btn" data-pstep="add">🔵 加入本氏液</button></div>`;
+  else if(!isI && s.step === 'added') ctrl = `<div class="wu-tq">本氏液加好了，四管現在都是藍色。下一步要怎麼做？</div><div class="btn-row"><button class="cast-btn" data-pstep="heat">🔥 隔水加熱</button><button class="cast-btn ghost" data-pstep="look">👀 直接觀察顏色</button></div>`;
+  else if(s.step === 'heating') ctrl = `<div class="wu-tq center">🔥 隔水加熱中……試管裡會變成什麼顏色呢？</div>`;
+  else if(s.step === 'scaffold'){
+    const t = POTION_TUBES[s.cur], rows = pRows(), a = s.sc[t.id];
+    const shown = rows.filter((r,j)=>j === 0 || a[rows[j-1].k]);
+    const key = t.id + shown.length, fresh = s.shownKey !== key; s.shownKey = key;
+    ctrl = `<div class="lab-sc">
+      <div class="lab-sc-h">🔎 推理${t.id}管（第 ${s.cur+1} / 4 管）：澱粉液 ＋ ${t.add}，${t.env}</div>
+      ${shown.map((r,j)=>`<div class="lab-sc-row${fresh && j === shown.length - 1 ? ' new' : ''}"><div class="lab-sc-q">${r.q}</div><div class="lab-chips">${r.opts.map(o=>scChip(t, r, o, s)).join('')}</div></div>`).join('')}
+      ${shown.length === rows.length ? `<div class="btn-row"><button class="cast-btn" id="pScGo">🔬 確認${t.id}管！</button></div>` : '<div class="lab-sc-tip">選好這一題，下一題就會出現。</div>'}
+    </div>`;
+  }
+  else if(s.step === 'reveal') ctrl = `<div class="wu-tq center">✨ 四管的結果都出來了！</div>`;
   else if(s.step === 'qa'){
     const q = pQs()[s.q];
     const order = labShuffleFixed(q.opts, st*7 + s.q + 3);
     ctrl = `<div class="wu-tq">❓ ${q.q}</div><div class="wu-topts">${order.map(o=>`<button class="wu-topt${s.pick===o?' on':''}" data-pq="${o}">${s.pick===o?'✅':'⬜'} ${o}</button>`).join('')}</div><div class="btn-row"><button class="cast-btn" id="pQGo">🔬 確認答案！</button></div>`;
   }
   return `
-    <div class="wu-title">${isI ? '🟤 第 1 站：碘液檢驗' : '🔵 第 2 站：本氏液檢驗'}</div>
-    <div class="wu-desc">${isI ? '碘液遇到澱粉會變成藍黑色；澱粉被分解後就不會變色。' : '本氏液原本是藍色，隔水加熱後，如果有葡萄糖會變色；葡萄糖越多，顏色越偏向磚紅色。'}</div>
-    <div class="lab-bench">${tubes}</div>
+    <div class="wu-title">${isI ? '🟤 第 2 站：碘液檢驗' : '🔵 第 3 站：本氏液檢驗'}</div>
+    <div class="wu-desc">${isI ? '碘液本來是<b>黃褐色</b>，遇到澱粉會變成<b>藍黑色</b>；澱粉被分解掉，就不會變色。' : '本氏液本來是<b>藍色</b>，<b>隔水加熱</b>後如果有葡萄糖就會變色；葡萄糖越多，越偏向<b>磚紅色</b>。'}</div>
+    <div class="lab-bench${s.step==='heating'?' bath':''}">${tubes}</div>
     ${ctrl}`;
 }
 
-/* ---------- 魔藥學 第 3 站：忘記標號 ---------- */
+/* ---------- 魔藥學 第 4 站：忘記標號 ---------- */
 function p3Pick(sample, id){ const s = state.lab.p3; if(s.ok[sample]) return; s.pick[sample] = id; render(); }
 /* 乙（清水）和丁（煮過的唾液）結果完全相同：兩組都可以填乙或丁，但兩組不能填一樣的 */
 function p3Match(i, pick){
@@ -4077,7 +4298,7 @@ function potionS3Html(){
   }).join('');
   const key = POTION_TUBES.map(t=>`<li><b>${t.id}</b>：澱粉液 ＋ ${t.add}，${t.env}</li>`).join('');
   return `
-    <div class="wu-title">🏷️ 第 3 站：忘記標號</div>
+    <div class="wu-title">🏷️ 第 4 站：忘記標號</div>
     <div class="wu-desc">四組檢驗結果的標籤掉了！依照結果，選出每一組來自哪一支試管。（小提示：其中有兩組的結果一模一樣，想想看為什麼。）</div>
     <ul class="lab-key">${key}</ul>
     <div class="lab-bench">${samples}</div>
@@ -4110,7 +4331,7 @@ function labHtml(tk){
       <div class="btn-row"><button class="cast-btn" id="labBegin">▶️ 我看懂了，開始！</button></div>
     </div>`;
   } else {
-    body = L.mode === 'tracker' ? [trackerS1Html, trackerS2Html][st]() : [potionTestHtml, potionTestHtml, potionS3Html][st]();
+    body = L.mode === 'tracker' ? [trackerS1Html, trackerS2Html][st]() : [potionReagentHtml, potionTestHtml, potionTestHtml, potionS3Html][st]();
   }
   return `<div class="panel stage wu-panel">${fxHtml(tk)}${head}${body}</div>`;
 }
@@ -4120,7 +4341,7 @@ function labBind(){
   on('labBegin', ()=>{ L.rules = false; render(); });
   on('labNext', labNext);
   on('t1Go', t1Go); on('t2IdGo', t2IdGo); on('t2JuiceGo', t2JuiceGo);
-  on('pPredGo', pPredGo); on('pQGo', pQGo); on('p3Go', p3Go);
+  on('p0Go', p0Go); on('p0Clear', p0Clear); on('p0OrderGo', p0OrderGo); on('pScGo', pScGo); on('pQGo', pQGo); on('p3Go', p3Go);
   const each = (sel, fn) => document.querySelectorAll(sel).forEach(b=>b.addEventListener('click', ()=>fn(b)));
   each('[data-t1]', b=>{ const [n,k,o] = b.dataset.t1.split('|'); t1Pick(n,k,o); });
   each('[data-t2id]', b=>{ const [l,n] = b.dataset.t2id.split('|'); t2IdPick(l,n); });
@@ -4128,7 +4349,9 @@ function labBind(){
   each('[data-lgfocus]', b=>{ const s = state.lab.t2; s.focus = s.focus === b.dataset.lgfocus ? null : b.dataset.lgfocus; render(); });
   each('.lg-band.click', b=>t2Band(+b.dataset.band));
   each('[data-pstep]', b=>pStep(b.dataset.pstep));
-  each('[data-pp]', b=>{ const [id,c] = b.dataset.pp.split('|'); pPred(id,c); });
+  each('[data-p0o]', b=>p0Pick(b.dataset.p0o));
+  each('[data-p0s]', b=>p0Seq(b.dataset.p0s));
+  each('[data-psc]', b=>{ const [id,k,o] = b.dataset.psc.split('|'); pSc(id,k,o); });
   each('[data-pq]', b=>pQPick(b.dataset.pq));
   each('[data-p3]', b=>{ const [i,id] = b.dataset.p3.split('|'); p3Pick(+i,id); });
 }
