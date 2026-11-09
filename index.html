@@ -827,12 +827,69 @@ img{-webkit-user-drag:none;}
 .potion .diff-tag{background:rgba(176,124,255,0.2); color:#d4b2ff;}
 .diff-card.track.has-img:hover .diff-img{filter:drop-shadow(0 0 16px rgba(111,156,255,0.7));}
 .diff-card.potion.has-img:hover .diff-img{filter:drop-shadow(0 0 16px rgba(176,124,255,0.7));}
+
+/* ---------- 序幕 ---------- */
+#prologue{position:fixed; inset:0; z-index:140; display:none; background:#07050a; overflow:hidden; cursor:pointer; color:#fff3dc; -webkit-user-select:none; user-select:none;}
+#prologue.on{display:block; animation:introIn .6s ease both;}
+#prologue.out{animation:introOut .5s ease both;}
+#prologue.shake{animation:proShake .6s ease;}
+@keyframes proShake{0%,100%{transform:none;} 15%{transform:translate(-10px,4px);} 30%{transform:translate(9px,-6px);} 45%{transform:translate(-7px,6px);} 60%{transform:translate(6px,-3px);} 75%{transform:translate(-3px,2px);}}
+.pro-bg{position:absolute; inset:-40px; background-size:cover; background-position:center; filter:brightness(0.55) saturate(1.1);}
+.pro-bg.kb{animation:proKb 22s ease-out both;}
+@keyframes proKb{from{transform:scale(1.12);} to{transform:scale(1);}}
+.pro-shade{position:absolute; inset:0; background:radial-gradient(ellipse at center, rgba(7,5,10,0.25), rgba(7,5,10,0.85) 75%);}
+.pro-stage{position:absolute; left:50%; top:0; transform:translateX(-50%); width:min(92vw, 860px); height:100%; display:flex; flex-direction:column; align-items:center; padding:7vh 0 0; box-sizing:border-box;}
+.pro-act{text-align:center; transition:all .8s ease;}
+.pro-act.big{margin-top:22vh; animation:actIn 1.2s ease both;}
+.pro-act.small{margin-top:0; transform:scale(0.62); opacity:0.85;}
+@keyframes actIn{from{opacity:0; letter-spacing:16px; filter:blur(6px);} to{opacity:1; letter-spacing:4px; filter:none;}}
+.pro-act-no{font-family:'Noto Serif TC',serif; color:var(--gold); font-size:20px; letter-spacing:8px;}
+.pro-act-title{font-family:'Noto Serif TC',serif; font-weight:900; font-size:clamp(30px, 6vw, 52px); color:var(--gold-hi); text-shadow:0 3px 0 #000, 0 0 24px rgba(217,178,95,0.6); letter-spacing:4px;}
+.pro-fx{min-height:0; display:flex; justify-content:center; margin:6px 0;}
+.pro-lines{display:flex; flex-direction:column; gap:14px; align-items:center; text-align:center; margin-top:10px;}
+.pro-line{font-family:'Noto Serif TC',serif; font-size:clamp(18px, 2.6vw, 25px); line-height:1.7; text-shadow:0 2px 6px #000; animation:lineIn 1s ease both; max-width:760px; transition:opacity .6s;}
+.pro-line.old{opacity:0.45;}
+.pro-line.big{font-size:clamp(34px, 7vw, 64px); font-weight:900; color:var(--gold-hi); text-shadow:0 4px 0 #000, 0 0 30px rgba(255,210,94,0.8); animation:bigIn .9s cubic-bezier(.2,.8,.3,1.4) both;}
+.pro-line.rainbow{font-size:clamp(26px, 5vw, 48px); background:linear-gradient(90deg,#ff6ad5,#ffd36a,#6af0ff,#b06aff,#ff6ad5); background-size:200% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; text-shadow:none; filter:drop-shadow(0 3px 0 #000) drop-shadow(0 0 14px rgba(255,180,255,0.6)); animation:bigIn .9s cubic-bezier(.2,.8,.3,1.4) both, rainbowMove 3s linear infinite;}
+.pro-line.glow{color:#ffe08a; text-shadow:0 0 18px rgba(255,210,94,0.9), 0 2px 4px #000;}
+@keyframes lineIn{from{opacity:0; transform:translateY(14px); filter:blur(4px);} to{opacity:1; transform:none; filter:none;}}
+@keyframes bigIn{from{opacity:0; transform:scale(0.4);} to{opacity:1; transform:scale(1);}}
+@keyframes rainbowMove{to{background-position:200% 0;}}
+.pro-circle{width:min(46vw, 240px); aspect-ratio:1; border-radius:50%; border:3px solid rgba(255,210,94,0.9); box-shadow:0 0 40px rgba(255,210,94,0.7), inset 0 0 40px rgba(255,210,94,0.4); animation:spin 9s linear infinite, bigIn 1s ease both; position:relative;}
+.pro-circle div{position:absolute; inset:22px; border-radius:50%; border:2px dashed rgba(255,230,160,0.8); animation:spin 5s linear infinite reverse;}
+.pro-wiz-big{animation:wizIn 1.4s ease both;}
+.pro-wiz-pic{width:min(36vw, 190px); height:min(36vw, 190px); border-radius:50%; border:4px solid var(--gold); box-shadow:0 0 40px rgba(176,124,255,0.6); font-size:110px; background:radial-gradient(circle at 50% 35%, #3d2f5c, #120d1c);}
+@keyframes wizIn{from{opacity:0; transform:translateY(40px) scale(0.85); filter:brightness(3) blur(6px);} to{opacity:1; transform:none; filter:none;}}
+.pro-row{display:flex; gap:clamp(8px, 2vw, 20px); flex-wrap:wrap; justify-content:center;}
+.pro-mon{display:flex; flex-direction:column; align-items:center; gap:6px; animation:bigIn .8s cubic-bezier(.2,.8,.3,1.4) both; font-weight:800; font-size:15px; text-shadow:0 2px 4px #000;}
+.pro-mon-pic{width:clamp(70px, 14vw, 110px); height:clamp(70px, 14vw, 110px); border-radius:50%; border:3px solid var(--gold); font-size:50px; background:radial-gradient(circle,#3b2c3a,#1a1218);}
+.pro-portal{display:flex; flex-direction:column; align-items:center; gap:8px; animation:bigIn .9s ease both; font-weight:900; font-size:clamp(12px, 1.8vw, 15px); text-shadow:0 2px 4px #000;}
+.pro-portal i{width:clamp(56px, 12vw, 96px); height:clamp(80px, 17vw, 136px); border-radius:50% 50% 12px 12px / 60% 60% 12px 12px; background:radial-gradient(ellipse at 50% 60%, rgba(255,255,255,0.9), rgba(var(--pc),0.9) 35%, rgba(var(--pc),0.15) 75%); box-shadow:0 0 30px rgba(var(--pc),0.9), inset 0 0 20px rgba(255,255,255,0.4); border:3px solid rgba(var(--pc),1); animation:portalPulse 2s ease-in-out infinite;}
+@keyframes portalPulse{0%,100%{filter:brightness(1);} 50%{filter:brightness(1.35);}}
+.pro-dragon{animation:wizIn 1.4s ease both;}
+.pro-dragon-pic{width:min(40vw, 210px); aspect-ratio:3/4; height:auto; border-radius:12px; font-size:110px; filter:drop-shadow(0 0 26px rgba(255,106,213,0.8));}
+.pro-dragon-pic img{object-fit:contain;}
+.pro-dialog{position:absolute; left:50%; bottom:84px; transform:translate(-50%, 20px); width:min(94vw, 860px); display:flex; gap:14px; align-items:flex-end; opacity:0; transition:all .5s ease; pointer-events:none;}
+.pro-dialog.on{opacity:1; transform:translate(-50%, 0);}
+.pro-wiz{width:clamp(64px, 12vw, 104px); height:clamp(64px, 12vw, 104px); border-radius:50%; flex-shrink:0; font-size:52px; border:3px solid var(--gold); box-shadow:0 0 0 3px #120d0e, 0 0 18px rgba(176,124,255,0.45); background:radial-gradient(circle at 50% 35%, #3d2f5c, #120d1c);}
+.pro-bubble{flex:1; background:linear-gradient(180deg,rgba(239,226,194,0.97),rgba(220,199,154,0.97)); color:#2b1d10; border:2px solid #8c6a2a; border-radius:14px; padding:12px 18px; min-height:96px; box-shadow:0 6px 0 rgba(0,0,0,0.4);}
+.pro-name{font-family:'Noto Serif TC',serif; font-weight:900; color:#6b3f8f; font-size:15px; margin-bottom:4px;}
+.pro-say{font-size:clamp(16px, 2.3vw, 20px); line-height:1.7; font-weight:600;}
+.pro-say.typing::after{content:'▍'; animation:markerPulse .7s infinite; color:#8c6a2a;}
+.pro-bottom{position:absolute; left:0; right:0; bottom:18px; display:flex; justify-content:center; align-items:center; gap:16px; pointer-events:none;}
+.pro-hint{font-size:13px; color:rgba(255,243,220,0.6); animation:markerPulse 1.6s infinite;}
+.pro-skip{position:absolute; right:18px; bottom:-4px; pointer-events:auto; background:rgba(0,0,0,0.55); border:1px solid var(--line); color:var(--gold-hi); border-radius:999px; padding:9px 16px; font-weight:800; font-size:14px; font-family:inherit; cursor:pointer;}
+.pro-skip:hover{border-color:var(--gold);}
+.pro-start{pointer-events:auto; font-size:17px; padding:11px 26px; animation:bigIn .6s ease both, hintPulse 1.4s 0.6s infinite;}
+@media(max-width:640px){ .pro-dialog{bottom:64px;} .pro-bubble{min-height:84px; padding:10px 12px;} .pro-act.big{margin-top:16vh;} .pro-stage{padding-top:5vh;} .pro-skip{right:12px;} }
+.replay-link{background:none; border:1px solid var(--line); color:var(--gold-hi); border-radius:999px; padding:5px 14px; font-size:12.5px; font-weight:700; margin-top:10px; cursor:pointer; font-family:inherit;}
 </style>
 </head>
 <body>
 <div id="bgStage" aria-hidden="true"><div class="bg-blur"></div><div class="bg-sharp"></div><div class="bg-shade"></div></div>
 <div class="wrap" id="app"></div>
 <div id="stageIntro" aria-hidden="true"></div>
+<div id="prologue"></div>
 
 <script>
 /* =========================================================
@@ -1090,7 +1147,7 @@ function showStageIntro(bgSrc, kicker, title, sub, extraHtml, opts){
     ${extraHtml || ''}
     <div class="si-cap"><div class="si-kicker">${kicker||''}</div><div class="si-title">${title||''}</div><div class="si-sub">${sub||''}</div>${introSticky ? `<button class="cast-btn si-start" id="siStart">${opts.button}</button>` : '<div class="si-skip">點一下畫面直接開始</div>'}</div>
     ${introSticky ? '' : `<div class="si-bar" style="animation-duration:${ms}ms"></div>`}`;
-  if(introSticky){ const btn = document.getElementById('siStart'); if(btn) btn.addEventListener('click', e=>{ e.stopPropagation(); introSticky = false; hideStageIntro(); }); }
+  if(introSticky){ const btn = document.getElementById('siStart'); if(btn) btn.addEventListener('click', e=>{ e.stopPropagation(); introSticky = false; hideStageIntro(); if(opts.onStart) opts.onStart(); }); }
   else introTimer = setTimeout(hideStageIntro, ms);
 }
 function hideStageIntro(){
@@ -2166,6 +2223,7 @@ function menuHtml(tk){
     <div class="menu-hero">
       <div class="crest">🏰</div>
       <h2>踏入黃金地下城</h2>
+      <button class="replay-link" id="replayPrologue">📜 重看序幕</button>
       <p>每場冒險會召喚 <b>${DISHES_PER_RUN} 道魔物料理</b>。跟著它們從口腔（咀嚼石窟）一路闖到肛門（終焉之門），擊倒體內的營養魔物，最後煉化出熱魔力！通關後依正確率掉落便便卡。</p>
     </div>
     <div class="diff-grid five">
@@ -2673,6 +2731,7 @@ function bindEvents(){
   on('pickBasic', ()=>startRun('basic'));
   on('pickAdv', ()=>startRun('advanced'));
   on('pickWarm', startWarmup);
+  on('replayPrologue', ()=>startPrologue());
   on('pickTrack', ()=>startLab('tracker'));
   on('pickPotion', ()=>startLab('potion'));
   on('nextFood', beginFood);
@@ -4044,8 +4103,167 @@ function labBind(){
   each('[data-p3]', b=>{ const [i,id] = b.dataset.p3.split('|'); p3Pick(+i,id); });
 }
 
+
+/* =========================================================
+   📜 序幕：一段段播放；敘述淡入，對話用打字效果
+   ---------------------------------------------------------
+   type：act＝幕標題、narr＝敘述、say＝大賢者說話、big＝大字強調
+   fx：circle＝金色魔法陣、wizard＝大賢者登場、shake＝震動、portals＝五道傳送門、dragon＝七彩神龍
+   ========================================================= */
+const PROLOGUE = [
+  {type:'act', no:'第一幕', title:'黃金地下城的傳說', bg:'lobby'},
+  {type:'narr', text:'傳說中，在每個人的體內，都隱藏著一座神祕的地下城。'},
+  {type:'narr', text:'在這座地下城裡，食物將化身為各種營養魔物，沿著錯綜複雜的消化道展開旅程。'},
+  {type:'narr', text:'唯有掌握消化奧祕的人，才能破解地下城中的機關，將營養魔物轉化為珍貴的熱魔力。'},
+  {type:'narr', text:'而那些能夠駕馭消化魔法的冒險者，被人們稱為——'},
+  {type:'big',  text:'「魔法屎」！'},
+  {type:'narr', text:'相傳，在地下城的最深處，沉睡著一股神祕的黃金之力。', fx:'glow'},
+  {type:'narr', text:'然而，至今仍沒有人能完全揭開它的祕密……'},
+  {type:'act', no:'第二幕', title:'腸道大賢者的召喚', bg:'warmup'},
+  {type:'narr', text:'某一天，一道金色魔法陣突然出現在你腳下。', fx:'circle'},
+  {type:'narr', text:'轉眼間，你已站在一座古老的地下城入口。'},
+  {type:'narr', text:'一位白鬍子老者，手持發光的法杖與厚重的魔法書，緩緩走向你。', fx:'wizard'},
+  {type:'say', text:'終於等到你了，年輕的魔法屎。'},
+  {type:'say', text:'老夫是腸道大賢者，黃金地下城的守護者。'},
+  {type:'say', text:'在這裡，你將面對醣類史萊姆、蛋白質巨獸與脂質護盾怪。', fx:'monsters'},
+  {type:'say', text:'你必須穿越咀嚼石窟、胃酸沸騰之池、絨毛迷宮等重重關卡，破解消化魔法的奧祕。'},
+  {type:'say', text:'但想成為真正的強者，光是擊倒魔物還不夠。'},
+  {type:'say', text:'你還必須學會追蹤魔物的變化、辨識魔法藥劑的反應，甚至將養分煉化為熱魔力！'},
+  {type:'act', no:'第三幕', title:'五界試煉', bg:'lobby'},
+  {type:'narr', text:'大賢者將法杖重重敲向地面。'},
+  {type:'big',  text:'轟隆——！', fx:'shake'},
+  {type:'narr', text:'五道散發不同光芒的傳送門，緩緩出現在你眼前。', fx:'portals'},
+  {type:'say', text:'這裡有五條修行之路，每一條都隱藏著不同的考驗。'},
+  {type:'say', text:'你可以從見習營地開始，掌握地下城的基本構造；也可以踏上見習魔法屎與大魔導屎之路，迎戰強大的營養魔物。'},
+  {type:'say', text:'若你想進一步鑽研消化的祕密，魔物追蹤所與魔藥學教室，也正等待著你的挑戰。'},
+  {type:'narr', text:'大賢者翻開手中的古老魔法書。'},
+  {type:'narr', text:'書頁上浮現一條盤旋而上的七彩神龍。', fx:'dragon'},
+  {type:'say', text:'傳說，唯有完成五條修行之路，才能召喚至高無上的終極寶物——'},
+  {type:'big',  text:'「五界制霸・七彩神龍便」！', rainbow:true},
+  {type:'say', text:'那麼，年輕的魔法屎……'},
+  {type:'say', text:'你的黃金傳奇，現在正式開始！', last:true}
+];
+const PRO_TYPE_MS = 55;          // 打字速度（每個字毫秒）
+let pro = null;
+
+function startPrologue(onDone){
+  const box = document.getElementById('prologue');
+  if(!box){ onDone && onDone(); return; }
+  pro = {i:-1, onDone, typing:null, timer:null, act:null};
+  box.className = 'on';
+  box.innerHTML = `
+    <div class="pro-bg" id="proBg"></div>
+    <div class="pro-shade"></div>
+    <div class="pro-stage" id="proStage">
+      <div class="pro-act" id="proAct"></div>
+      <div class="pro-fx" id="proFx"></div>
+      <div class="pro-lines" id="proLines"></div>
+    </div>
+    <div class="pro-dialog" id="proDialog">
+      ${pic(ASSETS.wizard, '🧙', 'pro-wiz')}
+      <div class="pro-bubble"><div class="pro-name">腸道大賢者</div><div class="pro-say" id="proSay"></div></div>
+    </div>
+    <div class="pro-bottom">
+      <span class="pro-hint" id="proHint">點一下畫面繼續</span>
+      <button class="pro-skip" id="proSkip">跳過序幕 ⏭</button>
+    </div>`;
+  document.getElementById('proSkip').addEventListener('click', e=>{ e.stopPropagation(); endPrologue(); });
+  box.onclick = proTap;
+  proNext();
+}
+function proTap(e){
+  if(!pro) return;
+  if(e && e.target.closest('.pro-start')) return;
+  if(pro.typing){ proFinishTyping(); return; }   // 打字中：先把這句打完
+  proNext();
+}
+function proNext(){
+  clearTimeout(pro.timer);
+  pro.i++;
+  const b = PROLOGUE[pro.i];
+  if(!b){ return; }
+  const lines = document.getElementById('proLines');
+  if(b.type === 'act'){
+    pro.act = b;
+    const bg = document.getElementById('proBg');
+    bg.style.backgroundImage = `url("${ASSETS.background[b.bg]}")`;
+    bg.classList.remove('kb'); void bg.offsetWidth; bg.classList.add('kb');
+    lines.innerHTML = ''; document.getElementById('proFx').innerHTML = '';
+    document.getElementById('proDialog').classList.remove('on');
+    const act = document.getElementById('proAct');
+    act.innerHTML = `<div class="pro-act-no">${b.no}</div><div class="pro-act-title">${b.title}</div>`;
+    act.className = 'pro-act big';
+    pro.timer = setTimeout(()=>{ act.className = 'pro-act small'; proNext(); }, 2200);
+    return;
+  }
+  if(b.fx) proFx(b.fx);
+  if(b.type === 'say'){
+    proClearLines();                         // 大賢者說話時，畫面上只留對話框
+    document.getElementById('proDialog').classList.add('on');
+    proType(b.text, ()=>{ if(b.last) proShowStart(); else pro.timer = setTimeout(proNext, 1100 + b.text.length * 45); });
+    return;
+  }
+  document.getElementById('proDialog').classList.remove('on');
+  /* 敘述／大字：淡入，舊的句子變淡，最多留 4 句 */
+  [...lines.children].forEach(n=>n.classList.add('old'));
+  while(lines.children.length >= 3) lines.removeChild(lines.firstChild);
+  const el = document.createElement('div');
+  el.className = 'pro-line' + (b.type === 'big' ? ' big' : '') + (b.rainbow ? ' rainbow' : '') + (b.fx === 'glow' ? ' glow' : '');
+  el.textContent = b.text;
+  lines.appendChild(el);
+  pro.timer = setTimeout(proNext, b.type === 'big' ? 2200 : 1400 + b.text.length * 80);
+}
+function proType(text, done){
+  const el = document.getElementById('proSay');
+  let n = 0;
+  el.textContent = '';
+  el.classList.add('typing');
+  pro.typing = {text, done};
+  pro.typeTimer = setInterval(()=>{
+    n++; el.textContent = text.slice(0, n);
+    if(n >= text.length) proFinishTyping();
+  }, PRO_TYPE_MS);
+}
+function proFinishTyping(){
+  const t = pro.typing; if(!t) return;
+  clearInterval(pro.typeTimer);
+  const el = document.getElementById('proSay'); el.textContent = t.text; el.classList.remove('typing');
+  pro.typing = null;
+  t.done && t.done();
+}
+function proClearLines(){ const l = document.getElementById('proLines'); if(l) l.innerHTML = ''; }
+function proFx(kind){
+  const fx = document.getElementById('proFx');
+  const box = document.getElementById('prologue');
+  if(['circle','wizard','portals','dragon'].includes(kind)) proClearLines();   // 新畫面出現時，清掉前面的句子
+  if(kind === 'circle') fx.innerHTML = '<div class="pro-circle"><div></div></div>';
+  if(kind === 'wizard') fx.innerHTML = `<div class="pro-wiz-big">${pic(ASSETS.wizard, '🧙', 'pro-wiz-pic')}</div>`;
+  if(kind === 'monsters') fx.innerHTML = `<div class="pro-row">${LAB_NUT.map((n,i)=>{ const m = MONSTERS[n]; return `<div class="pro-mon" style="animation-delay:${i*0.25}s">${pic(ASSETS.monsters[m.key], m.emoji, 'pro-mon-pic')}<span>${m.name}</span></div>`; }).join('')}</div>`;
+  if(kind === 'shake'){ box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake'); }
+  if(kind === 'portals'){
+    const P = [['見習營地','255,190,90'],['見習魔法屎','76,195,138'],['大魔導屎','224,72,59'],['魔物追蹤所','111,156,255'],['魔藥學教室','176,124,255']];
+    fx.innerHTML = `<div class="pro-row">${P.map((p,i)=>`<div class="pro-portal" style="--pc:${p[1]}; animation-delay:${i*0.3}s"><i></i><span>${p[0]}</span></div>`).join('')}</div>`;
+  }
+  if(kind === 'dragon') fx.innerHTML = `<div class="pro-dragon">${pic(ASSETS.cards.ur_rainbow, '🐉', 'pro-dragon-pic')}</div>`;
+}
+function proShowStart(){
+  const hint = document.getElementById('proHint');
+  hint.outerHTML = '<button class="cast-btn pro-start" id="proStart">⚔️ 踏入黃金地下城</button>';
+  document.getElementById('proStart').addEventListener('click', e=>{ e.stopPropagation(); endPrologue(); });
+}
+function endPrologue(){
+  if(!pro) return;
+  clearTimeout(pro.timer); clearInterval(pro.typeTimer);
+  const box = document.getElementById('prologue'), done = pro.onDone;
+  pro = null;
+  try{ localStorage.setItem('goldenDungeonPrologueSeen', '1'); }catch(e){}
+  box.classList.add('out');
+  setTimeout(()=>{ box.className = ''; box.innerHTML = ''; box.onclick = null; }, 500);
+  done && done();
+}
+
 render();
-showStageIntro(ASSETS.background.lobby, 'GOLDEN DUNGEON', '🏰 黃金地下城 - 魔法屎的考驗', '蔡譯禎老師設計', '', {button:'▶️ 開始遊戲'});
+showStageIntro(ASSETS.background.lobby, 'GOLDEN DUNGEON', '🏰 黃金地下城 - 魔法屎的考驗', '蔡譯禎老師設計', '', {button:'▶️ 開始遊戲', onStart:()=>startPrologue()});
 </script>
 </body>
 </html>
