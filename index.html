@@ -729,6 +729,10 @@ button.wu-member:active{transform:scale(0.96);}
 .nl-last{border-bottom:none;}
 #stageIntro.sticky{cursor:default;}
 .si-start{margin-top:14px; font-size:20px; padding:14px 34px;}
+.wu-dgs{display:grid; grid-template-columns:repeat(7, 1fr); gap:8px; margin:6px 0 10px;}
+@media(max-width:700px){.wu-dgs{grid-template-columns:repeat(4, 1fr);}}
+.wu-dg{background:linear-gradient(180deg,#3a2e30,#272022); border:2px solid rgba(217,178,95,0.3); color:var(--text); border-radius:10px; padding:14px 4px; font-size:16px; font-weight:800; font-family:inherit; cursor:pointer;}
+.wu-dg.on{border-color:var(--gold-hi); background:rgba(217,178,95,0.18);}
 </style>
 </head>
 <body>
@@ -921,7 +925,7 @@ const THEMES = {
 };
 
 /* 數值設定 */
-const DISHES_PER_RUN = 3;
+const DISHES_PER_RUN = 2;
 const Q_POINTS = {basic:5, advanced:8};
 const NUTRIENT_POINTS = 15;
 const SPEED_BONUS = 5;
@@ -1947,7 +1951,7 @@ function leaderHtml(){
     ? `依收集到的便便「種類」排名（全部 ${CARDS.length} 種），種類相同再比卡片總張數。`
     : state.leaderTab === 'warmup'
     ? `比完成見習營地四站的時間，越快越前面；每失誤一次加 ${WU_PENALTY_SEC} 秒。`
-    : '只計算成功通關（3 道料理全部完成）的場次；生命歸零的場次不列入。';
+    : `只計算成功通關（${DISHES_PER_RUN} 道料理全部完成）的場次；生命歸零的場次不列入。`;
   return `
   <div class="modal-overlay" id="leaderOverlay">
     <div class="modal panel wide">
@@ -2681,7 +2685,7 @@ function startWarmup(){
     station:0, accMs:0, runAt:null, rules:true, correct:0, mistakes:0, stMistakes:[0,0,0,0], stars:[], between:false, flash:null,
     s1:{tray:shuffled([...WU_TRACT, ...WU_GLANDS]), slots:Array(7).fill(null), locked:Array(7).fill(false), running:false, bad:[]},
     s2:{tray:shuffled([...WU_MAP.map(m=>m.name), ...WU_MAP_DECOYS]), placed:{}, combo:0, best:0, lit:false},
-    s3:{deck:shuffled(WU_JOBS.map((_,i)=>i)), cur:null, dur:16000, t0:0, paused:0, dragAt:null, tries:0, done:0},
+    s3:{deck:shuffled(WU_JOBS.map((_,i)=>i)), cur:null, dur:10000, t0:0, paused:0, dragAt:null, tries:0, done:0},
     s4:{part:'pipe', conns:[], ph:{'口腔':1, '胃':1, '小腸':1}, phOk:{}, phBad:[], temp:20, denatured:false, tRound:0, tPick:null, tOrder:WU_TEMP_ROUNDS.map(r=>shuffled(r.opts.map((_,i)=>i)))}
   };
   wuSel = null;
@@ -2994,7 +2998,7 @@ function wuS3Drop(id, target){
   const who = target.slice(7);
   if(job.owner === who){
     wuOk(); s.done++;
-    s.dur = Math.max(7000, s.dur - 600);
+    s.dur = Math.max(5000, s.dur - 400);
     state.wu.flash = {id:target, ok:true};
     setWizard(who === 'gland' ? `沒錯，「${job.text}」是消化腺的工作，不是消化道！` : `派對了！「${job.text}」正是${who}的工作。`, 'happy');
     wuS3Spawn();
@@ -3050,7 +3054,7 @@ function wuPhGo(){
     else { s.phBad.push(t.name); state.wu.mistakes++; state.wu.stMistakes[state.wu.station]++; hints.push(`${t.name}：${t.hint}`); }
   });
   if(s.phBad.length){ setWizard('還有地方的酸鹼值不對：' + hints.join(' '), 'sad'); }
-  else { s.part = 'temp'; setWizard('環境調和完成！最後是溫度實驗：每一題都要選出正確答案，並把溫度計拉到同樣的溫度。', 'happy'); }
+  else { s.part = 'temp'; setWizard('環境調和完成！接著是溫度實驗：可以拉動溫度計觀察酵素，再選出正確答案。', 'happy'); }
   wuRender();
 }
 /* 第 4 站第 3 段：溫度情境題（每題都要「選對情境」＋「把溫度計拉到同樣的位置」） */
@@ -3092,22 +3096,39 @@ function wuTempPick(i){ const s = state.wu.s4; if(s.part !== 'temp') return; s.t
 function wuTempGo(){
   const s = state.wu.s4; if(s.part !== 'temp') return;
   const r = WU_TEMP_ROUNDS[s.tRound];
-  if(s.tPick === null){ setWizard('先選一個答案，再把溫度計拉到對應的位置喔！', 'calm'); refreshWizardDom(); return; }
-  const pickOk = s.tPick === r.ans;
-  const tempOk = s.temp >= r.min && s.temp <= r.max && (r.title === '高溫' || !s.denatured);
-  if(pickOk && tempOk){
+  if(s.tPick === null){ setWizard('先選一個答案喔！可以拉動溫度計，觀察酵素的變化來幫助判斷。', 'calm'); refreshWizardDom(); return; }
+  if(s.tPick === r.ans){
     wuOk();
     s.tRound++; s.tPick = null;
-    if(s.tRound >= WU_TEMP_ROUNDS.length){ wuStationDone(r.ok + ' 溫度實驗全部完成！'); return; }
     s.temp = 20; s.denatured = false;
+    if(s.tRound >= WU_TEMP_ROUNDS.length){
+      s.part = 'digest'; s.dPick = [];
+      setWizard(r.ok + ' 溫度實驗完成！最後一題：想想看，真正有在消化食物的是哪幾個消化道？', 'happy');
+      wuRender(); return;
+    }
     setWizard(r.ok + ' 下一題！', 'happy');
     wuRender(); return;
   }
-  let msg;
-  if(!pickOk && !tempOk) msg = '答案和溫度計的位置都不對，再想想看！';
-  else if(!pickOk) msg = '溫度計拉對了，但答案不對喔！看看酵素的樣子，再選一次。';
-  else if(s.denatured) msg = '答案對了，但這隻酵素在剛才已經被熱到變性了！先重新培養一隻，再拉到正確的溫度。';
-  else msg = `答案對了，但溫度計的位置和情境不一樣喔！${r.drag}。`;
+  wuBad('答案不對喔！拉動溫度計，看看酵素在那個溫度會變成什麼樣子，再選一次。');
+  wuRender();
+}
+/* 第 4 站最後一題：真正有在消化食物的消化道（口腔、胃、小腸） */
+const WU_DIGEST_ANS = ['口腔','胃','小腸'];
+function wuDigestToggle(n){
+  const s = state.wu.s4; if(s.part !== 'digest') return;
+  s.dPick = s.dPick.includes(n) ? s.dPick.filter(x=>x!==n) : [...s.dPick, n];
+  wuRender();
+}
+function wuDigestGo(){
+  const s = state.wu.s4; if(s.part !== 'digest') return;
+  if(!s.dPick.length){ setWizard('先選出你認為的消化道，再按確認喔！', 'calm'); refreshWizardDom(); return; }
+  const ok = sameSet(s.dPick, WU_DIGEST_ANS);
+  if(ok){ wuOk(); wuStationDone('完全正確！口腔、胃、小腸都有消化液進行化學消化；咽和食道負責運送，大腸吸收剩餘的水分，肛門負責排遺。'); return; }
+  const extra = s.dPick.filter(n=>!WU_DIGEST_ANS.includes(n));
+  const miss = WU_DIGEST_ANS.filter(n=>!s.dPick.includes(n));
+  let msg = '還不完全對喔！';
+  if(extra.length) msg += `你選的消化道裡，有的只負責運送、吸收或排出，沒有消化液可以分解食物。`;
+  if(miss.length) msg += `還有消化道漏選了，回想一下剛剛的管線，消化液注入到哪些地方？`;
   wuBad(msg);
   wuRender();
 }
@@ -3118,7 +3139,7 @@ const WU_RULES = [
   {icon:'🧱', title:'鋪設地下城通道', rules:['把石板依照「食物經過的順序」放進 1～7 號格子。','石板堆裡混了 4 塊消化腺陷阱，食物不會經過消化腺，不要放進通道。','全部放好後按「放行食物」，食物會在第一個放錯的格子卡住。','放對的石板會固定，放錯的退回石板堆，每退回一塊算一次失誤。'], how:'拖曳石板，或先點石板、再點格子。'},
   {icon:'🗺️', title:'點亮地下城地圖', rules:['地圖上的名牌被魔物偷走了，「？」是名牌原本的位置。','把每個名牌放回正確的位置；連續放對有連擊加成。','有些名牌不是消化系統的構造，它們在地圖上沒有位置。','放錯位置或拿干擾名牌去放，都算一次失誤。'], how:'拖曳名牌，或先點名牌、再點「？」。'},
   {icon:'📜', title:'冒險者公會派任務', rules:['任務卡會從上方慢慢掉下來，越後面掉得越快。','看清楚卡片上的工作，點一下下方負責這項工作的消化道。','卡片掉到底就算失誤，那張卡會排到最後再出現一次。','同一張卡錯兩次，負責的消化道會發亮提示。'], how:'直接點下方的消化道卡片。'},
-  {icon:'⚗️', title:'煉金管線', rules:['接管線：先從消化腺拉到它「分泌」的消化液，再從消化液拉到它「注入」的消化道。','調和環境：把口腔、胃、小腸的旋鈕拉到正確的酸鹼性。','溫度實驗：每一題都要選對答案，並把溫度計拉到同樣的溫度。'], how:'按住方塊拉出管線，或先點起點、再點終點。'}
+  {icon:'⚗️', title:'煉金管線', rules:['接管線：先從消化腺拉到它「分泌」的消化液，再從消化液拉到它「注入」的消化道。','調和環境：把口腔、胃、小腸的旋鈕拉到正確的酸鹼性。','溫度實驗：拉動溫度計觀察酵素的變化，選出每一題的正確答案。','總結挑戰：選出真正有在消化食物的消化道。'], how:'按住方塊拉出管線，或先點起點、再點終點。'}
 ];
 function wuRulesHtml(){
   const w = state.wu, r = WU_RULES[wuSid()];
@@ -3246,7 +3267,7 @@ function wuS4Html(){
     const gb = node('mid', '膽囊', `${WU_ICON['膽囊']} <b>膽囊</b>`, {drag:true, drop:true, c:'#9bd65a'});
     const dsts = WU_PIPE_TARGETS.map(n=>node('dst', n, `${WU_ICON[n]} <b>${n}</b>`, {drop:true})).join('');
     return `
-      <div class="wu-title">⚗️ 第 ${state.wu.station+1} 站：煉金管線（1/3）</div>
+      <div class="wu-title">⚗️ 第 ${state.wu.station+1} 站：煉金管線（1/4）</div>
       <div class="wu-desc">先從消化腺拉管線到它「分泌」的消化液，再從消化液拉到它「注入」的消化道。已完成 ${s.conns.length} / ${WU_PIPES_NEEDED.length} 條。</div>
       <div class="wu-pipe-head">
         <div class="wu-ph-title">🏭 消化腺</div>
@@ -3277,19 +3298,27 @@ function wuS4Html(){
       </div>`;
     }).join('');
     return `
-      <div class="wu-title">🧪 第 4 站：調和環境（2/3）</div>
+      <div class="wu-title">🧪 第 4 站：調和環境（2/4）</div>
       <div class="wu-desc">把每個注入點的旋鈕拉到正確的區域：酸性、中性或鹼性。</div>
       ${rows}
       <div class="btn-row"><button class="cast-btn" id="wuPhGo">⚗️ 調和環境！</button></div>`;
+  }
+  if(s.part === 'digest'){
+    const cards = WU_TRACT.map(n=>`<button class="wu-dg${s.dPick.includes(n)?' on':''}" data-dg="${n}">${s.dPick.includes(n)?'✅':'⬜'} ${n}</button>`).join('');
+    return `
+      <div class="wu-title">🔎 第 ${state.wu.station+1} 站：總結挑戰（4/4）</div>
+      <div class="wu-tq">❓ 所以，真正有在「消化」食物的是哪幾個消化道？（可複選）</div>
+      <div class="wu-dgs">${cards}</div>
+      <div class="btn-row"><button class="cast-btn" id="wuDigestGo">🔬 確認答案！</button></div>`;
   }
   const r = WU_TEMP_ROUNDS[s.tRound];
   const opts = s.tOrder[s.tRound].map(i=>`<button class="wu-topt${s.tPick===i?' on':''}" data-topt="${i}">${s.tPick===i?'✅':'⬜'} ${r.opts[i]}</button>`).join('');
   const dots = WU_TEMP_ROUNDS.map((x,i)=>`<span class="wu-tdot ${i<s.tRound?'done':i===s.tRound?'on':''}">${i<s.tRound?'✓':i+1} ${x.title}</span>`).join('');
   return `
-    <div class="wu-title">🌡️ 第 4 站：酵素溫度實驗（3/3）</div>
+    <div class="wu-title">🌡️ 第 4 站：酵素溫度實驗（3/4）</div>
     <div class="wu-tdots">${dots}</div>
     <div class="wu-tq">❓ ${r.q}</div>
-    <div class="wu-tdrag">🌡️ ${r.drag}</div>
+    <div class="wu-tdrag">🌡️ 可以拉動溫度計，觀察酵素的變化，再選出答案</div>
     <div class="wu-lab">
       <div class="wu-enzyme" id="wuEnz">🙂</div>
       <div class="wu-enz-msg" id="wuEnzMsg"></div>
@@ -3355,6 +3384,8 @@ function wuBind(){
   on('wuPhGo', wuPhGo);
   on('wuTempGo', wuTempGo);
   on('wuTempReset', wuTempReset);
+  on('wuDigestGo', wuDigestGo);
+  document.querySelectorAll('[data-dg]').forEach(b=>b.addEventListener('click', ()=>wuDigestToggle(b.dataset.dg)));
   document.querySelectorAll('[data-topt]').forEach(b=>b.addEventListener('click', ()=>wuTempPick(+b.dataset.topt)));
   document.querySelectorAll('.wu-ph').forEach(r=>r.addEventListener('input', ()=>{
     const v = +r.value; state.wu.s4.ph[r.dataset.ph] = v;
