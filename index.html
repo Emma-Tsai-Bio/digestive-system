@@ -787,6 +787,7 @@ img{-webkit-user-drag:none;}
 .lg-band.click:hover{opacity:0.32;}
 .lg-band.sel{opacity:0.45; stroke:#ff8f86; stroke-width:3;}
 .lg-band.ok{opacity:0.5; stroke:var(--gold-hi); stroke-width:3;}
+.lg-band.hint-glow{opacity:0.55; stroke:var(--gold-hi); stroke-width:4; animation:breathe 1s ease-in-out infinite;}
 .lg-div{stroke:#d9b25f; stroke-opacity:0.5; stroke-dasharray:4 4;}
 .lg-grid{stroke:#fff; stroke-opacity:0.07;}
 .lg-organ{fill:#efe4cc; font-size:15px; font-weight:800;}
@@ -796,6 +797,8 @@ img{-webkit-user-drag:none;}
 /* 試管 */
 .lab-bench{display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin:6px 0 12px;}
 @media(max-width:700px){.lab-bench{grid-template-columns:repeat(2, 1fr);}}
+.lab-bench.three{grid-template-columns:repeat(3, 1fr); max-width:760px; margin-left:auto; margin-right:auto;}
+@media(max-width:700px){.lab-bench.three{gap:6px;} .lab-bench.three .lab-tcard{padding:8px 4px;} .lab-bench.three .lab-chips{gap:3px; justify-content:center;} .lab-bench.three .lab-chip{padding:5px 6px; font-size:13px;}}
 .lab-tcard{position:relative; display:flex; flex-direction:column; align-items:center; gap:6px; background:rgba(0,0,0,0.3); border:1px solid rgba(217,178,95,0.25); border-radius:12px; padding:10px 8px; text-align:center;}
 .lab-tcard.ok{border-color:var(--green);}
 .lab-tcard > .lab-ok{position:absolute; top:6px; right:8px;}
@@ -2000,6 +2003,7 @@ function canUseHint(){
   if(state.hintUses >= 3 || state.hintActive) return false;
   if(state.screen === 'organ') return !state.answered;
   if(state.screen === 'settlement') return !state.kcalDone;
+  if(state.screen === 'lab') return labHintSels().length > 0;
   return false;
 }
 function buyHeart(type){
@@ -2774,8 +2778,11 @@ function shopHtml(){
   const smallDisabled = state.score < SHOP.smallHeart.price || state.hp >= MAX_HP;
   const largeDisabled = state.score < SHOP.largeHeart.price || state.hp >= MAX_HP;
   let hintNote;
-  if(state.hintUses >= 3) hintNote = '這道料理的指引次數已用完（每道料理限 3 次）。';
+  const isLab = state.screen === 'lab';
+  if(state.hintUses >= 3) hintNote = isLab ? '這一站的指引次數已用完（每一站限 3 次）。' : '這道料理的指引次數已用完（每道料理限 3 次）。';
   else if(state.hintActive) hintNote = '指引已經生效中，先把這題解開吧。';
+  else if(isLab && !canUseHint()) hintNote = '現在這個步驟沒有題目可以提示，等出現題目時再來吧。';
+  else if(isLab) hintNote = `這一站第 ${state.hintUses+1} 次指引（價格逐次提高）。會讓目前這一題的正確答案發出金光。`;
   else if(!(state.screen==='organ' || state.screen==='settlement')) hintNote = '只能在闖關或能量結算時使用。';
   else hintNote = `這道料理第 ${state.hintUses+1} 次指引（價格逐次提高）。會讓正確答案發出金光；計算熱量時則會寫出算式。`;
   return `
@@ -3795,10 +3802,12 @@ const LAB_DEF = {
       {icon:'🧪', name:'認識試劑', rules:['做實驗之前，先認識兩種檢驗用的試劑：碘液和本氏液。','回答它們「本來的顏色」和「反應後的顏色」。','最後依照葡萄糖由少到多，排出本氏液加熱後的顏色順序。'], how:'點選答案；排序題依序點選顏色球。'},
       {icon:'🟤', name:'碘液檢驗', rules:['跟著步驟看清楚：甲、乙、丙、丁四管各加入了什麼、放在幾度。','放置 10 分鐘後滴入碘液——試管會先顯示「？」。','一管一管推理：澱粉酶還有活性嗎？澱粉會被分解嗎？碘液會變色嗎？答對後才會揭曉真正的顏色。'], how:'按「下一步」看實驗步驟，再點選每一題的選項。'},
       {icon:'🔵', name:'本氏液檢驗', rules:['取同一批四管溶液，改用本氏液檢驗有沒有葡萄糖。','每管下方會顯示你在碘液檢驗的判斷和結果，可以當作線索。','記得本氏液要「隔水加熱」！加熱後試管會顯示「？」，再一管一管推理。'], how:'依照步驟按鈕操作，再點選每一題的選項。'},
-      {icon:'🏷️', name:'忘記標號', rules:['糟糕！助手把試管的標籤弄掉了，只留下碘液和本氏液的檢驗結果。','依照檢驗結果，判斷每一組結果分別來自甲、乙、丙、丁哪一支試管。'], how:'在每組結果下方點選它的試管編號。'}
+      {icon:'🏷️', name:'忘記標號', rules:['糟糕！助手把試管的標籤弄掉了，只留下碘液和本氏液的檢驗結果。','這次只有甲、丙、丁三管。依照檢驗結果，判斷每一組結果分別來自哪一支試管。'], how:'在每組結果下方點選它的試管編號。'}
     ]}
 };
 const LAB_MODES = ['tracker','potion'];
+/* 忘記標號只用甲、丙、丁：乙（清水）和丁（煮沸唾液）結果一樣，無法區分，所以拿掉乙 */
+const P3_IDS = ['甲','丙','丁'];
 
 function pTubeMap(){ const m = {}; POTION_TUBES.forEach(t=>{ m[t.id] = {}; }); return m; }
 function labNew(mode){
@@ -3812,7 +3821,7 @@ function labNew(mode){
     p0:{q:0, pick:null, pool:p0Pool(), seq:[]},
     p1:{step:'setup', si:0, sc:pTubeMap(), lock:pTubeMap(), cur:0, q:0, pick:null},
     p2:{step:'recap', sc:pTubeMap(), lock:pTubeMap(), cur:0, q:0, pick:null},
-    p3:{order:shuffled(POTION_TUBES.map(t=>t.id)), pick:{}, ok:{}}
+    p3:{order:shuffled(P3_IDS), pick:{}, ok:{}}
   };
 }
 function startLab(mode){
@@ -3822,6 +3831,7 @@ function startLab(mode){
   state.stats = {correct:0, total:0, speed:0};
   state.runEarned = 0; state.ending = null; state.clearedFoods = []; state.uploadStatus = null;
   state.lab = labNew(mode);
+  state.hintUses = 0; state.hintActive = false;
   const d = LAB_DEF[mode];
   setWizard(`歡迎來到${d.title.slice(2).trim()}！先看清楚規則，再開始挑戰。`, 'calm');
   render();
@@ -3833,7 +3843,7 @@ function labSt(){ return state.lab.station; }
 function labAnswer(ok, hint){
   const L = state.lab;
   if(!L.qWrong){ L.total++; if(ok) L.correct++; }
-  if(ok){ L.qWrong = false; earn(WU_POINT); return true; }
+  if(ok){ L.qWrong = false; state.hintActive = false; earn(WU_POINT); return true; }
   L.qWrong = true; L.mistakes++; L.stMistakes[L.station]++;
   openWrongModal('', 'labRetry', hint, {hideAnswer:true, noHp:true});
   return false;
@@ -3842,7 +3852,7 @@ function labAnswer(ok, hint){
 function labItems(items, hint){
   const L = state.lab; L.tried = L.tried || {};
   items.forEach(it=>{ if(!L.tried[it.key]){ L.tried[it.key] = true; L.total++; if(it.ok) L.correct++; } });
-  if(items.every(it=>it.ok)){ earn(WU_POINT * items.length); return true; }
+  if(items.every(it=>it.ok)){ state.hintActive = false; earn(WU_POINT * items.length); return true; }
   L.mistakes++; L.stMistakes[L.station]++;
   openWrongModal('', 'labRetry', hint, {hideAnswer:true, noHp:true});
   return false;
@@ -3863,6 +3873,7 @@ function labStationDone(msg){
 function labNext(){
   const L = state.lab;
   L.between = false; L.station++; L.rules = true;
+  state.hintUses = 0; state.hintActive = false;
   if(L.station >= LAB_DEF[L.mode].stations.length){ labFinish(); return; }
   setWizard('下一站！先看規則再開始。', 'calm');
   render(); window.scrollTo({top:0, behavior:'smooth'});
@@ -4150,7 +4161,7 @@ function pStep(step){
   } else {
     if(step === 'add' && s.step === 'recap'){ s.step = 'added'; setWizard('本氏液加好了，現在四管都是藍色。接下來要怎麼做？', 'calm'); render(); return; }
     if(step === 'look' && s.step === 'added'){ labStepMistake('本氏液必須「隔水加熱」，才會和葡萄糖反應變色喔！直接看是看不出差別的。'); return; }
-    if(step === 'heat' && s.step === 'added'){ s.step = 'heating'; render(); pLater(s, 'heating', 'scaffold', 2000, '加熱完成！試管裡變成什麼顏色了呢？先一管一管推理看看。'); return; }
+    if(step === 'heat' && s.step === 'added'){ state.hintActive = false; s.step = 'heating'; render(); pLater(s, 'heating', 'scaffold', 2000, '加熱完成！試管裡變成什麼顏色了呢？先一管一管推理看看。'); return; }
   }
 }
 function pSc(id, k, o){
@@ -4265,12 +4276,7 @@ function potionTestHtml(){
 
 /* ---------- 魔藥學 第 4 站：忘記標號 ---------- */
 function p3Pick(sample, id){ const s = state.lab.p3; if(s.ok[sample]) return; s.pick[sample] = id; render(); }
-/* 乙（清水）和丁（煮過的唾液）結果完全相同：兩組都可以填乙或丁，但兩組不能填一樣的 */
-function p3Match(i, pick){
-  const s = state.lab.p3, id = s.order[i];
-  if(id === '乙' || id === '丁') return pick === '乙' || pick === '丁';
-  return pick === id;
-}
+function p3Match(i, pick){ return pick === state.lab.p3.order[i]; }
 function p3Go(){
   const s = state.lab.p3;
   if(s.order.some((_,i)=>!s.ok[i] && !s.pick[i])){ setWizard('每一組結果都要選出試管編號喔！', 'calm'); refreshWizardDom(); return; }
@@ -4279,32 +4285,64 @@ function p3Go(){
   const wrong = s.order.map((_,i)=>i).filter(i=>!s.ok[i] && (!p3Match(i, s.pick[i]) || dup.includes(s.pick[i])));
   const items = s.order.map((_,i)=>i).filter(i=>!s.ok[i]).map(i=>({key:'p3:'+i, ok:!wrong.includes(i)}));
   s.order.forEach((_,i)=>{ if(!wrong.includes(i)) s.ok[i] = true; });
-  if(!wrong.length){ labItems(items); labStationDone('標籤全部找回來了！乙管（清水）和丁管（煮過的唾液）結果一模一樣：兩管的澱粉都沒有被分解。'); return; }
+  if(!wrong.length){ labItems(items); labStationDone('標籤全部找回來了！澱粉被分解得越多，碘液越不變色、本氏液越偏磚紅色。'); return; }
   let hint = '想想看：碘液藍黑色＝澱粉還在；本氏液磚紅色＝葡萄糖很多。丙管是「反應比較差」，顏色會介於中間。';
   if(dup.length) hint += '<br>每一支試管只會出現一次，不能有兩組選同一個編號喔！';
   labItems(items, hint);
 }
 function potionS3Html(){
   const s = state.lab.p3;
-  /* 乙、丁結果相同：任一個選對都算對 */
   const samples = s.order.map((id,i)=>{
     const t = POTION_TUBES.find(x=>x.id===id), ok = s.ok[i];
     return `<div class="lab-tcard sample${ok?' ok':''}">
       <div class="lab-pair">${tubeSvg(IODINE_COLORS[t.iodine], '碘', {k:'s'+i})}${tubeSvg(BENEDICT_COLORS[t.benedict], '本氏', {k:'b'+i})}</div>
       <div class="lab-tinfo"><b>第 ${'ABCD'[i]} 組</b><small>碘液：${t.iodine}<br>本氏液：${t.benedict}</small></div>
-      <div class="lab-chips">${POTION_TUBES.map(x=>`<button class="lab-chip${s.pick[i]===x.id?' on':''}" data-p3="${i}|${x.id}" ${ok?'disabled':''}>${x.id}</button>`).join('')}</div>
+      <div class="lab-chips">${P3_IDS.map(x=>`<button class="lab-chip${s.pick[i]===x?' on':''}" data-p3="${i}|${x}" ${ok?'disabled':''}>${x}</button>`).join('')}</div>
       ${ok?'<div class="lab-ok">✅</div>':''}
     </div>`;
   }).join('');
-  const key = POTION_TUBES.map(t=>`<li><b>${t.id}</b>：澱粉液 ＋ ${t.add}，${t.env}</li>`).join('');
+  const key = POTION_TUBES.filter(t=>P3_IDS.includes(t.id)).map(t=>`<li><b>${t.id}</b>：澱粉液 ＋ ${t.add}，${t.env}</li>`).join('');
   return `
     <div class="wu-title">🏷️ 第 4 站：忘記標號</div>
-    <div class="wu-desc">四組檢驗結果的標籤掉了！依照結果，選出每一組來自哪一支試管。（小提示：其中有兩組的結果一模一樣，想想看為什麼。）</div>
+    <div class="wu-desc">甲、丙、丁三管的檢驗結果標籤掉了！依照碘液和本氏液的結果，選出每一組來自哪一支試管。</div>
     <ul class="lab-key">${key}</ul>
-    <div class="lab-bench">${samples}</div>
+    <div class="lab-bench three">${samples}</div>
     <div class="btn-row"><button class="cast-btn" id="p3Go">🏷️ 確認配對！</button></div>`;
 }
 
+/* ---------- 實驗模式的「賢者的指引」：找出目前題目的正確選項 ---------- */
+function labHintSels(){
+  const L = state.lab; if(!L || L.rules || L.between) return [];
+  const st = L.station, out = [];
+  if(L.mode === 'tracker'){
+    if(st === 0){ LAB_NUT.forEach(n=>{ if(!L.t1.ok[n]) ['start','end'].forEach(k=>out.push(`[data-t1="${n}|${k}|${TRACK_ANS[n][k]}"]`)); }); }
+    else {
+      const s = L.t2;
+      if(!s.idOk) ['甲','乙','丙'].forEach(l=>out.push(`[data-t2id="${l}|${s.labels[l]}"]`));
+      else if(s.ev < DROP_EVENTS.length){ const ev = DROP_EVENTS[s.ev];
+        if(!s.bandOk) out.push(`.lg-band[data-band="${ev.organ}"]`);
+        else ev.juices.forEach(j=>out.push(`[data-t2j="${j}"]`)); }
+    }
+    return out;
+  }
+  if(st === 0){
+    const s = L.p0;
+    if(s.q < REAGENT_QS.length) out.push(`[data-p0o="${REAGENT_QS[s.q].ans}"]`);
+    else { const ans = '藍綠黃橙紅';
+      if(s.seq.length >= ans.length) return out;
+      if(s.seq.join('') !== ans.slice(0, s.seq.length)) out.push('#p0Clear');
+      else out.push(`.rg-ball[data-p0s="${ans[s.seq.length]}"]`); }
+  } else if(st === 1 || st === 2){
+    const s = pState();
+    if(s.step === 'added') out.push('[data-pstep="heat"]');
+    else if(s.step === 'scaffold'){ const t = POTION_TUBES[s.cur]; pRows().forEach(r=>{ if(!s.lock[t.id][r.k]) out.push(`[data-psc="${t.id}|${r.k}|${scAns(t, r)}"]`); }); }
+    else if(s.step === 'qa') out.push(`[data-pq="${pQs()[s.q].opts[0]}"]`);
+  } else {
+    const s = L.p3;
+    s.order.forEach((id,i)=>{ if(!s.ok[i]) out.push(`[data-p3="${i}|${id}"]`); });
+  }
+  return out;
+}
 /* ---------- 共用畫面 ---------- */
 function labHtml(tk){
   const L = state.lab, d = LAB_DEF[L.mode], st = L.station;
@@ -4354,6 +4392,7 @@ function labBind(){
   each('[data-psc]', b=>{ const [id,k,o] = b.dataset.psc.split('|'); pSc(id,k,o); });
   each('[data-pq]', b=>pQPick(b.dataset.pq));
   each('[data-p3]', b=>{ const [i,id] = b.dataset.p3.split('|'); p3Pick(+i,id); });
+  if(state.hintActive) labHintSels().forEach(sel=>document.querySelectorAll(sel).forEach(e=>e.classList.add('hint-glow')));
 }
 
 
