@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>人體地下城：消化魔法使的考驗</title>
+<title>黃金地下城 - 魔法屎的考驗</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -49,7 +49,7 @@ body{
 #bgStage{position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:0; transition:opacity .4s; overflow:hidden;}
 #bgStage.on{opacity:1;}
 #bgStage .bg-blur{position:absolute; inset:-60px; background-position:center; background-size:cover; filter:blur(24px) brightness(0.42) saturate(1.1);}
-#bgStage .bg-sharp{position:absolute; top:0; left:50%; transform:translateX(-50%); width:min(80vw, 1200px); aspect-ratio:16/9; max-height:100vh; background-position:top center; background-size:cover; background-repeat:no-repeat;
+#bgStage .bg-sharp{position:absolute; top:0; left:50%; transform:translateX(-50%); width:min(80vw, 1200px); aspect-ratio:16/9; max-height:100vh; max-height:100dvh; background-position:top center; background-size:cover; background-repeat:no-repeat;
   -webkit-mask-image:linear-gradient(to bottom, #000 72%, transparent 100%), linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%); -webkit-mask-composite:source-in; mask-image:linear-gradient(to bottom, #000 72%, transparent 100%), linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%); mask-composite:intersect;}
 @media(max-width:780px){#bgStage .bg-sharp{width:100%;}}
 #bgStage .bg-shade{position:absolute; inset:0; background:linear-gradient(rgba(10,7,11,0.12), rgba(10,7,11,0.42));}
@@ -336,7 +336,7 @@ button{font-family:inherit; cursor:pointer;}
 .calc-section-sub{font-size:12px; color:var(--muted); margin-bottom:10px;}
 .calc-scratch,.calc-row input{
   width:100%; background:#171113; border:2px solid rgba(217,178,95,0.25); color:var(--text);
-  padding:10px 12px; border-radius:10px; font-size:15px; line-height:1.6; font-family:'Noto Sans TC',sans-serif;
+  padding:10px 12px; border-radius:10px; font-size:16px; line-height:1.6; font-family:'Noto Sans TC',sans-serif;
 }
 .calc-scratch{resize:vertical;}
 .calc-scratch:focus,.calc-row input:focus{outline:none; border-color:var(--gold);}
@@ -509,7 +509,7 @@ button{font-family:inherit; cursor:pointer;}
 .calc-row .unit{align-self:center; color:var(--muted); font-weight:700;}
 
 /* ---------- 暖身關：見習營地 ---------- */
-.wu-panel{padding-top:18px; overflow:clip;}
+.wu-panel{padding-top:18px; overflow:visible;}
 .wu-head{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;}
 .wu-steps{display:flex; gap:6px; flex-wrap:wrap;}
 .wu-step{font-size:12.5px; font-weight:700; padding:5px 10px; border-radius:999px; background:rgba(0,0,0,0.35); border:1px solid rgba(217,178,95,0.2); color:var(--muted);}
@@ -609,8 +609,8 @@ button.wu-member:active{transform:scale(0.96);}
 .wu-node{border-radius:12px; padding:10px 12px; background:#2b2224; border:3px solid rgba(217,178,95,0.35); text-align:center; font-size:15px; position:relative;}
 .wu-node b{font-size:16px;}
 .wu-node small{display:block; color:var(--muted); font-size:12px;}
-.wu-node.src,.wu-node.mid,.wu-node.juice{border-color:var(--c); box-shadow:0 0 12px color-mix(in srgb, var(--c) 40%, transparent);}
-.wu-node.juice{background:color-mix(in srgb, var(--c) 18%, #2b2224);}
+.wu-node.src,.wu-node.mid,.wu-node.juice{border-color:var(--c); box-shadow:0 0 12px rgba(0,0,0,0.45); box-shadow:0 0 12px color-mix(in srgb, var(--c) 40%, transparent);}
+.wu-node.juice{background:#3a2c30; background:color-mix(in srgb, var(--c) 18%, #2b2224);}
 .wu-node.done{opacity:0.55;}
 @media(max-width:700px){.wu-pipes .wu-col.mid{padding-left:4px;} .wu-gb-note{display:none;} .wu-pipe-head{grid-template-columns:1fr 10px 1fr 0.9fr 1fr; gap:0 8px;} .wu-ph-arrow{margin:0 -8px;} .wu-col.gl,.wu-col.ju{padding-bottom:50px;} .wu-pipe{stroke-width:3.5;} .wu-col.mid{padding-left:4px;} .wu-node.mid{white-space:nowrap; padding:8px 2px;} .wu-pipes{grid-template-columns:1fr 10px 1fr 0.9fr 1fr; gap:0 8px;} .wu-node{padding:8px 3px; font-size:12px; border-width:2px;} .wu-node b{font-size:13px;} .wu-pipe-tag{display:none;} .wu-ph-title{font-size:13px; padding:5px 4px;} .wu-ph-arrow{font-size:11px;} .wu-ph-arrow span{font-size:18px;} .wu-pipe-head{gap:4px;} .wu-gb-note{font-size:10.5px;}}
 
@@ -733,6 +733,100 @@ button.wu-member:active{transform:scale(0.96);}
 @media(max-width:700px){.wu-dgs{grid-template-columns:repeat(4, 1fr);}}
 .wu-dg{background:linear-gradient(180deg,#3a2e30,#272022); border:2px solid rgba(217,178,95,0.3); color:var(--text); border-radius:10px; padding:14px 4px; font-size:16px; font-weight:800; font-family:inherit; cursor:pointer;}
 .wu-dg.on{border-color:var(--gold-hi); background:rgba(217,178,95,0.18);}
+
+/* ---------- iPad / 觸控裝置修正 ---------- */
+/* 全頁取消「點兩下放大」（雙指縮放仍可用），按鈕不會有延遲 */
+html{touch-action:manipulation; -webkit-text-size-adjust:100%;}
+/* 長按圖片、拖曳物件時，不跳出「儲存圖片／拷貝」選單，也不會反白文字 */
+[data-drag],[data-drop],[data-member],[data-dg],[data-topt],.wu-panel img,.wu-map,.showcase,.pic img,.diff-card,.pcard,.opt-btn,.match-opt,.chk-pill{
+  -webkit-touch-callout:none; -webkit-user-select:none; user-select:none;}
+img{-webkit-user-drag:none;}
+/* 觸控裝置沒有滑鼠，點過的卡片不要一直停在「滑過」的樣子；毛玻璃減輕，舊 iPad 才不會卡 */
+@media (hover:none){
+  .diff-card:hover{transform:none;}
+  .opt-btn:hover:not(:disabled){border-color:rgba(217,178,95,0.25); box-shadow:none;}
+  .diff-card.has-img::after{display:none;}
+  .panel{-webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px);}
+  button.wu-member:hover{border-color:rgba(217,178,95,0.3); box-shadow:none;}
+}
+
+/* ---------- 研究型關卡（魔物追蹤所／魔藥學教室） ---------- */
+.lab-prog{font-family:'Noto Sans TC',sans-serif; font-size:13px; color:var(--muted); margin-left:8px; text-shadow:none;}
+.lab-chips{display:flex; flex-wrap:wrap; gap:6px;}
+.lab-chips.big .lab-chip{padding:12px 18px; font-size:16px;}
+.lab-chips.col{flex-direction:column; align-items:stretch;}
+.lab-chip{background:linear-gradient(180deg,#3a2e30,#272022); border:2px solid rgba(217,178,95,0.3); color:var(--text); border-radius:9px; padding:8px 11px; font-size:14px; font-weight:800; font-family:inherit; cursor:pointer;}
+.lab-chip.on{border-color:var(--gold-hi); background:rgba(217,178,95,0.2); color:var(--gold-hi);}
+.lab-chip:disabled{cursor:default; opacity:0.75;}
+.lab-chip.sw{display:flex; align-items:center; gap:6px; padding:6px 8px; font-size:13px;}
+.lab-chip.sw i{width:16px; height:16px; border-radius:50%; border:1px solid rgba(255,255,255,0.5); flex-shrink:0;}
+.lab-row{display:flex; align-items:center; gap:12px; margin:6px 0;}
+.lab-row > b{font-size:18px; min-width:26px;}
+.lab-ok{font-size:20px;}
+.wu-tq small{display:block; font-size:12.5px; color:var(--muted); font-weight:500; margin-top:2px;}
+.wu-tq.center{text-align:center;}
+/* 魔物追蹤 */
+.lab-track{display:grid; grid-template-columns:150px 1fr; grid-template-rows:auto auto; gap:6px 14px; align-items:center; background:rgba(0,0,0,0.3); border:1px solid rgba(217,178,95,0.25); border-radius:12px; padding:10px 12px; margin-bottom:10px;}
+.lab-track.ok{border-color:var(--green); background:rgba(76,195,138,0.1);}
+.lab-track-mon{grid-row:1 / 3; display:flex; flex-direction:column; align-items:center; text-align:center; gap:2px; position:relative;}
+.lab-track-mon .mon-pic{width:72px; height:72px; font-size:36px;}
+.lab-track-mon small{color:var(--muted);}
+.lab-track-mon .lab-ok{position:absolute; top:-4px; right:6px;}
+.lab-track-q{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.lab-track-q > span{font-weight:800; color:var(--gold-hi); min-width:92px;}
+@media(max-width:700px){ .lab-track{grid-template-columns:1fr;} .lab-track-mon{grid-row:auto; flex-direction:row; gap:8px;} .lab-track-mon .mon-pic{width:48px; height:48px; font-size:24px;} .lab-track-q > span{min-width:0; width:100%;} }
+/* 曲線圖 */
+.lg-wrap{background:rgba(0,0,0,0.35); border:1px solid rgba(217,178,95,0.25); border-radius:12px; padding:8px 8px 2px; margin:6px 0 14px;}
+.lg-legend{display:flex; flex-wrap:wrap; gap:6px 16px; justify-content:center; font-size:14px; font-weight:800; margin-bottom:2px;}
+.lg-leg{display:flex; align-items:center; gap:6px;}
+.lg-leg.dim{opacity:0.4;}
+.lg-leg i{display:inline-block; width:26px; height:5px; border-radius:3px;}
+.lg-svg{width:100%; height:auto; display:block; touch-action:manipulation;}
+.lg-band{opacity:0.16;}
+.lg-band.click{cursor:pointer;}
+.lg-band.click:hover{opacity:0.32;}
+.lg-band.sel{opacity:0.45; stroke:#ff8f86; stroke-width:3;}
+.lg-band.ok{opacity:0.5; stroke:var(--gold-hi); stroke-width:3;}
+.lg-div{stroke:#d9b25f; stroke-opacity:0.5; stroke-dasharray:4 4;}
+.lg-grid{stroke:#fff; stroke-opacity:0.07;}
+.lg-organ{fill:#efe4cc; font-size:15px; font-weight:800;}
+@media(max-width:639px){.lg-organ{font-size:14px;} .lg-axis{font-size:12px;} .lg-legend{font-size:13px;}}
+.lg-axis{fill:#a8977c; font-size:13px;}
+.lab-mol{width:28px; height:28px; border-radius:50%; font-size:18px; vertical-align:middle; margin-left:4px;}
+/* 試管 */
+.lab-bench{display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin:6px 0 12px;}
+@media(max-width:700px){.lab-bench{grid-template-columns:repeat(2, 1fr);}}
+.lab-tcard{position:relative; display:flex; flex-direction:column; align-items:center; gap:6px; background:rgba(0,0,0,0.3); border:1px solid rgba(217,178,95,0.25); border-radius:12px; padding:10px 8px; text-align:center;}
+.lab-tcard.ok{border-color:var(--green);}
+.lab-tcard > .lab-ok{position:absolute; top:6px; right:8px;}
+.lab-tube{display:flex; flex-direction:column; align-items:center;}
+.lab-tube-svg{width:52px; height:auto;}
+.lab-tube-label{font-family:'Noto Serif TC',serif; font-weight:900; font-size:18px; color:var(--gold-hi); margin-top:-2px;}
+.lab-liquid{transition:fill 1.2s ease;}
+.lab-tube.shake .lab-tube-svg{animation:tubeShake .5s ease-in-out infinite;}
+@keyframes tubeShake{0%,100%{transform:rotate(-3deg);} 50%{transform:rotate(3deg);}}
+.lab-bub{animation:bub 1.2s ease-in infinite;} .lab-bub.b2{animation-delay:.5s;}
+@keyframes bub{from{transform:translateY(0); opacity:1;} to{transform:translateY(-40px); opacity:0;}}
+.lab-tinfo b{display:block; font-size:14px;}
+.lab-tinfo small{display:block; color:var(--muted); font-size:12.5px; line-height:1.5;}
+.lab-result{font-weight:900; font-size:16px; color:var(--gold-hi);}
+.lab-result small{display:block; font-weight:500; font-size:12px; color:var(--muted);}
+.lab-pair{display:flex; gap:4px;}
+.lab-pair .lab-tube-svg{width:40px;}
+.lab-pair .lab-tube-label{font-size:13px;}
+.lab-key{margin:0 0 10px; padding-left:20px; font-size:14px; line-height:1.8; background:rgba(0,0,0,0.25); border-radius:10px; padding:8px 12px 8px 30px;}
+.lab-key b{color:var(--gold-hi);}
+.diff-grid.five{grid-template-columns:repeat(6, 1fr);}
+.diff-grid.five > .diff-card{grid-column:span 2;}
+.diff-grid.five > .diff-card:nth-child(4){grid-column:2 / span 2;}
+.diff-grid.five > .diff-card:nth-child(5){grid-column:4 / span 2;}
+@media(max-width:780px){.diff-grid.five{grid-template-columns:1fr;} .diff-grid.five > .diff-card,.diff-grid.five > .diff-card:nth-child(4),.diff-grid.five > .diff-card:nth-child(5){grid-column:auto;}}
+.diff-card.track{border-color:rgba(111,156,255,0.6);}
+.track .diff-tag{background:rgba(111,156,255,0.2); color:#a9c4ff;}
+.diff-card.potion{border-color:rgba(176,124,255,0.6);}
+.potion .diff-tag{background:rgba(176,124,255,0.2); color:#d4b2ff;}
+.diff-card.track.has-img:hover .diff-img{filter:drop-shadow(0 0 16px rgba(111,156,255,0.7));}
+.diff-card.potion.has-img:hover .diff-img{filter:drop-shadow(0 0 16px rgba(176,124,255,0.7));}
 </style>
 </head>
 <body>
@@ -761,12 +855,21 @@ const ASSETS = {
     large:     'bg_large.jpg',     // 汲水深淵（大腸）
     anus:      'bg_anus.jpg',      // 終焉之門（肛門）
     settle:    'bg_settle.jpg',    // 能量煉成陣、營火休息站
-    warmup:    'bg_warmup.jpg'     // 見習營地（暖身關）
+    warmup:    'bg_warmup.jpg',    // 見習營地（暖身關）
+    tracker:   'bg_tracker.jpg',   // 魔物追蹤所
+    potion:    'bg_potion.jpg'     // 魔藥學教室
   },
   difficultyCards: {           // 大廳的難度圖卡按鈕（兩張請用相同比例，建議 4:3，例如 800×600）
-    basic:    'card_basic.png',    // 見習魔法使（新手）
-    advanced: 'card_advanced.png', // 大魔導士（資深）
-    warmup:   'card_warmup.png'    // 見習營地（暖身）
+    basic:    'card_basic.png',    // 見習魔法屎（新手）
+    advanced: 'card_advanced.png', // 大魔導屎（資深）
+    warmup:   'card_warmup.png',   // 見習營地（暖身）
+    tracker:  'card_tracker.png',  // 魔物追蹤所
+    potion:   'card_potion.png'    // 魔藥學教室
+  },
+  molecules: {                 // 小分子精靈（可以不做，沒有圖會用表情符號）
+    glucose: 'molecule_glucose.png',  // 葡萄糖
+    amino:   'molecule_amino.png',    // 胺基酸
+    fatty:   'molecule_fatty.png'     // 脂肪酸和甘油
   },
   monsters: {                  // 分子魔物圖（建議正方形）
     carbs:   'monster_carbs.png',    // 醣類史萊姆
@@ -896,8 +999,8 @@ const CARDS = [
     desc:'只是一團綠色毒氣，什麼都沒拉出來。', tip:'💨 通關但正確率低於 50% 時獲得。'},
   {id:'curse_diarrhea', rarity:'CURSE', name:'水行俠的腹瀉（泥石流魔法陣）', emoji:'🌊',
     desc:'失控的泥石流魔法陣，一發不可收拾。', tip:'☠️ HP 歸零（冒險失敗）時必得。'},
-  {id:'ur_rainbow', rarity:'UR', name:'三界制霸・七彩神龍便', emoji:'🐉',
-    desc:'盤旋而上的七彩神龍便，只有走完三條修行之路的魔法使才能召喚。', tip:'🏆 見習營地、見習魔法使、大魔導士都通關一次即可獲得（每人限一張）。'}
+  {id:'ur_rainbow', rarity:'UR', name:'五界制霸・七彩神龍便', emoji:'🐉',
+    desc:'盤旋而上的七彩神龍便，只有走完五條修行之路的魔法屎才能召喚。', tip:'🏆 見習營地、見習魔法屎、大魔導屎、魔物追蹤所、魔藥學教室都通關一次即可獲得（每人限一張）。'}
 ];
 const RARITY_LABEL = {UR:'UR', SSR:'SSR', SR:'SR', R:'R', N:'N', CURSE:'詛咒'};
 const RARITY_GROUP = [
@@ -920,6 +1023,8 @@ const THEMES = {
   anus:      {rgb:'176,124,255', fx:'rune', kind:'spark',  n:10},
   settle:    {rgb:'255,157,92',  fx:'rise', kind:'spark',  n:14},
   warmup:    {rgb:'255,190,90',  fx:'rise', kind:'spark',  n:10},
+  tracker:   {rgb:'111,156,255', fx:'rise', kind:'spark',  n:10},
+  potion:    {rgb:'176,124,255', fx:'rise', kind:'bubble', n:12},
   hall:      {rgb:'217,178,95',  fx:'rise', kind:'spark',  n:10},
   curse:     {rgb:'224,87,79',   fx:'fall', kind:'drip',   n:12}
 };
@@ -936,7 +1041,7 @@ const SHOP = {
   largeHeart:{price:400, heal:2},
   hintPrices:[100,150,200]
 };
-const PRAISE = ['幹得好！這道咒文施展得漂亮。','不愧是老夫看中的魔法使！','精準的一擊，魔物應聲倒地！','呵呵，你對消化之道越來越熟練了。'];
+const PRAISE = ['幹得好！這道咒文施展得漂亮。','不愧是老夫看中的魔法屎！','精準的一擊，魔物應聲倒地！','呵呵，你對消化之道越來越熟練了。'];
 const CODEX_KEY = 'humanDungeonPoopCodex_v2';
 const PLAYER_KEY = 'humanDungeonPlayer_v1';
 const PENDING_KEY = 'humanDungeonPending_v1';
@@ -959,7 +1064,7 @@ function freshState(player){
     glandShuffled:null, speedEligible:true, timerPct:100,
     settleStep:'select', settleItems:[], settleCounted:{select:false, calc:false}, kcalDone:false,
     stats:{correct:0, total:0, speed:0}, runEarned:0,
-    wizard:{text:'年輕的魔法使啊，歡迎來到人體地下城。選擇你的修行之路，老夫會一路指引你。', mood:'calm'},
+    wizard:{text:'年輕的魔法屎啊，歡迎來到黃金地下城。選擇你的修行之路，老夫會一路指引你。', mood:'calm'},
     ending:null
   };
 }
@@ -1014,9 +1119,9 @@ let state = freshState();
   if(rem){
     state.loginConfirm = rem;
     state.loginDraft = {...rem};
-    state.wizard = {text:'咦？這張臉老夫好像見過。是你嗎，年輕的魔法使？', mood:'calm'};
+    state.wizard = {text:'咦？這張臉老夫好像見過。是你嗎，年輕的魔法屎？', mood:'calm'};
   } else {
-    state.wizard = {text:'年輕的魔法使啊，踏入地下城之前，先報上你的名號吧。老夫會記住你的冒險紀錄。', mood:'calm'};
+    state.wizard = {text:'年輕的魔法屎啊，踏入地下城之前，先報上你的名號吧。老夫會記住你的冒險紀錄。', mood:'calm'};
   }
 })();
 let timerHandle = null;
@@ -1173,7 +1278,7 @@ function submitLoginForm(){
   }
   state.loginError = '';
   state.loginConfirm = r.player;
-  setWizard('報上名號了嗎？確認一下，寫錯的話會變成另一位魔法使喔！', 'calm');
+  setWizard('報上名號了嗎？確認一下，寫錯的話會變成另一位魔法屎喔！', 'calm');
   render();
 }
 function editLogin(){
@@ -1223,7 +1328,7 @@ function switchPlayer(){
   stopWuClock();
   forget();
   state = freshState();
-  setWizard('換人上陣了嗎？新的魔法使，報上你的名號吧。', 'calm');
+  setWizard('換人上陣了嗎？新的魔法屎，報上你的名號吧。', 'calm');
   render();
 }
 let schoolsLoaded = false;
@@ -1502,7 +1607,7 @@ let wrongCountdown = null;
 function wrongReady(){ return !state.wrongModal || Date.now() >= state.wrongModal.readyAt; }
 function wrongBtnLabel(){
   const w = state.wrongModal;
-  return state.screen === 'ending' ? '面對結局……' : w.action === 'retrySettle' ? '🔁 重新詠唱' : w.action === 'retryQuestion' ? '🔁 再試一次' : '⚔️ 重整旗鼓，繼續前進';
+  return state.screen === 'ending' ? '面對結局……' : w.action === 'retrySettle' ? '🔁 重新詠唱' : (w.action === 'retryQuestion' || w.action === 'labRetry') ? '🔁 再試一次' : '⚔️ 重整旗鼓，繼續前進';
 }
 function startWrongCountdown(){
   clearInterval(wrongCountdown);
@@ -1525,7 +1630,10 @@ function closeWrongModal(){
   const action = state.wrongModal ? state.wrongModal.action : null;
   state.wrongModal = null;
   if(state.screen === 'ending'){ render(); return; }
-  if(action === 'retryQuestion'){
+  if(action === 'labRetry'){
+    setWizard('看完提示了嗎？再試一次，答對才能前進喔！', 'calm');
+    render();
+  } else if(action === 'retryQuestion'){
     state.answered = false;
     setWizard('看完提示了嗎？再試一次，答對才能前進喔！', 'calm');
     render(); startTimer();
@@ -1617,9 +1725,11 @@ function randomCardOf(rarity){ return pickOne(CARDS.filter(c=>c.rarity===rarity)
 const DROP_TABLES = {
   warmup:  {S:{n:1, t:[['SSR',10],['SR',50],['R',40]]}, A:{n:1, t:[['SR',30],['R',70]]}, B:{n:1, t:[['R',100]]}},
   basic:   {S:{n:2, t:[['SSR',15],['SR',55],['R',30]]}, A:{n:1, t:[['SR',50],['R',50]]}, B:{n:1, t:[['R',100]]}},
-  advanced:{S:{n:2, t:[['SSR',40],['SR',45],['R',15]]}, A:{n:1, t:[['SSR',10],['SR',50],['R',40]]}, B:{n:1, t:[['SR',20],['R',80]]}}
+  advanced:{S:{n:2, t:[['SSR',40],['SR',45],['R',15]]}, A:{n:1, t:[['SSR',10],['SR',50],['R',40]]}, B:{n:1, t:[['SR',20],['R',80]]}},
+  tracker: {S:{n:2, t:[['SSR',15],['SR',55],['R',30]]}, A:{n:1, t:[['SR',50],['R',50]]}, B:{n:1, t:[['R',100]]}},
+  potion:  {S:{n:2, t:[['SSR',15],['SR',55],['R',30]]}, A:{n:1, t:[['SR',50],['R',50]]}, B:{n:1, t:[['R',100]]}}
 };
-const ALL_MODES = ['warmup','basic','advanced'];
+const ALL_MODES = ['warmup','basic','advanced','tracker','potion'];
 const MODES_KEY = 'humanDungeonModes_v1';
 function modesKey(){ return MODES_KEY + ':' + (state.player ? state.player.id : 'guest'); }
 function loadModes(){ try{ return JSON.parse(localStorage.getItem(modesKey())) || []; }catch(e){ return []; } }
@@ -1644,7 +1754,7 @@ function finishRun(type){
     }
   }
   const codex = loadCodex();
-  /* 三界制霸：三種模式都通關過一次，就送 UR 卡（每人一張） */
+  /* 五界制霸：五種模式都通關過一次，就送 UR 卡（每人一張） */
   let urUnlocked = false;
   if(type === 'clear'){
     const modes = loadModes();
@@ -1676,9 +1786,9 @@ function finishRun(type){
     C:'唉，魔物大多從你指縫溜走了……結果只拉出了一團氣。',
     X:'生命耗盡……整座地下城被泥石流淹沒了。年輕人，重新來過吧！'
   };
-  setWizard(mode === 'warmup' ? '暖身完成！看看你四站的成績，準備好就去挑戰見習魔法使或大魔導士吧。' : words[grade], grade==='X'||(grade==='C' && mode!=='warmup') ? 'sad' : 'happy');
+  setWizard(mode === 'warmup' ? '暖身完成！看看你四站的成績，準備好就去挑戰見習魔法屎或大魔導屎吧。' : words[grade], grade==='X'||(grade==='C' && mode!=='warmup') ? 'sad' : 'happy');
   state.ending = {type, grade, acc, cards, urUnlocked, mode};
-  if(urUnlocked) setWizard('天啊……三條修行之路你全部走完了！七彩神龍便從天而降，這可是傳說中的傳說！', 'happy');
+  if(urUnlocked) setWizard('天啊……五條修行之路你全部走完了！七彩神龍便從天而降，這可是傳說中的傳說！', 'happy');
   state.hintActive = false;
   state.screen = 'ending';
 }
@@ -1725,17 +1835,18 @@ function restartGame(){
   const p = state.player, online = state.online;
   state = freshState(p);
   state.online = online;
-  setWizard('從泥石流中爬起來了嗎？很好，真正的魔法使不會被一次腹瀉打倒。再選一次修行之路吧！', 'calm');
+  setWizard('從泥石流中爬起來了嗎？很好，真正的魔法屎不會被一次腹瀉打倒。再選一次修行之路吧！', 'calm');
   render();
-  showStageIntro(ASSETS.background.lobby, 'HUMAN DUNGEON', '🏰 人體地下城', '選擇你的修行之路');
+  showStageIntro(ASSETS.background.lobby, 'GOLDEN DUNGEON', '🏰 黃金地下城', '選擇你的修行之路');
 }
 function backToHall(){
   stopWuClock();
+  state.lab = null;
   state.screen = 'menu';
   state.ending = null;
-  setWizard('歡迎回來，魔法使。休息夠了就再挑戰一次吧，說不定能拉出傳說中的黃金便便。', 'calm');
+  setWizard('歡迎回來，魔法屎。休息夠了就再挑戰一次吧，說不定能拉出傳說中的黃金便便。', 'calm');
   render();
-  showStageIntro(ASSETS.background.lobby, 'HUMAN DUNGEON', '🏰 人體地下城', '選擇你的修行之路');
+  showStageIntro(ASSETS.background.lobby, 'GOLDEN DUNGEON', '🏰 黃金地下城', '選擇你的修行之路');
 }
 
 /* =========================================================
@@ -1743,6 +1854,7 @@ function backToHall(){
    ========================================================= */
 function themeKey(){
   if(state.screen === 'warmup') return 'warmup';
+  if(state.screen === 'lab') return state.lab.mode;
   if(state.screen === 'organ') return currentOrgan().key;
   if(state.screen === 'settlement' || state.screen === 'intermission') return 'settle';
   if(state.screen === 'ending') return state.ending && state.ending.grade === 'X' ? 'curse' : 'hall';
@@ -1752,6 +1864,7 @@ function themeKey(){
 /* 每個關卡用自己的底圖；圖片確定載入成功才換上，並把暗色遮罩調淡讓圖片看得見 */
 function bgKey(){
   if(state.screen === 'warmup') return 'warmup';
+  if(state.screen === 'lab') return state.lab.mode;
   if(state.screen === 'organ') return currentOrgan().key;
   if(state.screen === 'settlement' || state.screen === 'intermission') return 'settle';
   return 'lobby';
@@ -1785,7 +1898,7 @@ function render(){
   document.documentElement.style.setProperty('--trgb', THEMES[tk].rgb);
   setBackground(ASSETS.background[bgKey()]);
 
-  const showMap = !['ending','login','warmup'].includes(state.screen);
+  const showMap = !['ending','login','warmup','lab'].includes(state.screen);
   const app = document.getElementById('app');
   app.innerHTML =
     topBarHtml() +
@@ -1829,9 +1942,9 @@ function topBarHtml(){
     <div class="brand">
       <div class="brand-emblem">🧙</div>
       <div>
-        <span class="en">HUMAN DUNGEON</span>
-        <h1>人體地下城</h1>
-        <span class="sub">消化魔法使的考驗 · 蔡譯禎老師設計</span>
+        <span class="en">GOLDEN DUNGEON</span>
+        <h1>黃金地下城</h1>
+        <span class="sub">魔法屎的考驗 · 蔡譯禎老師設計</span>
       </div>
     </div>
     ${state.screen === 'login' ? '' : `
@@ -1887,26 +2000,26 @@ function loginHtml(tk){
     <div class="form-grid">
       <div class="field full">
         <label for="inSchool">學校</label>
-        <input id="inSchool" list="schoolList" autocomplete="off" maxlength="30" placeholder="例：雙園國中" value="${val('school')}">
+        <input id="inSchool" autocorrect="off" autocapitalize="off" spellcheck="false" list="schoolList" autocomplete="off" maxlength="30" placeholder="例：雙園國中" value="${val('school')}">
         <datalist id="schoolList">${SCHOOL_CACHE.map(s=>`<option value="${escapeHtml(s)}"></option>`).join('')}</datalist>
         <small>同校同學請寫成一樣的名稱，可以從下拉建議中選</small>
       </div>
       <div class="field">
         <label for="inCls">班級</label>
-        <input id="inCls" maxlength="10" autocomplete="off" inputmode="numeric" placeholder="例：801" value="${val('cls')}">
+        <input id="inCls" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="10" autocomplete="off" inputmode="numeric" placeholder="例：801" value="${val('cls')}">
       </div>
       <div class="field">
         <label for="inSeat">座號</label>
-        <input id="inSeat" maxlength="4" autocomplete="off" inputmode="numeric" placeholder="例：12" value="${val('seat')}">
+        <input id="inSeat" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="4" autocomplete="off" inputmode="numeric" placeholder="例：12" value="${val('seat')}">
       </div>
       <div class="field">
         <label for="inSurname">姓</label>
-        <input id="inSurname" maxlength="5" autocomplete="off" placeholder="例：王" value="${val('surname')}">
+        <input id="inSurname" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="5" autocomplete="off" placeholder="例：王" value="${val('surname')}">
         <small>複姓請完整填寫，例如「歐陽」</small>
       </div>
       <div class="field">
         <label for="inGiven">名</label>
-        <input id="inGiven" maxlength="10" autocomplete="off" placeholder="例：小明" value="${val('given')}">
+        <input id="inGiven" autocorrect="off" autocapitalize="off" spellcheck="false" maxlength="10" autocomplete="off" placeholder="例：小明" value="${val('given')}">
       </div>
     </div>
     <div class="form-error">${escapeHtml(state.loginError)}</div>
@@ -1917,8 +2030,8 @@ function loginHtml(tk){
 
 /* ---------- 排行榜視窗 ---------- */
 const LEADER_TABS = [
-  {key:'basic', label:'🟢 見習魔法使榜', unit:'熱魔力', title:'單場最高熱魔力'},
-  {key:'advanced', label:'🔴 大魔導士榜', unit:'熱魔力', title:'單場最高熱魔力'},
+  {key:'basic', label:'🟢 見習魔法屎榜', unit:'熱魔力', title:'單場最高熱魔力'},
+  {key:'advanced', label:'🔴 大魔導屎榜', unit:'熱魔力', title:'單場最高熱魔力'},
   {key:'warmup', label:'🏕️ 暖身最快榜', unit:'', title:'最快通關時間'},
   {key:'codex', label:'📖 圖鑑收集榜', unit:'種', title:'收集種類'}
 ];
@@ -1928,7 +2041,7 @@ function leaderHtml(){
   const tabs = LEADER_TABS.map(t=>`<button class="tab ${t.key===state.leaderTab?'on':''}" data-tab="${t.key}">${t.label}</button>`).join('');
   let body;
   if(state.leaderStatus === 'offline') body = `<div class="lb-msg">📴 離線模式沒有排行榜。<br>請老師在遊戲檔案裡設定雲端網址。</div>`;
-  else if(state.leaderStatus === 'loading') body = `<div class="lb-msg">🔮 老夫正在用水晶球窺探各地魔法使的戰績……</div>`;
+  else if(state.leaderStatus === 'loading') body = `<div class="lb-msg">🔮 老夫正在用水晶球窺探各地魔法屎的戰績……</div>`;
   else if(state.leaderStatus === 'error') body = `<div class="lb-msg">⚠️ 水晶球暫時看不清楚（連不上雲端）。<br>請稍後再打開排行榜試試。</div>`;
   else {
     const b = state.leaderData.boards[tab.key] || {top:[], me:null, count:0};
@@ -1936,7 +2049,7 @@ function leaderHtml(){
     let mine;
     if(!state.player) mine = '';
     else if(me) mine = `<div class="my-rank">🧙 你目前是第 <b>${me.rank}</b> 名（共 ${b.count} 人）・${tab.title} <b>${lbValue(tab.key, me.value)}</b> ${tab.unit}${tab.key==='codex' ? `・卡片共 ${me.extra} 張` : ''}</div>`;
-    else mine = `<div class="my-rank">🧙 你還沒有上榜。${tab.key==='codex' ? '完成一場冒險拿到便便卡就會上榜！' : `成功通關一場「${{basic:'見習魔法使', advanced:'大魔導士', warmup:'見習營地'}[tab.key]}」就會上榜！`}</div>`;
+    else mine = `<div class="my-rank">🧙 你還沒有上榜。${tab.key==='codex' ? '完成一場冒險拿到便便卡就會上榜！' : `成功通關一場「${{basic:'見習魔法屎', advanced:'大魔導屎', warmup:'見習營地'}[tab.key]}」就會上榜！`}</div>`;
     const rows = b.top.map(r=>`
       <tr class="${r.me?'me ':''}${r.rank<=3?'top'+r.rank:''}">
         <td class="rk">${r.rank<=3 ? ['🥇','🥈','🥉'][r.rank-1] : r.rank}</td>
@@ -1944,7 +2057,7 @@ function leaderHtml(){
         <td class="num">${lbValue(tab.key, r.value)}${tab.key==='codex' ? ` <small style="color:var(--muted);font-family:'Noto Sans TC';font-weight:500">/ ${r.extra} 張</small>` : ''}</td>
       </tr>`).join('');
     body = mine + (b.top.length
-      ? `<table class="lb-table"><thead><tr><th>名次</th><th>魔法使</th><th class="num">${tab.key==='codex'?'種類':'熱魔力'}</th></tr></thead><tbody>${rows}</tbody></table>`
+      ? `<table class="lb-table"><thead><tr><th>名次</th><th>魔法屎</th><th class="num">${tab.key==='codex'?'種類':'熱魔力'}</th></tr></thead><tbody>${rows}</tbody></table>`
       : `<div class="lb-empty">還沒有人登上這個排行榜，搶下第一名吧！</div>`);
   }
   const note = state.leaderTab === 'codex'
@@ -1955,7 +2068,7 @@ function leaderHtml(){
   return `
   <div class="modal-overlay" id="leaderOverlay">
     <div class="modal panel wide">
-      <div class="modal-head"><h3>🏆 魔法使排行榜</h3><button class="close-x" id="closeLeader">✕</button></div>
+      <div class="modal-head"><h3>🏆 魔法屎排行榜</h3><button class="close-x" id="closeLeader">✕</button></div>
       <div class="tabs">${tabs}</div>
       ${body}
       <div class="lb-note">${note}<br>為保護個人資料，排行榜只顯示姓氏。顯示前 50 名。</div>
@@ -2029,6 +2142,7 @@ function screenHtml(tk){
   if(state.screen === 'login') return loginHtml(tk);
   if(state.screen === 'menu') return menuHtml(tk);
   if(state.screen === 'warmup') return warmupHtml(tk);
+  if(state.screen === 'lab') return labHtml(tk);
   if(state.screen === 'organ') return organHtml(tk);
   if(state.screen === 'settlement') return settlementHtml(tk);
   if(state.screen === 'intermission') return intermissionHtml(tk);
@@ -2038,7 +2152,7 @@ function screenHtml(tk){
 
 /* ---------- 大廳 ---------- */
 function diffCardHtml(cls, id, label, textHtml){
-  const src = ASSETS.difficultyCards[{basic:'basic', adv:'advanced', warm:'warmup'}[cls]];
+  const src = ASSETS.difficultyCards[{basic:'basic', adv:'advanced', warm:'warmup', track:'tracker', potion:'potion'}[cls]];
   const hasImg = src && !BAD_IMG.has(src);
   const img = hasImg
     ? `<img class="diff-img" src="${src}" alt="${label}" onerror="BAD_IMG.add('${src}'); this.closest('.diff-card').classList.remove('has-img'); this.remove();">`
@@ -2051,42 +2165,53 @@ function menuHtml(tk){
     ${fxHtml(tk)}
     <div class="menu-hero">
       <div class="crest">🏰</div>
-      <h2>踏入人體地下城</h2>
+      <h2>踏入黃金地下城</h2>
       <p>每場冒險會召喚 <b>${DISHES_PER_RUN} 道魔物料理</b>。跟著它們從口腔（咀嚼石窟）一路闖到肛門（終焉之門），擊倒體內的營養魔物，最後煉化出熱魔力！通關後依正確率掉落便便卡。</p>
     </div>
-    <div class="diff-grid three">
+    <div class="diff-grid five">
       ${diffCardHtml('warm', 'pickWarm', '見習營地（暖身）', `
         <span class="diff-tag">暖身・四個小遊戲</span>
         <h3>🏕️ 見習營地</h3>
         <p>鋪通道、點亮地圖、派任務、接管線，先熟悉消化系統的構造與功能。</p>
         <span class="diff-go">🔥 開始暖身！</span>`)}
-      ${diffCardHtml('basic', 'pickBasic', '見習魔法使（新手）', `
+      ${diffCardHtml('basic', 'pickBasic', '見習魔法屎（新手）', `
         <span class="diff-tag">新手・單一魔物</span>
-        <h3>🟢 見習魔法使</h3>
+        <h3>🟢 見習魔法屎</h3>
         <p>每道料理只藏著一種魔物，關卡較單純，適合先熟悉地下城的路線。</p>
         <span class="diff-go">⚔️ 踏入地下城！</span>`)}
-      ${diffCardHtml('adv', 'pickAdv', '大魔導士（資深）', `
+      ${diffCardHtml('adv', 'pickAdv', '大魔導屎（資深）', `
         <span class="diff-tag">資深・魔物軍團</span>
-        <h3>🔴 大魔導士</h3>
+        <h3>🔴 大魔導屎</h3>
         <p>多種魔物同時出沒，還要辨識正在被分解的魔物。風險更高，但熱魔力非常可觀！</p>
         <span class="diff-go">🔥 挑戰魔物軍團！</span>`)}
+      ${diffCardHtml('track', 'pickTrack', '魔物追蹤所（進階）', `
+        <span class="diff-tag">進階・分解追蹤</span>
+        <h3>🔍 魔物追蹤所</h3>
+        <p>追蹤三種養分在哪裡被分解，看懂大分子和小分子的趨勢圖。</p>
+        <span class="diff-go">📈 開始追蹤！</span>`)}
+      ${diffCardHtml('potion', 'pickPotion', '魔藥學教室（實驗）', `
+        <span class="diff-tag">實驗・魔藥檢驗</span>
+        <h3>⚗️ 魔藥學教室</h3>
+        <p>唾液分解澱粉的實驗：用碘液和本氏液檢驗，看懂溫度對酵素的影響。</p>
+        <span class="diff-go">🧪 開始調配！</span>`)}
     </div>
     <details class="rules">
       <summary>📜 冒險規則與便便卡掉落表</summary>
       ❤️ 生命 ${MAX_HP} 點，答錯扣 1 點，歸零即冒險失敗。<br>
       🔥 答對可獲得熱魔力，15 秒內答對再加 ${SPEED_BONUS} 點速攻加成；結算熱量的大卡數也會轉為熱魔力。<br>
       <table class="drop-table">
-        <tr><th>評價（正確率）</th><th>🟢 見習魔法使</th><th>🔴 大魔導士</th></tr>
+        <tr><th>評價（正確率）</th><th>🟢 見習魔法屎</th><th>🔴 大魔導屎</th></tr>
         <tr><td>🌟 S（≥ 90%）</td><td>2 張：每張 SSR 15%／SR 55%／R 30%</td><td>2 張：每張 SSR 40%／SR 45%／R 15%</td></tr>
         <tr><td>✨ A（70～89%）</td><td>1 張：SR 50%／R 50%</td><td>1 張：SSR 10%／SR 50%／R 40%</td></tr>
         <tr><td>🔹 B（50～69%）</td><td>1 張 R</td><td>1 張：SR 20%／R 80%</td></tr>
       </table>
-      🌈 <b>三界制霸</b>：三種模式都通關過一次，必得 UR「三界制霸・七彩神龍便」（每人一張）<br>
+      🔍⚗️ <b>魔物追蹤所、魔藥學教室</b>：失誤不扣生命，答對才前進；掉落機率和見習魔法屎相同<br>
+      🌈 <b>五界制霸</b>：五種模式都通關過一次，必得 UR「五界制霸・七彩神龍便」（每人一張）<br>
       💨 <b>正確率低於 50%</b>：必得「隱身氣體便」<br>
       💩 <b>生命歸零</b>：必得「水行俠的腹瀉」<br>
-      📋 <b>大魔導士</b>的能量結算要看「營養標示」：先算出每份熱量，再乘上份數<br>
+      📋 <b>大魔導屎</b>的能量結算要看「營養標示」：先算出每份熱量，再乘上份數<br>
       🏕️ <b>見習營地</b>不掉落便便卡，通關後顯示四站成績；失誤不扣生命，但每失誤一次，暖身成績加 5 秒<br>
-      🏆 <b>排行榜</b>：見習、大魔導士各一榜，比「成功通關」場次的單場最高熱魔力；暖身最快榜比時間；圖鑑收集榜比收集到的便便種類
+      🏆 <b>排行榜</b>：見習、大魔導屎各一榜，比「成功通關」場次的單場最高熱魔力；暖身最快榜比時間；圖鑑收集榜比收集到的便便種類
     </details>
   </div>`;
 }
@@ -2353,13 +2478,15 @@ function endingHtml(tk){
     <div class="stat-row">
       <div class="stat"><b>${Math.round(e.acc*100)}%</b><span>正確率（${state.stats.correct}/${state.stats.total}）</span></div>
       <div class="stat"><b>${state.runEarned}</b><span>本次熱魔力</span></div>
-      ${e.mode === 'warmup' && state.wu ? `
+      ${LAB_MODES.includes(e.mode) && state.lab ? `
+      <div class="stat"><b>${state.lab.stars.reduce((a,b)=>a+b,0)}/9</b><span>⭐ 星星</span></div>
+      <div class="stat"><b>${state.lab.mistakes}</b><span>失誤次數</span></div>` : e.mode === 'warmup' && state.wu ? `
       <div class="stat"><b>${fmtTime(state.wu.timeSec)}</b><span>暖身成績（含失誤 +${WU_PENALTY_SEC} 秒×${state.wu.mistakes}）</span></div>
       <div class="stat"><b>${state.wu.stars.reduce((a,b)=>a+b,0)}/12</b><span>⭐ 星星</span></div>` : `
       <div class="stat"><b>${state.stats.speed}</b><span>速攻次數</span></div>
       <div class="stat"><b>${state.clearedFoods.length}/${DISHES_PER_RUN}</b><span>淨化料理</span></div>`}
     </div>
-    ${e.urUnlocked ? '<div class="ur-banner">🌈 三界制霸達成！見習營地、見習魔法使、大魔導士全部通關，獲得 UR 卡！</div>' : ''}
+    ${e.urUnlocked ? '<div class="ur-banner">🌈 五界制霸達成！五條修行之路全部通關，獲得 UR 卡！</div>' : ''}
     <div class="drop-title">— 掉落的便便卡 —</div>
     <div class="drop-row">${cards}</div>
     <div class="btn-row">
@@ -2390,7 +2517,7 @@ function warmupEndingHtml(tk, e, cards, buttons){
       <div class="stat"><b>${Math.round(e.acc*100)}%</b><span>正確率（${state.stats.correct}/${state.stats.total}）</span></div>
       <div class="stat"><b>${state.runEarned}</b><span>本次熱魔力</span></div>
     </div>
-    ${e.urUnlocked ? `<div class="ur-banner">🌈 三界制霸達成！三條修行之路全部通關，獲得 UR 卡！</div><div class="drop-row" style="margin-top:12px">${cards}</div>` : ''}
+    ${e.urUnlocked ? `<div class="ur-banner">🌈 五界制霸達成！五條修行之路全部通關，獲得 UR 卡！</div><div class="drop-row" style="margin-top:12px">${cards}</div>` : ''}
     <div class="btn-row">
       ${buttons}
       <button class="cast-btn ghost" id="leaderBtn2">🏆 查看排行榜</button>
@@ -2416,10 +2543,10 @@ function wrongModalHtml(){
   <div class="modal-overlay">
     <div class="modal panel npc-modal">
       ${w.hideAnswer
-        ? npcLine(w.action === 'retryQuestion' ? '唔……這道咒文失手了。老夫不會直接告訴你答案，看看提示，再試一次吧！' : '唔……這道煉金術失手了。老夫不會直接告訴你答案，看看提示，再仔細算一次吧！', 'sad')
+        ? npcLine((w.action === 'retryQuestion' || w.action === 'labRetry') ? '唔……這道咒文失手了。老夫不會直接告訴你答案，看看提示，再試一次吧！' : '唔……這道煉金術失手了。老夫不會直接告訴你答案，看看提示，再仔細算一次吧！', 'sad')
         : npcLine('唔……這道咒文失手了。看清楚，正確的答案是這個：', 'sad') + `<div class="answer-reveal">✅ <b>${w.correctLabel}</b></div>`}
       ${w.explain ? `<div class="explain">${w.hideAnswer ? '💡' : '📜'} ${w.explain}</div>` : ''}
-      <div class="hp-loss">💔 生命 -1（剩下 ${state.hp} 點）</div>
+      ${w.noHp ? '' : `<div class="hp-loss">💔 生命 -1（剩下 ${state.hp} 點）</div>`}
       <div class="btn-row"><button class="cast-btn" id="wrongContinueBtn">${btnLabel}</button></div>
     </div>
   </div>`;
@@ -2453,7 +2580,7 @@ function shopHtml(){
   <div class="modal-overlay" id="shopOverlay">
     <div class="modal panel npc-modal">
       <div class="modal-head"><h3>⚗️ 大賢者的店</h3><button class="close-x" id="closeShop">✕</button></div>
-      ${npcLine('年輕的魔法使啊，你需要老夫的提示嗎？這只要消耗你一點點魔力（熱魔力）……藥水也有，看你的生命快撐不住了吧？', 'calm')}
+      ${npcLine('年輕的魔法屎啊，你需要老夫的提示嗎？這只要消耗你一點點魔力（熱魔力）……藥水也有，看你的生命快撐不住了吧？', 'calm')}
       <div class="shop-balance">持有熱魔力：<b>${state.score}</b></div>
       <div class="shop-item">
         <div class="ic">🧪</div>
@@ -2546,6 +2673,8 @@ function bindEvents(){
   on('pickBasic', ()=>startRun('basic'));
   on('pickAdv', ()=>startRun('advanced'));
   on('pickWarm', startWarmup);
+  on('pickTrack', ()=>startLab('tracker'));
+  on('pickPotion', ()=>startLab('potion'));
   on('nextFood', beginFood);
   on('hallBtn', backToHall);
   on('restartBtn', restartGame);
@@ -2587,6 +2716,7 @@ function bindEvents(){
   const kin = document.getElementById('kcalInput');
   if(kin) kin.addEventListener('keydown', e=>{ if(e.key==='Enter') submitKcal(); });
   wuBind();
+  labBind();
 }
 
 /* =========================================================
@@ -3396,10 +3526,526 @@ function wuBind(){
   if(document.getElementById('wuPipes')) wuDrawPipes();
   state.wu.flash = null;
 }
-window.addEventListener('resize', ()=>{ if(state.screen === 'warmup') wuDrawPipes(); });
+window.addEventListener('resize', ()=>{ if(state.screen === 'warmup') wuDrawPipes(); if(state.screen === 'lab' && (window.innerWidth < 640) !== window.__labNarrow){ window.__labNarrow = window.innerWidth < 640; render(); } });
+
+
+/* =========================================================
+   🔍 魔物追蹤所 ＆ ⚗️ 魔藥學教室（共用的「研究型關卡」框架）
+   ---------------------------------------------------------
+   失誤不扣生命；答錯會跳出提示視窗（停 3 秒），答對才前進。
+   正確率只算每一題的第一次作答。
+   ========================================================= */
+const LAB_ORGANS = ['口腔','咽','食道','胃','小腸','大腸','肛門'];
+const LAB_BAND_COLORS = ['#c9a26b','#5fb3a8','#4a7bd1','#e0483b','#4cc38a','#6f6bd8','#b07cff'];
+const LAB_JUICES = ['唾液','胃液','膽汁','胰液','腸液'];
+const LAB_NUT = ['醣類','蛋白質','脂質'];
+
+/* 大分子在每個消化道的剩餘量（每段 = 該消化道內的變化） */
+const BIG_CURVES = {
+  '醣類':  [[100,70],[70],[70],[70],[70,0],[0],[0]],
+  '蛋白質':[[100],[100],[100],[100,60],[60,0],[0],[0]],
+  '脂質':  [[100],[100],[100],[100],[100,0],[0],[0]]
+};
+/* 小分子的量：在小腸先增加，接著被吸收而下降 */
+const SMALL_INFO = {
+  '醣類':  {small:'葡萄糖', big:'澱粉', key:'glucose', emoji:'🍬', curve:[[0,25],[25],[25],[25],[25,90,0],[0],[0]]},
+  '蛋白質':{small:'胺基酸', big:'蛋白質', key:'amino', emoji:'🔮', curve:[[0],[0],[0],[0],[0,90,0],[0],[0]]},
+  '脂質':  {small:'脂肪酸和甘油', big:'脂質', key:'fatty', emoji:'💧', curve:[[0],[0],[0],[0],[0,90,0],[0],[0]]}
+};
+/* 血條判讀：每一次下降與造成下降的消化液（膽汁不含酵素） */
+const DROP_EVENTS = [
+  {nut:'醣類', organ:4-4, nth:1, juices:['唾液']},
+  {nut:'蛋白質', organ:3, nth:1, juices:['胃液']},
+  {nut:'醣類', organ:4, nth:2, juices:['胰液','腸液']},
+  {nut:'蛋白質', organ:4, nth:2, juices:['胰液','腸液']},
+  {nut:'脂質', organ:4, nth:1, juices:['胰液']}
+];
+const TRACK_ANS = {'醣類':{start:'口腔', end:'小腸'}, '蛋白質':{start:'胃', end:'小腸'}, '脂質':{start:'小腸', end:'小腸'}};
+
+/* 魔藥學：四支試管（每管都加入等量澱粉液，放置 10 分鐘） */
+const POTION_TUBES = [
+  {id:'甲', add:'唾液', env:'37 °C 溫水', iodine:'黃褐色', benedict:'磚紅色'},
+  {id:'乙', add:'清水', env:'37 °C 溫水', iodine:'藍黑色', benedict:'藍色'},
+  {id:'丙', add:'唾液', env:'冰水（約 4 °C）', iodine:'淡藍黑色', benedict:'黃綠色'},
+  {id:'丁', add:'煮沸過的唾液', env:'37 °C 溫水', iodine:'藍黑色', benedict:'藍色'}
+];
+const IODINE_COLORS = {'黃褐色':'#c98a2e', '淡藍黑色':'#56619a', '藍黑色':'#1f2448', '原色':'#d9c48a'};
+const BENEDICT_COLORS = {'藍色':'#2f74c9', '黃綠色':'#a9c43a', '磚紅色':'#b4452a', '原色':'#e9e4d8'};
+const IODINE_OPTS = ['藍黑色','淡藍黑色','黃褐色'];
+const BENEDICT_OPTS = ['藍色','黃綠色','磚紅色'];
+const IODINE_HINT = {'藍黑色':'澱粉還在', '淡藍黑色':'澱粉剩一些', '黃褐色':'澱粉被分解了（碘液原色）'};
+const BENEDICT_HINT = {'藍色':'沒有葡萄糖', '黃綠色':'少量葡萄糖', '磚紅色':'大量葡萄糖'};
+
+const LAB_DEF = {
+  tracker:{
+    title:'🔍 魔物追蹤所', kicker:'MONSTER TRACKING', bg:'tracker',
+    stations:[
+      {icon:'🐾', name:'魔物追蹤', rules:['三隻魔物會沿著七個消化道前進。','為每一隻魔物選出：它「從哪裡開始被分解」，以及「在哪裡分解完成」。','全部選好再按確認；選錯的魔物要重選，選對的會固定。'], how:'點選每隻魔物下方的消化道按鈕。'},
+      {icon:'📉', name:'血條判讀', rules:['圖上三條曲線代表三種養分「大分子」剩下的量，每個色塊是一個消化道。','先認出甲、乙、丙三條曲線各是哪一種養分。','接著逐一找出每次下降發生在哪個消化道，再選出造成下降的消化液（可複選）。'], how:'點選曲線圖上的色塊，再點選下方的選項。'},
+      {icon:'🔄', name:'反向判讀', rules:['這次反過來：實線是「小分子」的量，虛線是它原本的大分子。','判斷虛線是哪一種大分子、實線是分解後的哪一種小分子。','注意小分子在小腸裡先增加、後來又下降，想想看為什麼。'], how:'看圖後點選下方的選項。'}
+    ]},
+  potion:{
+    title:'⚗️ 魔藥學教室', kicker:'POTION LAB', bg:'potion',
+    stations:[
+      {icon:'🟤', name:'碘液檢驗', rules:['四支試管都裝了等量的澱粉液，再分別加入不同材料、放在不同溫度 10 分鐘。','先預測：滴入碘液後，每一管會變成什麼顏色？','預測正確後滴入碘液觀察，再回答實驗的問題。'], how:'點選每支試管下方的顏色選項。'},
+      {icon:'🔵', name:'本氏液檢驗', rules:['取同樣的四管溶液，改用本氏液檢驗有沒有葡萄糖。','本氏液要先「隔水加熱」才會變色，記得步驟！','預測加熱後的顏色，再觀察並回答問題。'], how:'依照步驟按鈕操作，再點選顏色選項。'},
+      {icon:'🏷️', name:'忘記標號', rules:['糟糕！助手把試管的標籤弄掉了，只留下碘液和本氏液的檢驗結果。','依照檢驗結果，判斷每一組結果分別來自甲、乙、丙、丁哪一支試管。'], how:'在每組結果下方點選它的試管編號。'}
+    ]}
+};
+const LAB_MODES = ['tracker','potion'];
+
+function labNew(mode){
+  const order = shuffled(LAB_NUT);
+  return {
+    mode, station:0, rules:true, between:false, stars:[], stMistakes:[0,0,0], mistakes:0, correct:0, total:0, qWrong:false,
+    /* 追蹤所 */
+    t1:{pick:{'醣類':{},'蛋白質':{},'脂質':{}}, ok:{}},
+    t2:{labels:{甲:order[0], 乙:order[1], 丙:order[2]}, idPick:{}, idOk:false, ev:0, band:null, bandOk:false, juice:[]},
+    t3:{order:shuffled(LAB_NUT), round:0, step:'big', pick:null},
+    /* 魔藥學 */
+    p1:{step:'setup', pred:{}, ok:{}, q:0, pick:null},
+    p2:{step:'add', pred:{}, ok:{}, q:0, pick:null},
+    p3:{order:shuffled(POTION_TUBES.map(t=>t.id)), pick:{}, ok:{}}
+  };
+}
+function startLab(mode){
+  stopTimer();
+  state.difficulty = mode;
+  state.screen = 'lab';
+  state.stats = {correct:0, total:0, speed:0};
+  state.runEarned = 0; state.ending = null; state.clearedFoods = []; state.uploadStatus = null;
+  state.lab = labNew(mode);
+  const d = LAB_DEF[mode];
+  setWizard(`歡迎來到${d.title.slice(2)}！先看清楚規則，再開始挑戰。`, 'calm');
+  render();
+  showStageIntro(ASSETS.background[d.bg], d.kicker, d.title, d.stations.map(x=>x.name).join('・'));
+}
+function labSt(){ return state.lab.station; }
+
+/* 一題的作答：第一次作答才列入正確率 */
+function labAnswer(ok, hint){
+  const L = state.lab;
+  if(!L.qWrong){ L.total++; if(ok) L.correct++; }
+  if(ok){ L.qWrong = false; earn(WU_POINT); return true; }
+  L.qWrong = true; L.mistakes++; L.stMistakes[L.station]++;
+  openWrongModal('', 'labRetry', hint, {hideAnswer:true, noHp:true});
+  return false;
+}
+/* 多個小項目一起送出（例如 4 支試管）：每一項各自算一題，只算第一次作答 */
+function labItems(items, hint){
+  const L = state.lab; L.tried = L.tried || {};
+  items.forEach(it=>{ if(!L.tried[it.key]){ L.tried[it.key] = true; L.total++; if(it.ok) L.correct++; } });
+  if(items.every(it=>it.ok)){ earn(WU_POINT * items.length); return true; }
+  L.mistakes++; L.stMistakes[L.station]++;
+  openWrongModal('', 'labRetry', hint, {hideAnswer:true, noHp:true});
+  return false;
+}
+/* 操作步驟錯誤（例如沒加熱就觀察）：算失誤，但不算題目 */
+function labStepMistake(hint){
+  const L = state.lab; L.mistakes++; L.stMistakes[L.station]++;
+  openWrongModal('', 'labRetry', hint, {hideAnswer:true, noHp:true});
+}
+function labStationDone(msg){
+  const L = state.lab, m = L.stMistakes[L.station];
+  L.stars[L.station] = m === 0 ? 3 : m <= 2 ? 2 : 1;
+  earn(L.stars[L.station] * 10);
+  L.between = true;
+  setWizard(msg, 'happy');
+  render();
+}
+function labNext(){
+  const L = state.lab;
+  L.between = false; L.station++; L.rules = true;
+  if(L.station >= 3){ labFinish(); return; }
+  setWizard('下一站！先看規則再開始。', 'calm');
+  render(); window.scrollTo({top:0, behavior:'smooth'});
+}
+function labFinish(){
+  const L = state.lab;
+  state.stats = {correct:L.correct, total:L.total, speed:0};
+  finishRun('clear');
+  render();
+}
+
+/* ---------- 曲線圖（每個消化道一個色塊） ---------- */
+function labGraph(curves, opts){
+  opts = opts || {};
+  const narrow = window.innerWidth < 640;   // 手機：圖畫窄一點、高一點，字才看得清楚
+  const W = narrow ? 420 : 820, H = narrow ? 330 : 300, X0 = narrow ? 44 : 54, Y0 = 18, PH = narrow ? 262 : 230, BW = (W - X0 - 8) / 7;
+  const y = v => Y0 + PH - v / 100 * PH;
+  let g = '';
+  LAB_ORGANS.forEach((o,i)=>{
+    const x = X0 + i*BW, sel = opts.band === i, ok = opts.okBand === i;
+    g += `<rect class="lg-band${opts.clickable?' click':''}${sel?' sel':''}${ok?' ok':''}" data-band="${i}" x="${x}" y="${Y0}" width="${BW}" height="${PH}" fill="${LAB_BAND_COLORS[i]}"/>`;
+    g += `<line x1="${x}" y1="${Y0}" x2="${x}" y2="${Y0+PH}" class="lg-div"/>`;
+    g += `<text x="${x+BW/2}" y="${Y0+PH+22}" text-anchor="middle" class="lg-organ">${o}</text>`;
+  });
+  g += `<line x1="${X0+7*BW}" y1="${Y0}" x2="${X0+7*BW}" y2="${Y0+PH}" class="lg-div"/>`;
+  [0,50,100].forEach(v=>{ g += `<text x="${X0-8}" y="${y(v)+5}" text-anchor="end" class="lg-axis">${v}%</text><line x1="${X0}" y1="${y(v)}" x2="${X0+7*BW}" y2="${y(v)}" class="lg-grid"/>`; });
+  g += `<text x="14" y="${Y0+PH/2}" transform="rotate(-90 14 ${Y0+PH/2})" text-anchor="middle" class="lg-axis">${opts.ylabel || '剩餘量'}</text>`;
+  curves.forEach((c,k)=>{
+    const off = (k - (curves.length-1)/2) * 3;
+    const pts = [];
+    c.seg.forEach((v,i)=>{
+      const x = X0 + i*BW;
+      if(v.length === 1){ pts.push([x, v[0]], [x+BW, v[0]]); }
+      else if(v.length === 2){ pts.push([x, v[0]], [x+BW*0.25, v[0]], [x+BW*0.75, v[1]], [x+BW, v[1]]); }
+      else { pts.push([x, v[0]], [x+BW*0.15, v[0]], [x+BW*0.45, v[1]], [x+BW*0.85, v[2]], [x+BW, v[2]]); }
+    });
+    const d = pts.map((p,i)=>`${i?'L':'M'}${p[0].toFixed(1)},${(y(p[1])+off).toFixed(1)}`).join(' ');
+    g += `<path d="${d}" fill="none" stroke="${c.color}" stroke-width="${c.hl?6:4}" stroke-linejoin="round" ${c.dash?'stroke-dasharray="9 7"':''} ${c.dim?'opacity="0.28"':''}/>`;
+  });
+  const legend = curves.map(c=>`<span class="lg-leg${c.dim?' dim':''}"><i style="background:${c.color};${c.dash?'background:repeating-linear-gradient(90deg,'+c.color+' 0 7px,transparent 7px 12px)':''}"></i>${c.name}</span>`).join('');
+  return `<div class="lg-wrap"><div class="lg-legend">${legend}</div><svg class="lg-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${g}</svg></div>`;
+}
+const CURVE_COLORS = {甲:'#9be76a', 乙:'#ff8a7a', 丙:'#ffd36a'};
+
+/* ---------- 追蹤所 第 1 站：魔物追蹤 ---------- */
+function t1Pick(nut, kind, organ){ const s = state.lab.t1; if(s.ok[nut]) return; s.pick[nut][kind] = organ; render(); }
+function t1Go(){
+  const s = state.lab.t1;
+  if(LAB_NUT.some(n=>!s.ok[n] && (!s.pick[n].start || !s.pick[n].end))){ setWizard('每一隻魔物都要選好「開始」和「完成」喔！', 'calm'); refreshWizardDom(); return; }
+  const wrong = LAB_NUT.filter(n=>!s.ok[n] && (s.pick[n].start !== TRACK_ANS[n].start || s.pick[n].end !== TRACK_ANS[n].end));
+  const items = LAB_NUT.filter(n=>!s.ok[n]).map(n=>({key:'t1:'+n, ok:!wrong.includes(n)}));
+  LAB_NUT.forEach(n=>{ if(!wrong.includes(n)) s.ok[n] = true; });
+  if(!wrong.length){ labItems(items); labStationDone('三隻魔物的行蹤都追到了！醣類從口腔、蛋白質從胃、脂質在小腸才開始被分解，最後都在小腸分解完成。'); return; }
+  const hints = {
+    '醣類':'醣類史萊姆：想一想，第一個能分解澱粉的消化液在哪裡？還沒分解完的部分，最後在哪裡被分解完？',
+    '蛋白質':'蛋白質巨獸：唾液不能分解蛋白質，那第一個能分解蛋白質的消化液在哪裡？',
+    '脂質':'脂質護盾怪：膽汁、胰液都送到哪裡？在那之前，有沒有消化液能分解脂質？'
+  };
+  labItems(items, wrong.map(n=>hints[n]).join('<br>'));
+}
+function trackerS1Html(){
+  const s = state.lab.t1;
+  const rows = LAB_NUT.map(n=>{
+    const m = MONSTERS[n], ok = s.ok[n];
+    const chips = kind => LAB_ORGANS.map(o=>`<button class="lab-chip${s.pick[n][kind]===o?' on':''}" data-t1="${n}|${kind}|${o}" ${ok?'disabled':''}>${o}</button>`).join('');
+    return `<div class="lab-track${ok?' ok':''}">
+      <div class="lab-track-mon">${pic(ASSETS.monsters[m.key], m.emoji, 'mon-pic')}<b>${m.name}</b><small>（${n}）</small>${ok?'<span class="lab-ok">✅</span>':''}</div>
+      <div class="lab-track-q"><span>開始被分解：</span><div class="lab-chips">${chips('start')}</div></div>
+      <div class="lab-track-q"><span>分解完成：</span><div class="lab-chips">${chips('end')}</div></div>
+    </div>`;
+  }).join('');
+  return `
+    <div class="wu-title">🐾 第 1 站：魔物追蹤</div>
+    <div class="wu-desc">三隻魔物分別從哪個消化道「開始被分解」？最後在哪裡「分解完成」？</div>
+    ${rows}
+    <div class="btn-row"><button class="cast-btn" id="t1Go">🔍 確認追蹤結果！</button></div>`;
+}
+
+/* ---------- 追蹤所 第 2 站：血條判讀 ---------- */
+function t2IdPick(lbl, nut){ const s = state.lab.t2; if(s.idOk) return; s.idPick[lbl] = nut; render(); }
+function t2IdGo(){
+  const s = state.lab.t2;
+  if(['甲','乙','丙'].some(l=>!s.idPick[l])){ setWizard('甲、乙、丙三條曲線都要選喔！', 'calm'); refreshWizardDom(); return; }
+  const items = ['甲','乙','丙'].map(l=>({key:'t2id:'+l, ok:s.idPick[l] === s.labels[l]}));
+  if(labItems(items, '看曲線「第一次下降」的位置：澱粉在口腔就被唾液分解一部分；蛋白質要到胃才開始被分解；脂質一直到小腸才被分解。')){ s.idOk = true; setWizard('認得很準！接下來找出每一次下降發生在哪裡。', 'happy'); render(); return; }
+}
+function t2Band(i){
+  const s = state.lab.t2; if(!s.idOk || s.bandOk) return;
+  const ev = DROP_EVENTS[s.ev];
+  s.band = i;
+  if(i === ev.organ){ labAnswer(true); s.bandOk = true; s.juice = []; render(); return; }
+  render();
+  labAnswer(false, `看清楚「${t2Label(ev.nut)}」曲線往下掉的那一段落在哪個色塊裡。曲線在色塊內部下降，才是在那個消化道被分解。`);
+}
+function t2Juice(j){ const s = state.lab.t2; if(!s.bandOk) return; s.juice = s.juice.includes(j) ? s.juice.filter(x=>x!==j) : [...s.juice, j]; render(); }
+function t2JuiceGo(){
+  const s = state.lab.t2, ev = DROP_EVENTS[s.ev];
+  if(!s.juice.length){ setWizard('先選出消化液喔！（可複選）', 'calm'); refreshWizardDom(); return; }
+  if(sameSet(s.juice, ev.juices)){
+    labAnswer(true);
+    s.ev++; s.band = null; s.bandOk = false; s.juice = [];
+    if(s.ev >= DROP_EVENTS.length){ labStationDone('五次下降全部判讀完成！你已經能從曲線看出養分在哪裡、被哪些消化液分解了。'); return; }
+    setWizard('答對了！看下一次下降。', 'happy'); render(); return;
+  }
+  labAnswer(false, ev.nut === '脂質'
+    ? '提示：膽汁不含酵素，只能把脂肪乳化成小油滴；真正分解脂質的消化液是哪一種？'
+    : `提示：在${LAB_ORGANS[ev.organ]}，有哪些含有酵素的消化液能分解${ev.nut}？膽汁不含酵素喔。`);
+}
+function t2Label(nut){ const s = state.lab.t2; return Object.keys(s.labels).find(l=>s.labels[l] === nut); }
+function trackerS2Html(){
+  const s = state.lab.t2;
+  const ev = s.idOk ? DROP_EVENTS[s.ev] : null;
+  const curves = ['甲','乙','丙'].map(l=>({name:l + (s.idOk ? `（${s.labels[l]}）` : ''), color:CURVE_COLORS[l], seg:BIG_CURVES[s.labels[l]], hl: ev && s.labels[l] === ev.nut, dim: ev && s.labels[l] !== ev.nut}));
+  const graph = labGraph(curves, {clickable: s.idOk && !s.bandOk, band: s.band, okBand: s.bandOk ? ev.organ : null});
+  let q;
+  if(!s.idOk){
+    q = `<div class="wu-tq">❓ 甲、乙、丙三條曲線，分別是哪一種養分？</div>
+      ${['甲','乙','丙'].map(l=>`<div class="lab-row"><b style="color:${CURVE_COLORS[l]}">${l}</b><div class="lab-chips">${LAB_NUT.map(n=>`<button class="lab-chip${s.idPick[l]===n?' on':''}" data-t2id="${l}|${n}">${n}</button>`).join('')}</div></div>`).join('')}
+      <div class="btn-row"><button class="cast-btn" id="t2IdGo">✅ 確認</button></div>`;
+  } else if(!s.bandOk){
+    q = `<div class="wu-tq">❓ 「${t2Label(ev.nut)}」（${ev.nut}）曲線的第 ${ev.nth} 次下降，發生在哪個消化道？<small>點選圖上的色塊</small></div>`;
+  } else {
+    q = `<div class="wu-tq">❓ 在${LAB_ORGANS[ev.organ]}，造成這次下降的是哪些消化液？（可複選）</div>
+      <div class="lab-chips big">${LAB_JUICES.map(j=>`<button class="lab-chip${s.juice.includes(j)?' on':''}" data-t2j="${j}">${j}</button>`).join('')}</div>
+      <div class="btn-row"><button class="cast-btn" id="t2JuiceGo">🧪 確認消化液</button></div>`;
+  }
+  return `
+    <div class="wu-title">📉 第 2 站：血條判讀 <small class="lab-prog">${s.idOk ? `下降 ${Math.min(s.ev+1, DROP_EVENTS.length)} / ${DROP_EVENTS.length}` : '認出曲線'}</small></div>
+    ${graph}
+    ${q}`;
+}
+
+/* ---------- 追蹤所 第 3 站：反向判讀 ---------- */
+const T3_ABSORB_OPTS = ['被小腸的絨毛吸收，進入血液', '在大腸又被分解掉了', '又重新組合變回大分子', '直接從肛門排出體外'];
+const T3_MOUTH_OPTS = ['唾液把澱粉分解成葡萄糖', '食物在口腔被咬碎就會變成葡萄糖', '口腔會吸收葡萄糖', '胃液流到口腔分解澱粉'];
+function t3Steps(nut, round){
+  const st = ['big','small'];
+  if(round === 0) st.push('absorb');
+  if(nut === '醣類') st.push('mouth');
+  return st;
+}
+function t3Pick(v){ state.lab.t3.pick = v; render(); }
+function t3Go(){
+  const s = state.lab.t3, nut = s.order[s.round], info = SMALL_INFO[nut];
+  if(s.pick === null){ setWizard('先選一個答案喔！', 'calm'); refreshWizardDom(); return; }
+  const ans = {big:info.big, small:info.small, absorb:T3_ABSORB_OPTS[0], mouth:T3_MOUTH_OPTS[0]}[s.step];
+  if(s.pick !== ans){
+    const hint = {
+      big:'看虛線「第一次下降」的位置：在口腔就下降的是澱粉；在胃開始下降的是蛋白質；到小腸才下降的是脂質。',
+      small:'大分子分解後會變成對應的小分子：澱粉 → 葡萄糖、蛋白質 → 胺基酸、脂質 → 脂肪酸和甘油。',
+      absorb:'小分子養分是在哪裡、透過什麼構造進入身體的？想想小腸的皺褶和絨毛。',
+      mouth:'口腔裡有哪一種消化液，可以進行化學消化？'
+    }[s.step];
+    labAnswer(false, hint); return;
+  }
+  labAnswer(true);
+  const steps = t3Steps(nut, s.round);
+  const i = steps.indexOf(s.step);
+  s.pick = null;
+  if(i < steps.length - 1){ s.step = steps[i+1]; setWizard('答對了！再回答下一個問題。', 'happy'); render(); return; }
+  s.round++; s.step = 'big';
+  if(s.round >= 3){ labStationDone('反向判讀完成！小分子在小腸被分解出來，又被小腸的絨毛吸收，所以曲線最後會下降。'); return; }
+  setWizard('答對了！來看下一張圖。', 'happy'); render();
+}
+function trackerS3Html(){
+  const s = state.lab.t3, nut = s.order[s.round], info = SMALL_INFO[nut];
+  const curves = [
+    {name:'虛線：某種大分子', color:'#c7b9ff', seg:BIG_CURVES[nut], dash:true},
+    {name:'實線：某種小分子', color:'#ffd36a', seg:info.curve, hl:true}
+  ];
+  const opts = {
+    big:['澱粉','蛋白質','脂質'],
+    small:['葡萄糖','胺基酸','脂肪酸和甘油'],
+    absorb:T3_ABSORB_OPTS, mouth:T3_MOUTH_OPTS
+  }[s.step];
+  const qText = {
+    big:'❓ 虛線是哪一種「大分子」？',
+    small:'❓ 實線是它分解後的哪一種「小分子」？',
+    absorb:'❓ 實線在小腸後段下降了，這是為什麼？',
+    mouth:'❓ 實線在口腔就開始上升，這是為什麼？'
+  }[s.step];
+  const order = s.step === 'absorb' || s.step === 'mouth' ? labShuffleFixed(opts, s.round + s.step.length) : opts;
+    return `
+    <div class="wu-title">🔄 第 3 站：反向判讀 <small class="lab-prog">第 ${s.round+1} / 3 張圖</small></div>
+    ${labGraph(curves, {ylabel:'相對量'})}
+    <div class="wu-tq">${qText}</div>
+    <div class="wu-topts">${order.map(o=>`<button class="wu-topt${s.pick===o?' on':''}" data-t3="${o}">${s.pick===o?'✅':'⬜'} ${o}${s.step==='small'?' '+labSmallPic(o):''}</button>`).join('')}</div>
+    <div class="btn-row"><button class="cast-btn" id="t3Go">🔬 確認答案！</button></div>`;
+}
+function labSmallPic(name){
+  const n = LAB_NUT.find(k=>SMALL_INFO[k].small === name); if(!n) return '';
+  const i = SMALL_INFO[n];
+  return pic(ASSETS.molecules[i.key], i.emoji, 'lab-mol');
+}
+function labShuffleFixed(arr, seed){ const a = [...arr]; for(let i=a.length-1;i>0;i--){ seed = (seed*9301+49297)%233280; const j = Math.floor(seed/233280*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+
+/* ---------- 試管繪製 ---------- */
+function tubeSvg(color, label, opts){
+  opts = opts || {};
+  const fill = color || '#e9e4d8';
+  return `<div class="lab-tube${opts.cls?' '+opts.cls:''}">
+    <svg viewBox="0 0 60 150" class="lab-tube-svg">
+      <defs><linearGradient id="tg${label}${opts.k||''}" x1="0" x2="1"><stop offset="0" stop-color="rgba(255,255,255,0.35)"/><stop offset="0.35" stop-color="rgba(255,255,255,0.05)"/><stop offset="1" stop-color="rgba(0,0,0,0.15)"/></linearGradient></defs>
+      <rect x="14" y="4" width="32" height="8" rx="3" fill="#8c7a5e"/>
+      <path d="M18 12 L18 128 A12 12 0 0 0 42 128 L42 12 Z" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.55)" stroke-width="2"/>
+      <path d="M19.5 ${opts.level||58} L19.5 128 A10.5 10.5 0 0 0 40.5 128 L40.5 ${opts.level||58} Z" fill="${fill}" class="lab-liquid"/>
+      <path d="M19.5 ${opts.level||58} L19.5 128 A10.5 10.5 0 0 0 40.5 128 L40.5 ${opts.level||58} Z" fill="url(#tg${label}${opts.k||''})"/>
+      ${opts.bubbles ? '<circle cx="26" cy="110" r="2.5" fill="rgba(255,255,255,0.6)" class="lab-bub"/><circle cx="34" cy="96" r="2" fill="rgba(255,255,255,0.5)" class="lab-bub b2"/>' : ''}
+    </svg>
+    <div class="lab-tube-label">${label}</div>
+  </div>`;
+}
+function tubeCardHtml(t, color, extra, opts){
+  return `<div class="lab-tcard">${tubeSvg(color, t.id, opts)}
+    <div class="lab-tinfo"><b>澱粉液 ＋ ${t.add}</b><small>${t.env}</small></div>${extra||''}</div>`;
+}
+
+/* ---------- 魔藥學 第 1、2 站：碘液／本氏液 ---------- */
+const P1_QS = [
+  {q:'為什麼甲管不會變成藍黑色？', opts:['唾液中的酵素把澱粉分解了','碘液在溫水中失效了','溫水把澱粉沖淡了','甲管沒有加入澱粉液'], hint:'碘液遇到什麼才會變藍黑色？甲管和乙管差在哪裡？'},
+  {q:'乙管（加清水）在實驗中的作用是什麼？', opts:['對照組：用來比較有沒有唾液的差別','實驗組：用來證明清水能分解澱粉','用來測試碘液的溫度','沒有作用，可以省略'], hint:'乙管只把唾液換成清水，其他條件都一樣。這種用來「比較」的試管叫做什麼？'}
+];
+const P2_QS = [
+  {q:'丁管（煮沸過的唾液）為什麼和乙管結果一樣？', opts:['高溫使唾液中的酵素變性，失去作用','煮沸讓唾液變成清水','煮沸讓澱粉消失了','本氏液在高溫下失效'], hint:'酵素遇到高溫會發生什麼事？降溫後還能恢復嗎？'},
+  {q:'丙管（冰水）為什麼只出現黃綠色？', opts:['低溫使酵素活性降低，分解得比較少','低溫讓酵素完全死掉','冰水把葡萄糖凍住了','冰水裡沒有澱粉'], hint:'低溫會破壞酵素嗎？還是只會讓它變慢？'}
+];
+function pState(){ return labSt() === 0 ? state.lab.p1 : state.lab.p2; }
+function pAns(t){ return labSt() === 0 ? t.iodine : t.benedict; }
+function pOpts(){ return labSt() === 0 ? IODINE_OPTS : BENEDICT_OPTS; }
+function pColors(){ return labSt() === 0 ? IODINE_COLORS : BENEDICT_COLORS; }
+function pQs(){ return labSt() === 0 ? P1_QS : P2_QS; }
+function pStep(step){
+  const s = pState();
+  if(labSt() === 0 && step === 'wait' && s.step === 'setup'){ s.step = 'waiting'; render(); setTimeout(()=>{ if(state.lab && s.step === 'waiting'){ s.step = 'predict'; setWizard('10 分鐘到了！先預測：滴入碘液後，每一管會是什麼顏色？', 'calm'); render(); } }, 1800); return; }
+  if(labSt() === 1){
+    if(step === 'add' && s.step === 'add'){ s.step = 'added'; setWizard('本氏液加好了，現在四管都是藍色。接下來要怎麼做？', 'calm'); render(); return; }
+    if(step === 'look' && s.step === 'added'){ labStepMistake('本氏液必須「隔水加熱」，才會和葡萄糖反應變色喔！直接看是看不出差別的。'); return; }
+    if(step === 'heat' && s.step === 'added'){ s.step = 'heating'; render(); setTimeout(()=>{ if(state.lab && s.step === 'heating'){ s.step = 'predict'; setWizard('加熱中……先預測：加熱後每一管會是什麼顏色？', 'calm'); render(); } }, 1800); return; }
+  }
+}
+function pPred(id, c){ const s = pState(); if(s.ok[id] || s.step !== 'predict') return; s.pred[id] = c; render(); }
+function pPredGo(){
+  const s = pState();
+  if(POTION_TUBES.some(t=>!s.ok[t.id] && !s.pred[t.id])){ setWizard('四支試管都要預測喔！', 'calm'); refreshWizardDom(); return; }
+  const wrong = POTION_TUBES.filter(t=>!s.ok[t.id] && s.pred[t.id] !== pAns(t));
+  const items = POTION_TUBES.filter(t=>!s.ok[t.id]).map(t=>({key:'p'+labSt()+':'+t.id, ok:!wrong.includes(t)}));
+  POTION_TUBES.forEach(t=>{ if(!wrong.includes(t)) s.ok[t.id] = true; });
+  if(!wrong.length){
+    labItems(items); s.step = 'reveal';
+    setWizard(labSt() === 0 ? '預測完全正確！看看滴入碘液後的結果。' : '預測完全正確！看看加熱後的結果。', 'happy');
+    render(); setTimeout(()=>{ if(state.lab && s.step === 'reveal'){ s.step = 'qa'; render(); } }, 1600);
+    return;
+  }
+  const iod = {'甲':'甲管：唾液在 37 °C 時，能把澱粉分解多少？', '乙':'乙管：清水能分解澱粉嗎？', '丙':'丙管：低溫時唾液還有作用嗎？是全部分解、完全沒分解，還是分解得比較少？', '丁':'丁管：煮沸過的唾液還能分解澱粉嗎？'};
+  const ben = {'甲':'甲管：澱粉被分解成葡萄糖了嗎？量多還是量少？', '乙':'乙管：沒有唾液，會產生葡萄糖嗎？', '丙':'丙管：低溫時酵素活性降低，產生的葡萄糖是多還是少？', '丁':'丁管：酵素變性後，還能產生葡萄糖嗎？'};
+  labItems(items, (labSt() === 0 ? '碘液遇到澱粉會變藍黑色。' : '本氏液加熱後，葡萄糖越多顏色越偏磚紅色。') + '<br>' + wrong.map(t=>(labSt()===0?iod:ben)[t.id]).join('<br>'));
+}
+function pQPick(o){ pState().pick = o; render(); }
+function pQGo(){
+  const s = pState(), qs = pQs(), q = qs[s.q];
+  if(s.pick === null){ setWizard('先選一個答案喔！', 'calm'); refreshWizardDom(); return; }
+  if(s.pick !== q.opts[0]){ labAnswer(false, q.hint); return; }
+  labAnswer(true); s.q++; s.pick = null;
+  if(s.q >= qs.length){ labStationDone(labSt() === 0 ? '碘液檢驗完成！碘液可以檢驗「澱粉」還在不在。' : '本氏液檢驗完成！本氏液隔水加熱後，可以檢驗有沒有「葡萄糖」。'); return; }
+  setWizard('答對了！下一題。', 'happy'); render();
+}
+function potionTestHtml(){
+  const st = labSt(), s = pState(), colors = pColors();
+  const isI = st === 0;
+  let tubeColor = t => isI ? (['reveal','qa'].includes(s.step) ? colors[t.iodine] : '#e9e4d8')
+                           : (['added','heating','predict'].includes(s.step) ? colors['藍色'] : ['reveal','qa'].includes(s.step) ? colors[t.benedict] : '#e9e4d8');
+  const showPred = s.step === 'predict';
+  const tubes = POTION_TUBES.map(t=>{
+    const extra = showPred ? `<div class="lab-chips col">${pOpts().map(c=>`<button class="lab-chip sw${s.pred[t.id]===c?' on':''}" data-pp="${t.id}|${c}" ${s.ok[t.id]?'disabled':''}><i style="background:${colors[c]}"></i>${c}</button>`).join('')}</div>${s.ok[t.id]?'<div class="lab-ok">✅</div>':''}`
+      : ['reveal','qa'].includes(s.step) ? `<div class="lab-result">${pAns(t)}<small>${isI ? IODINE_HINT[pAns(t)] : BENEDICT_HINT[pAns(t)]}</small></div>` : '';
+    return tubeCardHtml(t, tubeColor(t), extra, {bubbles: s.step === 'waiting' || s.step === 'heating', cls: ['waiting','heating'].includes(s.step) ? 'shake' : '', k:st});
+  }).join('');
+  let ctrl = '';
+  if(isI && s.step === 'setup') ctrl = `<div class="wu-tq">四支試管都準備好了，放置 10 分鐘讓唾液作用。</div><div class="btn-row"><button class="cast-btn" data-pstep="wait">⏳ 放置 10 分鐘</button></div>`;
+  else if(s.step === 'waiting') ctrl = `<div class="wu-tq center">⏳ 等待中……</div>`;
+  else if(!isI && s.step === 'add') ctrl = `<div class="wu-tq">取同樣的四管溶液（都已放置 10 分鐘），先加入本氏液。</div><div class="btn-row"><button class="cast-btn" data-pstep="add">🔵 加入本氏液</button></div>`;
+  else if(!isI && s.step === 'added') ctrl = `<div class="wu-tq">本氏液加好了，下一步要怎麼做？</div><div class="btn-row"><button class="cast-btn" data-pstep="heat">🔥 隔水加熱</button><button class="cast-btn ghost" data-pstep="look">👀 直接觀察顏色</button></div>`;
+  else if(s.step === 'heating') ctrl = `<div class="wu-tq center">🔥 隔水加熱中……</div>`;
+  else if(showPred) ctrl = `<div class="wu-tq">❓ 預測：${isI ? '滴入碘液後' : '隔水加熱後'}，每一管會變成什麼顏色？</div><div class="btn-row"><button class="cast-btn" id="pPredGo">🔮 確認預測</button></div>`;
+  else if(s.step === 'reveal') ctrl = `<div class="wu-tq center">${isI ? '💧 滴入碘液……' : '✨ 顏色出現了……'}</div>`;
+  else if(s.step === 'qa'){
+    const q = pQs()[s.q];
+    const order = labShuffleFixed(q.opts, st*7 + s.q + 3);
+    ctrl = `<div class="wu-tq">❓ ${q.q}</div><div class="wu-topts">${order.map(o=>`<button class="wu-topt${s.pick===o?' on':''}" data-pq="${o}">${s.pick===o?'✅':'⬜'} ${o}</button>`).join('')}</div><div class="btn-row"><button class="cast-btn" id="pQGo">🔬 確認答案！</button></div>`;
+  }
+  return `
+    <div class="wu-title">${isI ? '🟤 第 1 站：碘液檢驗' : '🔵 第 2 站：本氏液檢驗'}</div>
+    <div class="wu-desc">${isI ? '碘液遇到澱粉會變成藍黑色；澱粉被分解後就不會變色。' : '本氏液原本是藍色，隔水加熱後，如果有葡萄糖會變色；葡萄糖越多，顏色越偏向磚紅色。'}</div>
+    <div class="lab-bench">${tubes}</div>
+    ${ctrl}`;
+}
+
+/* ---------- 魔藥學 第 3 站：忘記標號 ---------- */
+function p3Pick(sample, id){ const s = state.lab.p3; if(s.ok[sample]) return; s.pick[sample] = id; render(); }
+/* 乙（清水）和丁（煮過的唾液）結果完全相同：兩組都可以填乙或丁，但兩組不能填一樣的 */
+function p3Match(i, pick){
+  const s = state.lab.p3, id = s.order[i];
+  if(id === '乙' || id === '丁') return pick === '乙' || pick === '丁';
+  return pick === id;
+}
+function p3Go(){
+  const s = state.lab.p3;
+  if(s.order.some((_,i)=>!s.ok[i] && !s.pick[i])){ setWizard('每一組結果都要選出試管編號喔！', 'calm'); refreshWizardDom(); return; }
+  const picks = s.order.map((_,i)=>s.pick[i]);
+  const dup = picks.filter((p,i)=>picks.indexOf(p) !== i);
+  const wrong = s.order.map((_,i)=>i).filter(i=>!s.ok[i] && (!p3Match(i, s.pick[i]) || dup.includes(s.pick[i])));
+  const items = s.order.map((_,i)=>i).filter(i=>!s.ok[i]).map(i=>({key:'p3:'+i, ok:!wrong.includes(i)}));
+  s.order.forEach((_,i)=>{ if(!wrong.includes(i)) s.ok[i] = true; });
+  if(!wrong.length){ labItems(items); labStationDone('標籤全部找回來了！乙管（清水）和丁管（煮過的唾液）結果一模一樣：兩管的澱粉都沒有被分解。'); return; }
+  let hint = '想想看：碘液藍黑色＝澱粉還在；本氏液磚紅色＝葡萄糖很多。丙管是「反應比較差」，顏色會介於中間。';
+  if(dup.length) hint += '<br>每一支試管只會出現一次，不能有兩組選同一個編號喔！';
+  labItems(items, hint);
+}
+function potionS3Html(){
+  const s = state.lab.p3;
+  /* 乙、丁結果相同：任一個選對都算對 */
+  const samples = s.order.map((id,i)=>{
+    const t = POTION_TUBES.find(x=>x.id===id), ok = s.ok[i];
+    return `<div class="lab-tcard sample${ok?' ok':''}">
+      <div class="lab-pair">${tubeSvg(IODINE_COLORS[t.iodine], '碘', {k:'s'+i})}${tubeSvg(BENEDICT_COLORS[t.benedict], '本氏', {k:'b'+i})}</div>
+      <div class="lab-tinfo"><b>第 ${'ABCD'[i]} 組</b><small>碘液：${t.iodine}<br>本氏液：${t.benedict}</small></div>
+      <div class="lab-chips">${POTION_TUBES.map(x=>`<button class="lab-chip${s.pick[i]===x.id?' on':''}" data-p3="${i}|${x.id}" ${ok?'disabled':''}>${x.id}</button>`).join('')}</div>
+      ${ok?'<div class="lab-ok">✅</div>':''}
+    </div>`;
+  }).join('');
+  const key = POTION_TUBES.map(t=>`<li><b>${t.id}</b>：澱粉液 ＋ ${t.add}，${t.env}</li>`).join('');
+  return `
+    <div class="wu-title">🏷️ 第 3 站：忘記標號</div>
+    <div class="wu-desc">四組檢驗結果的標籤掉了！依照結果，選出每一組來自哪一支試管。（小提示：其中有兩組的結果一模一樣，想想看為什麼。）</div>
+    <ul class="lab-key">${key}</ul>
+    <div class="lab-bench">${samples}</div>
+    <div class="btn-row"><button class="cast-btn" id="p3Go">🏷️ 確認配對！</button></div>`;
+}
+
+/* ---------- 共用畫面 ---------- */
+function labHtml(tk){
+  const L = state.lab, d = LAB_DEF[L.mode], st = L.station;
+  const steps = d.stations.map((x,i)=>`<span class="wu-step ${i<st?'done':i===st?'on':''}">${i<st || (i===st && L.between) ? '⭐'.repeat(L.stars[i]||0) : (i+1)} ${x.name}</span>`).join('');
+  const head = `<div class="wu-head"><div class="wu-steps">${steps}</div><div class="wu-meta"><span>❌ 失誤 <b>${L.mistakes}</b></span></div></div>`;
+  let body;
+  if(L.between){
+    const last = st === 2;
+    body = `<div class="wu-between center">
+      <div class="big-icon">🏅</div>
+      <h2 class="ending-title">第 ${st+1} 站「${d.stations[st].name}」完成！</h2>
+      <div class="wu-stars">${'⭐'.repeat(L.stars[st])}${'☆'.repeat(3-L.stars[st])}</div>
+      <p class="wu-desc">這一站失誤 ${L.stMistakes[st]} 次（0 次 3 星、1～2 次 2 星）</p>
+      <div class="btn-row"><button class="cast-btn" id="labNext">${last ? '🏆 完成挑戰，領取獎勵！' : `➡️ 前往第 ${st+2} 站：${d.stations[st+1].name}`}</button></div>
+    </div>`;
+  } else if(L.rules){
+    const r = d.stations[st];
+    body = `<div class="wu-rules">
+      <div class="wu-rules-kicker">第 ${st+1} 站・遊戲規則</div>
+      <h2 class="wu-rules-title">${r.icon} ${r.name}</h2>
+      <ol class="wu-rules-list">${r.rules.map(x=>`<li>${x}</li>`).join('')}</ol>
+      <div class="wu-rules-how">🖐️ 操作方式：${r.how}</div>
+      <div class="wu-rules-note">💡 答錯不會扣生命，但會影響星星和正確率；答錯要再試一次，答對才能前進。</div>
+      <div class="btn-row"><button class="cast-btn" id="labBegin">▶️ 我看懂了，開始！</button></div>
+    </div>`;
+  } else {
+    body = L.mode === 'tracker' ? [trackerS1Html, trackerS2Html, trackerS3Html][st]() : [potionTestHtml, potionTestHtml, potionS3Html][st]();
+  }
+  return `<div class="panel stage wu-panel">${fxHtml(tk)}${head}${body}</div>`;
+}
+function labBind(){
+  if(state.screen !== 'lab') return;
+  const L = state.lab;
+  on('labBegin', ()=>{ L.rules = false; render(); });
+  on('labNext', labNext);
+  on('t1Go', t1Go); on('t2IdGo', t2IdGo); on('t2JuiceGo', t2JuiceGo); on('t3Go', t3Go);
+  on('pPredGo', pPredGo); on('pQGo', pQGo); on('p3Go', p3Go);
+  const each = (sel, fn) => document.querySelectorAll(sel).forEach(b=>b.addEventListener('click', ()=>fn(b)));
+  each('[data-t1]', b=>{ const [n,k,o] = b.dataset.t1.split('|'); t1Pick(n,k,o); });
+  each('[data-t2id]', b=>{ const [l,n] = b.dataset.t2id.split('|'); t2IdPick(l,n); });
+  each('[data-t2j]', b=>t2Juice(b.dataset.t2j));
+  each('.lg-band.click', b=>t2Band(+b.dataset.band));
+  each('[data-t3]', b=>t3Pick(b.dataset.t3));
+  each('[data-pstep]', b=>pStep(b.dataset.pstep));
+  each('[data-pp]', b=>{ const [id,c] = b.dataset.pp.split('|'); pPred(id,c); });
+  each('[data-pq]', b=>pQPick(b.dataset.pq));
+  each('[data-p3]', b=>{ const [i,id] = b.dataset.p3.split('|'); p3Pick(+i,id); });
+}
 
 render();
-showStageIntro(ASSETS.background.lobby, 'HUMAN DUNGEON', '🏰 人體地下城：消化魔法使的考驗', '蔡譯禎老師設計', '', {button:'▶️ 開始遊戲'});
+showStageIntro(ASSETS.background.lobby, 'GOLDEN DUNGEON', '🏰 黃金地下城 - 魔法屎的考驗', '蔡譯禎老師設計', '', {button:'▶️ 開始遊戲'});
 </script>
 </body>
 </html>
